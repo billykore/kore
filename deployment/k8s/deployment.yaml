@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-list-app
+  labels:
+    name: todo-list-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: todo-list-app-service
+  template:
+    metadata:
+      name: todo-list-app-service
+      labels:
+        name: todo-list-app-service
+    spec:
+      containers:
+        - name: todo-list-app
+          image: billykore/todo-list-app
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: todo-list-app-env
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 300m
+              memory: 300Mi
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-list-app-service
+spec:
+  selector:
+    name: todo-list-app-service
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30001
+  type: NodePort
