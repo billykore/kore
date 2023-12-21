@@ -18,23 +18,12 @@ jobs:
         with:
           filters: |
             backend:
+              - '.github/**'
               - 'cmd/**'
               - 'internal/**'   
 
-  secrets:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get Firebase Secret
-        shell: bash
-        run: |
-          cat <<EOF > todo-list-app-firebase-sdk.json
-            ${{ secrets.FIREBASE_SDK }}
-          EOF
-
   build:
-    needs:
-      - secrets
-      - changes
+    needs: changes
     if: ${{ needs.changes.outputs.backend == 'true' }}
     runs-on: ubuntu-latest
     steps:
@@ -53,10 +42,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Create Firebase SDK
+        shell: bash
+        run: |
+          cat <<EOF > todo-list-app-firebase-sdk.json
+           ${{ secrets.FIREBASE_SDK }}
+          EOF
+
       - name: Build and push Author Image
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm64
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.SERVICE_NAME }}:latest

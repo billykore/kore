@@ -7,6 +7,7 @@ import (
 )
 
 type Config struct {
+	Env       string `envconfig:"ENV"`
 	Port      string `envconfig:"PORT"`
 	Firestore Firestore
 }
