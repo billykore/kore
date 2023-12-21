@@ -12,14 +12,14 @@ type Config struct {
 }
 
 var (
-	cfg  *Config
-	once sync.Once
+	_cfg  *Config
+	_once sync.Once
 )
 
 func Get() *Config {
-	once.Do(func() {
-		cfg = new(Config)
-		envconfig.MustProcess("", cfg)
+	_once.Do(func() {
+		_cfg = new(Config)
+		envconfig.MustProcess("", _cfg)
 	})
-	return cfg
+	return _cfg
 }
