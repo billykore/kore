@@ -4,22 +4,25 @@ import (
 	"github.com/billykore/todolist/internal/entity"
 	"github.com/billykore/todolist/internal/errors"
 	"github.com/billykore/todolist/internal/pkg/api"
+	"github.com/billykore/todolist/internal/pkg/log"
 	"github.com/billykore/todolist/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
 
 type TodoHandler struct {
-	uc *usecase.TodoUsecase
+	log *log.Logger
+	uc  *usecase.TodoUsecase
 }
 
-func NewTodoHandler(uc *usecase.TodoUsecase) *TodoHandler {
+func NewTodoHandler(log *log.Logger, uc *usecase.TodoUsecase) *TodoHandler {
 	return &TodoHandler{
-		uc: uc,
+		log: log,
+		uc:  uc,
 	}
 }
 
 func (h *TodoHandler) GetTodos(ctx *gin.Context) {
-	param, err := getTodosParam(ctx)
+	param, err := h.getTodosParam(ctx)
 	if err != nil {
 		ctx.JSON(api.ResponseBadRequest(err))
 		return
@@ -32,17 +35,18 @@ func (h *TodoHandler) GetTodos(ctx *gin.Context) {
 	ctx.JSON(api.ResponseSuccess(todos))
 }
 
-func getTodosParam(ctx *gin.Context) (*entity.GetTodosParam, error) {
+func (h *TodoHandler) getTodosParam(ctx *gin.Context) (*entity.GetTodosParam, error) {
 	param := new(entity.GetTodosParam)
 	err := ctx.ShouldBindQuery(param)
 	if err != nil {
+		h.log.Error(err)
 		return nil, errors.ErrInvalidRequest
 	}
 	return param, nil
 }
 
 func (h *TodoHandler) GetTodo(ctx *gin.Context) {
-	param, err := todoSelectorParam(ctx)
+	param, err := h.todoParam(ctx)
 	if err != nil {
 		ctx.JSON(api.ResponseBadRequest(err))
 		return
@@ -56,7 +60,7 @@ func (h *TodoHandler) GetTodo(ctx *gin.Context) {
 }
 
 func (h *TodoHandler) AddTodo(ctx *gin.Context) {
-	param, err := addTodoParam(ctx)
+	param, err := h.addTodoParam(ctx)
 	if err != nil {
 		ctx.JSON(api.ResponseBadRequest(err))
 		return
@@ -69,17 +73,18 @@ func (h *TodoHandler) AddTodo(ctx *gin.Context) {
 	ctx.JSON(api.ResponseSuccess(nil))
 }
 
-func addTodoParam(ctx *gin.Context) (*entity.AddTodoParam, error) {
+func (h *TodoHandler) addTodoParam(ctx *gin.Context) (*entity.AddTodoParam, error) {
 	param := new(entity.AddTodoParam)
 	err := ctx.ShouldBindJSON(param)
 	if err != nil {
+		h.log.Error(err)
 		return nil, errors.ErrInvalidRequest
 	}
 	return param, nil
 }
 
 func (h *TodoHandler) SetDoneTodo(ctx *gin.Context) {
-	param, err := todoSelectorParam(ctx)
+	param, err := h.todoParam(ctx)
 	if err != nil {
 		ctx.JSON(api.ResponseBadRequest(err))
 		return
@@ -93,7 +98,7 @@ func (h *TodoHandler) SetDoneTodo(ctx *gin.Context) {
 }
 
 func (h *TodoHandler) DeleteTodo(ctx *gin.Context) {
-	param, err := todoSelectorParam(ctx)
+	param, err := h.todoParam(ctx)
 	if err != nil {
 		ctx.JSON(api.ResponseBadRequest(err))
 		return
@@ -106,10 +111,11 @@ func (h *TodoHandler) DeleteTodo(ctx *gin.Context) {
 	ctx.JSON(api.ResponseSuccess(nil))
 }
 
-func todoSelectorParam(ctx *gin.Context) (*entity.TodoSelectorParam, error) {
-	param := new(entity.TodoSelectorParam)
+func (h *TodoHandler) todoParam(ctx *gin.Context) (*entity.TodoParam, error) {
+	param := new(entity.TodoParam)
 	err := ctx.ShouldBindUri(param)
 	if err != nil {
+		h.log.Error(err)
 		return nil, errors.ErrInvalidRequest
 	}
 	return param, nil

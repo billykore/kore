@@ -22,7 +22,7 @@ type GetTodosParam struct {
 	IsDone string `form:"isDone"`
 }
 
-type TodoSelectorParam struct {
+type TodoParam struct {
 	Id string `uri:"id"`
 }
 

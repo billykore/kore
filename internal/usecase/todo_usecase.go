@@ -39,7 +39,7 @@ func (uc *TodoUsecase) GetTodos(ctx context.Context, param *entity.GetTodosParam
 	return todosData, nil
 }
 
-func (uc *TodoUsecase) GetTodo(ctx context.Context, param *entity.TodoSelectorParam) (*entity.Todo, error) {
+func (uc *TodoUsecase) GetTodo(ctx context.Context, param *entity.TodoParam) (*entity.Todo, error) {
 	todo, err := uc.repo.GetTodoById(ctx, param.Id)
 	if err != nil {
 		uc.log.Usecase("GetTodo").Error(err)
@@ -71,7 +71,7 @@ func (uc *TodoUsecase) SaveTodo(ctx context.Context, param *entity.AddTodoParam)
 	return nil
 }
 
-func (uc *TodoUsecase) SetDoneTodo(ctx context.Context, param *entity.TodoSelectorParam) error {
+func (uc *TodoUsecase) SetDoneTodo(ctx context.Context, param *entity.TodoParam) error {
 	err := uc.repo.SetDoneTodo(ctx, param.Id)
 	if err != nil {
 		uc.log.Usecase("SetDoneTodo").Error(err)
@@ -83,7 +83,7 @@ func (uc *TodoUsecase) SetDoneTodo(ctx context.Context, param *entity.TodoSelect
 	return nil
 }
 
-func (uc *TodoUsecase) DeleteTodo(ctx context.Context, param *entity.TodoSelectorParam) error {
+func (uc *TodoUsecase) DeleteTodo(ctx context.Context, param *entity.TodoParam) error {
 	err := uc.repo.DeleteTodo(ctx, param.Id)
 	if err != nil {
 		uc.log.Usecase("DeleteTodo").Error(err)
