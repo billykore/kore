@@ -16,10 +16,12 @@ func NewTodoRepository(firestore *firestore.Client) *TodoRepository {
 	return &TodoRepository{firestore: firestore}
 }
 
-func (r *TodoRepository) GetTodos(ctx context.Context, query *model.Query) ([]*model.Todo, error) {
+func (r *TodoRepository) GetTodos(ctx context.Context, isDone string) ([]*model.Todo, error) {
 	var iter *firestore.DocumentIterator
-	if !query.IsEmpty() {
-		iter = r.firestore.Collection("todos").Where(query.Key, "==", query.Value).Documents(ctx)
+	if isDone == "true" {
+		iter = r.firestore.Collection("todos").Where("IsDone", "==", true).Documents(ctx)
+	} else if isDone == "false" {
+		iter = r.firestore.Collection("todos").Where("IsDone", "==", false).Documents(ctx)
 	} else {
 		iter = r.firestore.Collection("todos").Documents(ctx)
 	}

@@ -1,20 +1,25 @@
 ### get todos
-GET http://localhost:55751/todos
+GET http://localhost:8080/todos
 Content-Type: application/json
 Accept: application/json
 
 ### get done todos
-GET http://localhost:55751/todos?isDone=true
+GET http://localhost:8080/todos?isDone=true
+Content-Type: application/json
+Accept: application/json
+
+### get not done todos
+GET http://localhost:8080/todos?isDone=false
 Content-Type: application/json
 Accept: application/json
 
 ### get todo by id
-GET http://localhost:55751/todos/5b9c7f66-9fbc-11ee-99cb-ee85fce9a206
+GET http://localhost:8080/todos/5b9c7f66-9fbc-11ee-99cb-ee85fce9a206
 Content-Type: application/json
 Accept: application/json
 
 ### save todo
-POST http://localhost:55751/todos
+POST http://localhost:8080/todos
 Content-Type: application/json
 Accept: application/json
 
@@ -24,7 +29,7 @@ Accept: application/json
 }
 
 ### set done todo
-PUT http://localhost:55751/todos/5b9c7f66-9fbc-11ee-99cb-ee85fce9a206
+PUT http://localhost:8080/todos/5b9c7f66-9fbc-11ee-99cb-ee85fce9a206
 Content-Type: application/json
 Accept: application/json
 
@@ -33,6 +38,6 @@ Accept: application/json
 }
 
 ### delete todo
-DELETE http://localhost:55751/todos/5b9c7f66-9fbc-11ee-99cb-ee85fce9a206
+DELETE http://localhost:8080/todos/5b9c7f66-9fbc-11ee-99cb-ee85fce9a206
 Content-Type: application/json
 Accept: application/json

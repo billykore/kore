@@ -5,7 +5,6 @@ import (
 
 	"github.com/billykore/todolist/internal/entity"
 	"github.com/billykore/todolist/internal/errors"
-	"github.com/billykore/todolist/internal/model"
 	"github.com/billykore/todolist/internal/pkg/log"
 	"github.com/billykore/todolist/internal/repository"
 	"github.com/google/uuid"
@@ -24,10 +23,7 @@ func NewTodoUsecase(log *log.Logger, repo *repository.TodoRepository) *TodoUseca
 }
 
 func (uc *TodoUsecase) GetTodos(ctx context.Context, param *entity.GetTodosParam) ([]*entity.Todo, error) {
-	todos, err := uc.repo.GetTodos(ctx, &model.Query{
-		Key:   "IsDone",
-		Value: param.IsDone,
-	})
+	todos, err := uc.repo.GetTodos(ctx, param.IsDone)
 	if err != nil {
 		uc.log.Usecase("GetTodos").Error(err)
 		return nil, &errors.Error{

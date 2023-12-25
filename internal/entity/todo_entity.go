@@ -19,7 +19,7 @@ func NewTodo(model *model.Todo) *Todo {
 }
 
 type GetTodosParam struct {
-	IsDone bool `form:"isDone"`
+	IsDone string `form:"isDone"`
 }
 
 type TodoSelectorParam struct {
