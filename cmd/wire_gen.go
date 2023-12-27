@@ -9,25 +9,27 @@ package main
 import (
 	"github.com/billykore/todolist/internal/config"
 	"github.com/billykore/todolist/internal/database/firestore"
-	"github.com/billykore/todolist/internal/handler"
 	"github.com/billykore/todolist/internal/pkg/log"
 	"github.com/billykore/todolist/internal/repository"
 	"github.com/billykore/todolist/internal/server"
+	"github.com/billykore/todolist/internal/service"
 	"github.com/billykore/todolist/internal/usecase"
-	"github.com/gin-gonic/gin"
+)
+
+import (
+	_ "github.com/joho/godotenv/autoload"
 )
 
 // Injectors from wire.go:
 
 func todoApp(cfg *config.Config) *app {
-	engine := gin.Default()
 	logger := log.NewLogger()
 	client := firestore.New(cfg)
 	todoRepository := repository.NewTodoRepository(client)
 	todoUsecase := usecase.NewTodoUsecase(logger, todoRepository)
-	todoHandler := handler.NewTodoHandler(todoUsecase)
-	router := server.NewRouter(engine, todoHandler)
-	httpServer := server.NewHTTPServer(cfg, router)
-	mainApp := newApp(httpServer)
+	todoService := service.NewTodoService(todoUsecase)
+	httpServer := server.NewHTTPServer(logger, cfg, todoService)
+	grpcServer := server.NewGRPCServer(logger, cfg, todoService)
+	mainApp := newApp(httpServer, grpcServer)
 	return mainApp
 }

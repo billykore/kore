@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
         - name: todo-list-app
-          image: billykore/todo-list-app
-          imagePullPolicy: IfNotPresent
+          image: billykore/todo-list-app:latest
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: todo-list-app-env
@@ -41,7 +41,12 @@ spec:
   selector:
     name: todo-list-app-service
   ports:
-    - port: 8080
-      targetPort: 8080
-      nodePort: 30001
+    - name: "http"
+      port: 8000
+      targetPort: 8000
+      nodePort: 30017
+    - name: "grpc"
+      port: 9000
+      targetPort: 9000
+      nodePort: 30031
   type: NodePort

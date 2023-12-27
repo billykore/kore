@@ -7,7 +7,8 @@ import (
 )
 
 type Config struct {
-	Port      string `envconfig:"PORT"`
+	HTTPPort  string `envconfig:"HTTP_PORT"`
+	GRPCPort  string `envconfig:"GRPC_PORT"`
 	Firestore Firestore
 }
 

@@ -1,6 +1,7 @@
 package log
 
 import (
+	"fmt"
 	"sync"
 
 	"go.uber.org/zap"
@@ -43,6 +44,17 @@ func (l *Logger) Fatal(err error) {
 	l.zapLogger.Fatal("fatal", zap.Error(err))
 }
 
-func (l *Logger) Info(data any) {
-	l.zapLogger.Info("info", zap.String("usecase", l.usecase), zap.Any("data", data))
+func (l *Logger) Fatalf(format string, a ...any) {
+	l.zapLogger.Fatal(
+		"fatal",
+		zap.String("error", fmt.Sprintf(format, a)),
+	)
+}
+
+func (l *Logger) Infof(format string, a ...any) {
+	l.zapLogger.Info(
+		"info",
+		zap.String("usecase", l.usecase),
+		zap.Any("info", fmt.Sprintf(format, a)),
+	)
 }

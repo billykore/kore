@@ -1,6 +1,9 @@
 package entity
 
-import "github.com/billykore/todolist/internal/model"
+import (
+	v1 "github.com/billykore/todolist/internal/grpc/v1"
+	"github.com/billykore/todolist/internal/model"
+)
 
 type Todo struct {
 	Id          string `json:"id"`
@@ -15,6 +18,15 @@ func NewTodo(model *model.Todo) *Todo {
 		Title:       model.Title,
 		Description: model.Description,
 		IsDone:      model.IsDone,
+	}
+}
+
+func (t *Todo) GRPCMessage() *v1.Todo {
+	return &v1.Todo{
+		Id:          t.Id,
+		Title:       t.Title,
+		Description: t.Description,
+		IsDone:      t.IsDone,
 	}
 }
 

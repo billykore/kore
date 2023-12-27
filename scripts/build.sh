@@ -4,13 +4,13 @@ DOCKERFILE="$(pwd)/Dockerfile"
 
 # check Dockerfile.
 if [[ ! -f "$DOCKERFILE" ]]; then
-  echo "error: Dockerfile not found"
+  echo >&2 "error: Dockerfile not found"
   exit 1
 fi
 
 # build Docker image.
 echo "Build image..."
-docker build -t billykore/todo-list-app .
+docker build -t billykore/todo-list-app:latest .
 
 # push image to DockerHub.
 echo "Push image..."
