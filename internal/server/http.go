@@ -39,7 +39,7 @@ func (hs *HTTPServer) Serve() {
 		Handler: mux,
 	}
 
-	hs.log.Infof("Serving gRPC-Gateway for REST on :%s", port)
+	hs.log.Infof("Serving gRPC-Gateway for REST on port %s", port)
 	if err = srv.ListenAndServe(); err != nil {
 		hs.log.Fatalf("failed to serve http at port %s: %v", port, err)
 	}

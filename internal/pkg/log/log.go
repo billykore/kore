@@ -47,7 +47,7 @@ func (l *Logger) Fatal(err error) {
 func (l *Logger) Fatalf(format string, a ...any) {
 	l.zapLogger.Fatal(
 		"fatal",
-		zap.String("error", fmt.Sprintf(format, a)),
+		zap.String("error", fmt.Sprintf(format, a...)),
 	)
 }
 
@@ -55,6 +55,6 @@ func (l *Logger) Infof(format string, a ...any) {
 	l.zapLogger.Info(
 		"info",
 		zap.String("usecase", l.usecase),
-		zap.Any("info", fmt.Sprintf(format, a)),
+		zap.Any("info", fmt.Sprintf(format, a...)),
 	)
 }
