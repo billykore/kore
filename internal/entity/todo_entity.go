@@ -1,8 +1,8 @@
 package entity
 
 import (
-	v1 "github.com/billykore/todolist/internal/grpc/v1"
 	"github.com/billykore/todolist/internal/model"
+	v1 "github.com/billykore/todolist/internal/proto/v1"
 )
 
 type Todo struct {

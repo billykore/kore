@@ -5,8 +5,8 @@ import (
 	"net"
 
 	"github.com/billykore/todolist/internal/config"
-	"github.com/billykore/todolist/internal/grpc/v1"
 	"github.com/billykore/todolist/internal/pkg/log"
+	"github.com/billykore/todolist/internal/proto/v1"
 	"github.com/billykore/todolist/internal/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"

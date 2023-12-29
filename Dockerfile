@@ -10,13 +10,12 @@ RUN apk add --no-cache protobuf && \
     protoc --go_out=. --go_opt=paths=source_relative \
         --go-grpc_out=. --go-grpc_opt=paths=source_relative \
         --grpc-gateway_out=. --grpc-gateway_opt=paths=source_relative \
-        internal/grpc/v1/todo.proto && \
+        internal/proto/v1/*.proto && \
     wire ./... && \
     go build -o ./out/app ./cmd
 
 FROM alpine:latest
 COPY --from=build /app/out/app /
 COPY --from=build /app/todo-list-app-firebase-sdk.json /
-EXPOSE 8000
-EXPOSE 9000
+EXPOSE 8000 9000
 ENTRYPOINT ["./app"]

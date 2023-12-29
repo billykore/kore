@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"github.com/billykore/todolist/internal/config"
-	v1 "github.com/billykore/todolist/internal/grpc/v1"
 	"github.com/billykore/todolist/internal/pkg/log"
+	v1 "github.com/billykore/todolist/internal/proto/v1"
 	"github.com/billykore/todolist/internal/service"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )

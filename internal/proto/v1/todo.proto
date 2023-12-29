@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package todo;
+package todo.v1;
 
-option go_package = "todo-list-app/internal/grpc/v1;v1";
+option go_package = "todo-list-app/internal/proto/v1;v1";
 
 import "third_party/google/api/annotations.proto";
 
@@ -26,9 +26,24 @@ service TodoService {
     };
   };
 
-  rpc AddTodo (AddTodoRequest) returns (DefaultReply) {};
-  rpc SetDoneTodo (TodoRequest) returns (DefaultReply) {};
-  rpc DeleteTodo (TodoRequest) returns (DefaultReply) {};
+  rpc AddTodo (AddTodoRequest) returns (DefaultReply) {
+    option (google.api.http) = {
+      post: "/todos"
+      body: "*"
+    };
+  };
+
+  rpc SetDoneTodo (TodoRequest) returns (DefaultReply) {
+    option (google.api.http) = {
+      put: "/todos/{id}"
+    };
+  };
+
+  rpc DeleteTodo (TodoRequest) returns (DefaultReply) {
+    option (google.api.http) = {
+      delete: "/todos/{id}"
+    };
+  };
 }
 
 message GetTodosRequest {

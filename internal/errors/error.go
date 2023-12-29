@@ -8,10 +8,6 @@ const (
 	TypeNotFound
 )
 
-var (
-	ErrInvalidRequest = &Error{TypeBadRequest, "Invalid Request"}
-)
-
 type Error struct {
 	Type    ErrType `json:"-"`
 	Message string  `json:"message"`
