@@ -26,7 +26,7 @@
           "method": "GET",
           "disable_host_sanitize": false,
           "host": [
-            "http://localhost:8000"
+            "http://todo-service.default.svc.cluster.local:8000"
           ]
         }
       ],
@@ -37,7 +37,7 @@
       "extra_config": {
         "auth/validator": {
           "alg": "HS256",
-          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "jwk_local_path": "symmetric.json",
           "disable_jwk_security": true,
           "cache": false,
           "operation_debug": true
@@ -56,14 +56,14 @@
           "method": "POST",
           "disable_host_sanitize": false,
           "host": [
-            "http://localhost:8000"
+            "http://todo-service.default.svc.cluster.local:8000"
           ]
         }
       ],
       "extra_config": {
         "auth/validator": {
           "alg": "HS256",
-          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "jwk_local_path": "symmetric.json",
           "disable_jwk_security": true,
           "cache": false,
           "operation_debug": true
@@ -82,14 +82,14 @@
           "method": "GET",
           "disable_host_sanitize": false,
           "host": [
-            "http://localhost:8000"
+            "http://todo-service.default.svc.cluster.local:8000"
           ]
         }
       ],
       "extra_config": {
         "auth/validator": {
           "alg": "HS256",
-          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "jwk_local_path": "symmetric.json",
           "disable_jwk_security": true,
           "cache": false,
           "operation_debug": true
@@ -108,14 +108,14 @@
           "method": "PUT",
           "disable_host_sanitize": false,
           "host": [
-            "http://localhost:8000"
+            "http://todo-service.default.svc.cluster.local:8000"
           ]
         }
       ],
       "extra_config": {
         "auth/validator": {
           "alg": "HS256",
-          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "jwk_local_path": "symmetric.json",
           "disable_jwk_security": true,
           "cache": false,
           "operation_debug": true
@@ -134,14 +134,14 @@
           "method": "DELETE",
           "disable_host_sanitize": false,
           "host": [
-            "http://localhost:8000"
+            "http://todo-service.default.svc.cluster.local:8000"
           ]
         }
       ],
       "extra_config": {
         "auth/validator": {
           "alg": "HS256",
-          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "jwk_local_path": "symmetric.json",
           "disable_jwk_security": true,
           "cache": false,
           "operation_debug": true
@@ -159,7 +159,7 @@
           "sd": "static",
           "method": "POST",
           "host": [
-            "http://localhost:8000"
+            "http://todo-service.default.svc.cluster.local:8000"
           ],
           "disable_host_sanitize": false
         }
@@ -167,7 +167,7 @@
       "extra_config": {
         "auth/signer": {
           "alg": "HS256",
-          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "jwk_local_path": "symmetric.json",
           "keys_to_sign": [
             "accessToken",
             "expiredTime"

@@ -8,12 +8,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      name: todo-list-app-service
+      name: todo-service
   template:
     metadata:
-      name: todo-list-app-service
+      name: todo-service
       labels:
-        name: todo-list-app-service
+        name: todo-service
     spec:
       containers:
         - name: todo-list-app
@@ -36,17 +36,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: todo-list-app-service
+  name: todo-service
 spec:
   selector:
-    name: todo-list-app-service
+    name: todo-service
   ports:
     - name: "http"
       port: 8000
       targetPort: 8000
-      nodePort: 30017
     - name: "grpc"
       port: 9000
       targetPort: 9000
-      nodePort: 30031
-  type: NodePort
+  type: ClusterIP
