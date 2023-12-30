@@ -13,22 +13,32 @@ import (
 )
 
 type HTTPServer struct {
-	log *log.Logger
-	cfg *config.Config
-	svc *service.TodoService
+	log     *log.Logger
+	cfg     *config.Config
+	authSvc *service.AuthService
+	todoSvc *service.TodoService
 }
 
-func NewHTTPServer(log *log.Logger, cfg *config.Config, svc *service.TodoService) *HTTPServer {
+func NewHTTPServer(log *log.Logger, cfg *config.Config, authSvc *service.AuthService, todoSvc *service.TodoService) *HTTPServer {
 	return &HTTPServer{
-		log: log,
-		cfg: cfg,
-		svc: svc,
+		log:     log,
+		cfg:     cfg,
+		authSvc: authSvc,
+		todoSvc: todoSvc,
 	}
 }
 
 func (hs *HTTPServer) Serve() {
 	mux := runtime.NewServeMux()
-	err := v1.RegisterTodoServiceHandlerServer(context.Background(), mux, hs.svc)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	err := v1.RegisterTodoServiceHandlerServer(ctx, mux, hs.todoSvc)
+	if err != nil {
+		hs.log.Fatalf("failed to register gateway: %v", err)
+	}
+
+	err = v1.RegisterAuthorizationHandlerServer(ctx, mux, hs.authSvc)
 	if err != nil {
 		hs.log.Fatalf("failed to register gateway: %v", err)
 	}

@@ -24,12 +24,14 @@ import (
 
 func todoApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
+	authUsecase := usecase.NewAuthUsecase()
+	authService := service.NewAuthService(authUsecase)
 	client := firestore.New(cfg)
 	todoRepository := repository.NewTodoRepository(client)
 	todoUsecase := usecase.NewTodoUsecase(logger, todoRepository)
 	todoService := service.NewTodoService(todoUsecase)
-	httpServer := server.NewHTTPServer(logger, cfg, todoService)
-	grpcServer := server.NewGRPCServer(logger, cfg, todoService)
+	httpServer := server.NewHTTPServer(logger, cfg, authService, todoService)
+	grpcServer := server.NewGRPCServer(logger, cfg, authService, todoService)
 	mainApp := newApp(httpServer, grpcServer)
 	return mainApp
 }

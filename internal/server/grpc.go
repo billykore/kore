@@ -13,16 +13,18 @@ import (
 )
 
 type GRPCServer struct {
-	log *log.Logger
-	cfg *config.Config
-	svc *service.TodoService
+	log     *log.Logger
+	cfg     *config.Config
+	authSvc *service.AuthService
+	todoSvc *service.TodoService
 }
 
-func NewGRPCServer(log *log.Logger, cfg *config.Config, svc *service.TodoService) *GRPCServer {
+func NewGRPCServer(log *log.Logger, cfg *config.Config, authSvc *service.AuthService, todoSvc *service.TodoService) *GRPCServer {
 	return &GRPCServer{
-		log: log,
-		cfg: cfg,
-		svc: svc,
+		log:     log,
+		cfg:     cfg,
+		authSvc: authSvc,
+		todoSvc: todoSvc,
 	}
 }
 
@@ -33,7 +35,8 @@ func (gs *GRPCServer) Serve() {
 	}
 
 	srv := grpc.NewServer()
-	v1.RegisterTodoServiceServer(srv, gs.svc)
+	v1.RegisterTodoServiceServer(srv, gs.todoSvc)
+	v1.RegisterAuthorizationServer(srv, gs.authSvc)
 	reflection.Register(srv)
 
 	gs.log.Infof("Run on grpc server port %s", gs.cfg.GRPCPort)

@@ -6,6 +6,13 @@
   "cache_ttl": "300s",
   "output_encoding": "json",
   "port": 3000,
+  "extra_config": {
+    "telemetry/logging": {
+      "level": "ERROR",
+      "syslog": false,
+      "stdout": true
+    }
+  },
   "endpoints": [
     {
       "endpoint": "/api/v1/todos",
@@ -25,7 +32,17 @@
       ],
       "input_query_strings": [
         "isDone"
-      ]
+      ],
+      "input_headers": ["*"],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "HS256",
+          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "disable_jwk_security": true,
+          "cache": false,
+          "operation_debug": true
+        }
+      }
     },
     {
       "endpoint": "/api/v1/todos",
@@ -42,7 +59,16 @@
             "http://localhost:8000"
           ]
         }
-      ]
+      ],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "HS256",
+          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "disable_jwk_security": true,
+          "cache": false,
+          "operation_debug": true
+        }
+      }
     },
     {
       "endpoint": "/api/v1/todos/{id}",
@@ -59,7 +85,16 @@
             "http://localhost:8000"
           ]
         }
-      ]
+      ],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "HS256",
+          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "disable_jwk_security": true,
+          "cache": false,
+          "operation_debug": true
+        }
+      }
     },
     {
       "endpoint": "/api/v1/todos/{id}",
@@ -76,7 +111,16 @@
             "http://localhost:8000"
           ]
         }
-      ]
+      ],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "HS256",
+          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "disable_jwk_security": true,
+          "cache": false,
+          "operation_debug": true
+        }
+      }
     },
     {
       "endpoint": "/api/v1/todos/{id}",
@@ -93,7 +137,45 @@
             "http://localhost:8000"
           ]
         }
-      ]
+      ],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "HS256",
+          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "disable_jwk_security": true,
+          "cache": false,
+          "operation_debug": true
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/login",
+      "method": "POST",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/login",
+          "encoding": "json",
+          "sd": "static",
+          "method": "POST",
+          "host": [
+            "http://localhost:8000"
+          ],
+          "disable_host_sanitize": false
+        }
+      ],
+      "extra_config": {
+        "auth/signer": {
+          "alg": "HS256",
+          "jwk_local_path": "/Users/billykore/Kore/Golang/todo-list-app/api/gateway/symmetric.json",
+          "keys_to_sign": [
+            "accessToken",
+            "expiredTime"
+          ],
+          "kid": "drPB_Wlr8gCYSaNp4GxJi6w61b8N1oosZQ8sxD9R1Is",
+          "disable_jwk_security": true
+        }
+      }
     }
   ]
 }
