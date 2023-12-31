@@ -40,6 +40,14 @@ func (l *Logger) Error(err error) {
 	l.zapLogger.Error("error", zap.String("usecase", l.usecase), zap.Error(err))
 }
 
+func (l *Logger) Errorf(format string, a ...any) {
+	l.zapLogger.Error(
+		"error",
+		zap.String("usecase", l.usecase),
+		zap.Error(fmt.Errorf(format, a...)),
+	)
+}
+
 func (l *Logger) Fatal(err error) {
 	l.zapLogger.Fatal("fatal", zap.Error(err))
 }
