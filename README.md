@@ -1,2 +1,2 @@
-# Simple Todo List App
-This app is one of many projects that soon will be deleted.
+# Simple Todo App
+One of many projects that soon will be deleted.
