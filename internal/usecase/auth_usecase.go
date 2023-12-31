@@ -23,7 +23,7 @@ func NewAuthUsecase(log *log.Logger, repo *repository.UserRepository) *AuthUseca
 	}
 }
 
-func (uc *AuthUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*v1.LoginReply, error) {
+func (uc *AuthUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*token.Token, error) {
 	user, err := uc.repo.GetUserByUsername(ctx, req.GetUsername())
 	if err != nil {
 		uc.log.Usecase("Login").Errorf("failed to get user by username %s: %v", req.GetUsername(), err)
@@ -51,8 +51,5 @@ func (uc *AuthUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*v1.Log
 		}
 	}
 
-	return &v1.LoginReply{
-		AccessToken: t.AccessToken,
-		ExpiredTime: t.ExpiredTime,
-	}, nil
+	return t, nil
 }
