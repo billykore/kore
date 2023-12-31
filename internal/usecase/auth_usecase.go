@@ -23,7 +23,7 @@ func NewAuthUsecase(log *log.Logger, repo *repository.UserRepository) *AuthUseca
 	}
 }
 
-func (uc *AuthUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*token.Token, error) {
+func (uc *AuthUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*v1.Token, error) {
 	user, err := uc.repo.GetUserByUsername(ctx, req.GetUsername())
 	if err != nil {
 		uc.log.Usecase("Login").Errorf("failed to get user by username %s: %v", req.GetUsername(), err)
@@ -32,7 +32,6 @@ func (uc *AuthUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*token.
 			Message: "Sorry, your username or password was incorrect",
 		}
 	}
-
 	err = password.Verify(user.Password, req.GetPassword())
 	if err != nil {
 		uc.log.Usecase("Login").Errorf("failed to verify user %s password: %v", user.Username, err)
@@ -41,7 +40,6 @@ func (uc *AuthUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*token.
 			Message: "Sorry, your username or password was incorrect",
 		}
 	}
-
 	t, err := token.New(user.Username)
 	if err != nil {
 		uc.log.Usecase("Login").Errorf("failed to create token: %v", err)
@@ -50,6 +48,8 @@ func (uc *AuthUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*token.
 			Message: "Sorry, your username or password was incorrect",
 		}
 	}
-
-	return t, nil
+	return &v1.Token{
+		AccessToken: t.AccessToken,
+		ExpiredTime: t.ExpiredTime,
+	}, nil
 }

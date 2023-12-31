@@ -6,6 +6,11 @@ option go_package = "todo-list-app/internal/proto/v1;v1";
 
 import "third_party/google/api/annotations.proto";
 
+message Token {
+  string accessToken = 1;
+  int64 expiredTime = 2;
+}
+
 service Authorization {
   rpc Login (LoginRequest) returns (LoginReply) {
     option (google.api.http) = {
@@ -21,6 +26,5 @@ message LoginRequest {
 }
 
 message LoginReply {
-  string accessToken = 1;
-  int64 expiredTime = 2;
+  Token token = 1;
 }

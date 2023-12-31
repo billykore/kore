@@ -24,8 +24,5 @@ func (s *AuthService) Login(ctx context.Context, in *v1.LoginRequest) (*v1.Login
 	if err != nil {
 		return nil, status.Error(codes.Unauthenticated, err.Error())
 	}
-	return &v1.LoginReply{
-		AccessToken: token.AccessToken,
-		ExpiredTime: token.ExpiredTime,
-	}, nil
+	return &v1.LoginReply{Token: token}, nil
 }
