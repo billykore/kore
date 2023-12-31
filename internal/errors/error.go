@@ -5,6 +5,7 @@ type ErrType int
 const (
 	TypeInternalServerError ErrType = iota
 	TypeBadRequest
+	TypeUnauthorized
 	TypeNotFound
 )
 

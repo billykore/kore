@@ -24,9 +24,10 @@ import (
 
 func todoApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
-	authUsecase := usecase.NewAuthUsecase()
-	authService := service.NewAuthService(authUsecase)
 	client := firestore.New(cfg)
+	userRepository := repository.NewUserRepository(client)
+	authUsecase := usecase.NewAuthUsecase(logger, userRepository)
+	authService := service.NewAuthService(authUsecase)
 	todoRepository := repository.NewTodoRepository(client)
 	todoUsecase := usecase.NewTodoUsecase(logger, todoRepository)
 	todoService := service.NewTodoService(todoUsecase)

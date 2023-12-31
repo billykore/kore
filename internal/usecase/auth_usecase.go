@@ -2,35 +2,53 @@ package usecase
 
 import (
 	"context"
-	"errors"
 
+	"github.com/billykore/todolist/internal/errors"
 	"github.com/billykore/todolist/internal/pkg/log"
+	"github.com/billykore/todolist/internal/pkg/password"
 	"github.com/billykore/todolist/internal/pkg/token"
 	v1 "github.com/billykore/todolist/internal/proto/v1"
+	"github.com/billykore/todolist/internal/repository"
 )
 
 type AuthUsecase struct {
-	log *log.Logger
+	log  *log.Logger
+	repo *repository.UserRepository
 }
 
-func NewAuthUsecase(log *log.Logger) *AuthUsecase {
-	return &AuthUsecase{log: log}
+func NewAuthUsecase(log *log.Logger, repo *repository.UserRepository) *AuthUsecase {
+	return &AuthUsecase{
+		log:  log,
+		repo: repo,
+	}
 }
 
 func (uc *AuthUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*v1.LoginReply, error) {
-	if req.GetUsername() != "kore" {
-		uc.log.Usecase("Login").Errorf("invalid username %s", req.GetUsername())
-		return nil, errors.New("invalid username")
-	}
-	if req.GetPassword() != "passwd" {
-		uc.log.Usecase("Login").Errorf("invalid password %s", req.GetUsername())
-		return nil, errors.New("invalid password")
+	user, err := uc.repo.GetUserByUsername(ctx, req.GetUsername())
+	if err != nil {
+		uc.log.Usecase("Login").Errorf("failed to get user by username %s: %v", req.GetUsername(), err)
+		return nil, errors.Error{
+			Type:    errors.TypeUnauthorized,
+			Message: "Sorry, your username or password was incorrect",
+		}
 	}
 
-	t, err := token.New(req.GetUsername())
+	err = password.Verify(user.Password, req.GetPassword())
+	if err != nil {
+		uc.log.Usecase("Login").Errorf("failed to verify user %s password: %v", user.Username, err)
+		return nil, errors.Error{
+			Type:    errors.TypeUnauthorized,
+			Message: "Sorry, your username or password was incorrect",
+		}
+	}
+
+	t, err := token.New(user.Username)
 	if err != nil {
 		uc.log.Usecase("Login").Errorf("failed to create token: %v", err)
-		return nil, err
+		return nil, errors.Error{
+			Type:    errors.TypeUnauthorized,
+			Message: "Sorry, your username or password was incorrect",
+		}
 	}
 
 	return &v1.LoginReply{
