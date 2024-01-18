@@ -5,6 +5,7 @@ import (
 
 	"github.com/billykore/todolist/internal/model"
 	"github.com/billykore/todolist/internal/pkg/log"
+	"github.com/billykore/todolist/internal/pkg/messages"
 	v1 "github.com/billykore/todolist/internal/proto/v1"
 	"github.com/billykore/todolist/internal/repository"
 	"github.com/google/uuid"
@@ -28,7 +29,7 @@ func (uc *TodoUsecase) GetTodos(ctx context.Context, req *v1.GetTodosRequest) ([
 	todos, err := uc.repo.GetTodos(ctx, req.GetIsDone())
 	if err != nil {
 		uc.log.Usecase("GetTodos").Error(err)
-		return nil, status.Error(codes.NotFound, "Todos not found")
+		return nil, status.Error(codes.NotFound, messages.TodosNotFound)
 	}
 	var todosData []*v1.Todo
 	for _, t := range todos {
@@ -46,7 +47,7 @@ func (uc *TodoUsecase) GetTodo(ctx context.Context, req *v1.TodoRequest) (*v1.To
 	todo, err := uc.repo.GetTodoById(ctx, req.GetId())
 	if err != nil {
 		uc.log.Usecase("GetTodo").Error(err)
-		return nil, status.Error(codes.NotFound, "Todos not found")
+		return nil, status.Error(codes.NotFound, messages.TodosNotFound)
 	}
 	return &v1.Todo{
 		Id:          todo.Id,
@@ -60,7 +61,7 @@ func (uc *TodoUsecase) SaveTodo(ctx context.Context, req *v1.AddTodoRequest) err
 	id, err := uuid.NewUUID()
 	if err != nil {
 		uc.log.Usecase("SaveTodo").Error(err)
-		return status.Error(codes.Internal, "Failed to save todo")
+		return status.Error(codes.Internal, messages.FailedSaveTodo)
 	}
 	err = uc.repo.SaveTodo(ctx, &model.Todo{
 		Id:          id.String(),
@@ -69,8 +70,7 @@ func (uc *TodoUsecase) SaveTodo(ctx context.Context, req *v1.AddTodoRequest) err
 	})
 	if err != nil {
 		uc.log.Usecase("SaveTodo").Error(err)
-		return status.Error(codes.Internal, "Failed to save todo")
-
+		return status.Error(codes.Internal, messages.FailedSaveTodo)
 	}
 	return nil
 }
@@ -79,8 +79,7 @@ func (uc *TodoUsecase) SetDoneTodo(ctx context.Context, req *v1.TodoRequest) err
 	err := uc.repo.SetDoneTodo(ctx, req.GetId())
 	if err != nil {
 		uc.log.Usecase("SetDoneTodo").Error(err)
-		return status.Error(codes.Internal, "Failed set done todo")
-
+		return status.Error(codes.Internal, messages.FailedSetDoneTodo)
 	}
 	return nil
 }
@@ -89,8 +88,7 @@ func (uc *TodoUsecase) DeleteTodo(ctx context.Context, req *v1.TodoRequest) erro
 	err := uc.repo.DeleteTodo(ctx, req.GetId())
 	if err != nil {
 		uc.log.Usecase("DeleteTodo").Error(err)
-		return status.Error(codes.Internal, "Failed set done todo")
-
+		return status.Error(codes.Internal, messages.FailedSetDoneTodo)
 	}
 	return nil
 }
