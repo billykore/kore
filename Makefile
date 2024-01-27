@@ -1,12 +1,12 @@
-# make build-image
+# make build-image service=todo
 .PHONY: build-image
 build-image:
-	@./scripts/build.sh
+	@./scripts/build.sh $(service)
 
-# make deploy
+# make deploy service=todo
 .PHONY: deploy
 deploy:
-	@./scripts/deployment.sh
+	@./scripts/deployment.sh $(service)
 
 # make generate-wire
 .PHONY: generate-wire
@@ -21,11 +21,11 @@ generate-grpc:
 # make generate
 .PHONY: generate
 generate: \
-	generate-wire \
-	generate-grpc
+	generate-grpc \
+	generate-wire
 
-# make run
+# make run service=todo
 .PHONY: run
 run:
 	@echo "Run app..."
-	@go run ./cmd
+	@go run ./services/$(service)/cmd

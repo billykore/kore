@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monorepo-todo-app
+  labels:
+    name: monorepo-todo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: monorepo-todo-service
+  template:
+    metadata:
+      name: monorepo-todo-service
+      labels:
+        name: monorepo-todo-service
+    spec:
+      containers:
+        - name: monorepo-todo-app
+          image: billykore/monorepo-todo:latest
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: monorepo-todo-env
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 300m
+              memory: 300Mi
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: monorepo-todo-service
+spec:
+  selector:
+    name: monorepo-todo-service
+  ports:
+    - name: "http"
+      port: 8001
+      targetPort: 8001
+    - name: "grpc"
+      port: 9001
+      targetPort: 9001
+  type: ClusterIP

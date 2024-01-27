@@ -19,7 +19,6 @@ jobs:
           filters: |
             backend:
               - '.github/**'
-              - 'cmd/**'
               - 'internal/**'   
 
   build:
@@ -49,10 +48,20 @@ jobs:
            ${{ secrets.FIREBASE_SDK }}
           EOF
 
-      - name: Build and push Author Image
+      - name: Build and push Auth Image
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/arm64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.SERVICE_NAME }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.AUTH_SERVICE_NAME }}:latest
+          file: ./services/auth/Dockerfile
+
+      - name: Build and push Todo Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/arm64
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.TODO_SERVICE_NAME }}:latest
+          file: ./services/todo/Dockerfile

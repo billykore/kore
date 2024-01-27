@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package monorepo.v1;
+
+option go_package = "todo-list-app/libs/proto/v1;v1";
+
+message DefaultReply {
+  string message = 1;
+}
