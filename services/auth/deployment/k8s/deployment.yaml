@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monorepo-auth-app
+  labels:
+    name: monorepo-auth-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: monorepo-auth-service
+  template:
+    metadata:
+      name: monorepo-auth-service
+      labels:
+        name: monorepo-auth-service
+    spec:
+      containers:
+        - name: monorepo-auth-app
+          image: billykore/monorepo-auth:latest
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: monorepo-auth-env
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 300m
+              memory: 300Mi
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: monorepo-auth-service
+spec:
+  selector:
+    name: monorepo-auth-service
+  ports:
+    - name: "http"
+      port: 8000
+      targetPort: 8000
+    - name: "grpc"
+      port: 9000
+      targetPort: 9000
+  type: ClusterIP

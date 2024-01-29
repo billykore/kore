@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-PROTO_FILE="$(pwd)/internal/proto/v1/todo.proto"
+PROTO_DIR="$(pwd)/libs/proto/v1"
 
-# check protobuf file.
-if [[ ! -f "$PROTO_FILE" ]]; then
-  echo >&2 "error: todo.proto not found"
+# check protobuf directory.
+if [[ ! -d "$PROTO_DIR" ]]; then
+  echo >&2 "error: $PROTO_DIR not found"
   exit 1
 fi
 
@@ -13,4 +13,4 @@ echo "Generate gRPC code..."
 protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     --grpc-gateway_out=. --grpc-gateway_opt=paths=source_relative \
-    internal/proto/v1/*.proto
+    libs/proto/v1/*.proto
