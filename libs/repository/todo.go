@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/billykore/todolist/libs/model"
+	"github.com/billykore/kore/libs/model"
 )
 
 type Todo interface {

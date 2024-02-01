@@ -7,13 +7,13 @@
 package main
 
 import (
-	"github.com/billykore/todolist/libs/config"
-	"github.com/billykore/todolist/libs/database/firestore"
-	"github.com/billykore/todolist/libs/pkg/log"
-	"github.com/billykore/todolist/services/todo/repository"
-	"github.com/billykore/todolist/services/todo/server"
-	"github.com/billykore/todolist/services/todo/service"
-	"github.com/billykore/todolist/services/todo/usecase"
+	"github.com/billykore/kore/libs/config"
+	"github.com/billykore/kore/libs/database/firestore"
+	"github.com/billykore/kore/libs/pkg/log"
+	"github.com/billykore/kore/services/todo/repository"
+	"github.com/billykore/kore/services/todo/server"
+	"github.com/billykore/kore/services/todo/service"
+	"github.com/billykore/kore/services/todo/usecase"
 )
 
 import (

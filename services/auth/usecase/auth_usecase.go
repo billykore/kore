@@ -3,12 +3,12 @@ package usecase
 import (
 	"context"
 
-	"github.com/billykore/todolist/libs/pkg/log"
-	"github.com/billykore/todolist/libs/pkg/messages"
-	"github.com/billykore/todolist/libs/pkg/password"
-	"github.com/billykore/todolist/libs/pkg/token"
-	"github.com/billykore/todolist/libs/proto/v1"
-	"github.com/billykore/todolist/libs/repository"
+	"github.com/billykore/kore/libs/pkg/log"
+	"github.com/billykore/kore/libs/pkg/messages"
+	"github.com/billykore/kore/libs/pkg/password"
+	"github.com/billykore/kore/libs/pkg/token"
+	"github.com/billykore/kore/libs/proto/v1"
+	"github.com/billykore/kore/libs/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

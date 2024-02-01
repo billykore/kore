@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/billykore/todolist/libs/database/firestore"
+	"github.com/billykore/kore/libs/database/firestore"
 	"github.com/google/wire"
 )
 

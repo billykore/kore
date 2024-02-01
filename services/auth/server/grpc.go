@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/billykore/todolist/libs/config"
-	"github.com/billykore/todolist/libs/pkg/log"
-	"github.com/billykore/todolist/libs/proto/v1"
-	"github.com/billykore/todolist/services/auth/service"
+	"github.com/billykore/kore/libs/config"
+	"github.com/billykore/kore/libs/pkg/log"
+	"github.com/billykore/kore/libs/proto/v1"
+	"github.com/billykore/kore/services/auth/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )

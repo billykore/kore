@@ -1,7 +1,7 @@
 package pkg
 
 import (
-	"github.com/billykore/todolist/libs/pkg/log"
+	"github.com/billykore/kore/libs/pkg/log"
 	"github.com/google/wire"
 )
 

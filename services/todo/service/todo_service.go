@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	v1 "github.com/billykore/todolist/libs/proto/v1"
-	"github.com/billykore/todolist/services/todo/usecase"
+	v1 "github.com/billykore/kore/libs/proto/v1"
+	"github.com/billykore/kore/services/todo/usecase"
 	"google.golang.org/grpc/codes"
 )
 

@@ -1,4 +1,4 @@
 .DS_Store
 .idea
 .env
-todo-list-app-firebase-sdk.json
+firebase-sdk.json

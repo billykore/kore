@@ -3,19 +3,14 @@ package service
 import (
 	"context"
 
-	"github.com/billykore/todolist/libs/proto/v1"
-	"github.com/billykore/todolist/services/auth/usecase"
+	"github.com/billykore/kore/libs/proto/v1"
+	"github.com/billykore/kore/services/auth/usecase"
 )
 
 type AuthService struct {
 	v1.UnimplementedAuthorizationServer
 
 	uc *usecase.AuthUsecase
-}
-
-func (s *AuthService) mustEmbedUnimplementedAuthorizationServer() {
-	//TODO implement me
-	panic("implement me")
 }
 
 func NewAuthService(uc *usecase.AuthUsecase) *AuthService {

@@ -29,3 +29,9 @@ generate: \
 run:
 	@echo "Run app..."
 	@go run ./services/$(service)/cmd
+
+# make install-cli
+.PHONY: install-cli
+install-cli:
+	@echo "Install monorepo CLI..."
+	@go install ./kore-cli

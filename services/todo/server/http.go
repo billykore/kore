@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/billykore/todolist/libs/config"
-	"github.com/billykore/todolist/libs/pkg/log"
-	v1 "github.com/billykore/todolist/libs/proto/v1"
-	"github.com/billykore/todolist/services/todo/service"
+	"github.com/billykore/kore/libs/config"
+	"github.com/billykore/kore/libs/pkg/log"
+	v1 "github.com/billykore/kore/libs/proto/v1"
+	"github.com/billykore/kore/services/todo/service"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
 

@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"cloud.google.com/go/firestore"
-	firestoredb "github.com/billykore/todolist/libs/database/firestore"
-	"github.com/billykore/todolist/libs/model"
-	"github.com/billykore/todolist/libs/repository"
+	firestoredb "github.com/billykore/kore/libs/database/firestore"
+	"github.com/billykore/kore/libs/model"
+	"github.com/billykore/kore/libs/repository"
 )
 
 type todoRepo struct {

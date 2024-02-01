@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package kore.v1;
+
+option go_package = "todo-list-app/libs/proto/v1;v1";
+
+import "third_party/google/api/annotations.proto";
+
+service Greeter {
+  rpc Greet (GreetRequest) returns (GreetReply) {
+    option (google.api.http) = {
+      post: "/greet"
+      body: "*"
+    };
+  }
+}
+
+
+message GreetRequest {
+  string name = 1;
+}
+
+message GreetReply {
+  string message = 1;
+}
