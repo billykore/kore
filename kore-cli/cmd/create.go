@@ -28,7 +28,7 @@ that look something like this:
     │       ├── repository/  # Service repositories.
     │       ├── server/      # Service http and gRPC servers.
     │       ├── service/     # Service API handlers.
-    │       ├── usecase/     # Service usecases. Contains business logics.
+    │       ├── usecase/     # Service usecases.
     │       └── Dockerfile
     ├── ...
 
