@@ -1,2 +1,2 @@
 # Golang Monorepo
-Monorepo for all Go service that I want to write
+Monorepo for all Go service I want to write
