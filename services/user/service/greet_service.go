@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/billykore/kore/services/user/usecase"
 	"github.com/billykore/kore/libs/proto/v1"
+	"github.com/billykore/kore/services/user/usecase"
 )
 
 type UserService struct {

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/billykore/kore/kore-cli/tpl"
+	"github.com/billykore/kore/korecli/tpl"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -16,7 +16,7 @@ import (
 const createDesc = `
 This command create new service inside the monorepo services directory.
 
-For example, 'kore-cli create todo' will create a service inside the 'services/' directory
+For example, 'korecli create todo' will create a service inside the 'services/' directory
 that look something like this:
 
     kore/
@@ -32,7 +32,7 @@ that look something like this:
     │       └── Dockerfile
     ├── ...
 
-'kore-cli create' take service name for an argument and the name will be same for new directory
+'korecli create' take service name for an argument and the name will be same for new directory
 inside the 'services/' directory.
 `
 

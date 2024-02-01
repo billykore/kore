@@ -24,8 +24,8 @@ import (
 
 	"{{ .Mod }}/libs/config"
 	"{{ .Mod }}/libs/pkg/log"
-	"{{ .Mod }}/services/{{ .ServiceName }}/service"
 	"{{ .Mod }}/libs/proto/v1"
+	"{{ .Mod }}/services/{{ .ServiceName }}/service"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
 

@@ -7,8 +7,8 @@ import (
 
 	"github.com/billykore/kore/libs/config"
 	"github.com/billykore/kore/libs/pkg/log"
-	"github.com/billykore/kore/services/user/service"
 	"github.com/billykore/kore/libs/proto/v1"
+	"github.com/billykore/kore/services/user/service"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
 

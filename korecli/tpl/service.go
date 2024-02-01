@@ -17,8 +17,8 @@ func ServiceTemplate() []byte {
 import (
 	"context"
 
-	"{{ .Mod }}/services/{{ .ServiceName }}/usecase"
 	"{{ .Mod }}/libs/proto/v1"
+	"{{ .Mod }}/services/{{ .ServiceName }}/usecase"
 )
 
 type {{ .StructName }}Service struct {

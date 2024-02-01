@@ -34,4 +34,4 @@ run:
 .PHONY: install-cli
 install-cli:
 	@echo "Install monorepo CLI..."
-	@go install ./kore-cli
+	@go install ./korecli

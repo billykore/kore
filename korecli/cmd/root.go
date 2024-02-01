@@ -10,12 +10,12 @@ const koreDesc = `Monorepo CLI tool
 
 Action for CLI:
 
-- kore-cli create: create new service
+- korecli create: create new service
 `
 
 func newRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "kore",
+		Use:   "korecli",
 		Short: "Monorepo CLI",
 		Long:  koreDesc,
 	}
