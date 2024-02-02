@@ -113,6 +113,9 @@ func (o *createOption) Create() error {
 	if err := o.createCmd(svcPath); err != nil {
 		return err
 	}
+	if err := o.createDeployment(svcPath); err != nil {
+		return err
+	}
 	if err := o.createDockerfile(svcPath); err != nil {
 		return err
 	}
@@ -220,13 +223,13 @@ func (o *createOption) createService(path string) error {
 }
 
 func (o *createOption) createServer(path string) error {
-	servicePath := fmt.Sprintf("%s/server", path)
+	serverPath := fmt.Sprintf("%s/server", path)
 
-	if err := os.Mkdir(servicePath, 0754); err != nil {
+	if err := os.Mkdir(serverPath, 0754); err != nil {
 		return err
 	}
 
-	providerFile, err := os.Create(fmt.Sprintf("%s/provider.go", servicePath))
+	providerFile, err := os.Create(fmt.Sprintf("%s/provider.go", serverPath))
 	if err != nil {
 		return err
 	}
@@ -235,7 +238,7 @@ func (o *createOption) createServer(path string) error {
 		return err
 	}
 
-	httpFile, err := os.Create(fmt.Sprintf("%s/http.go", servicePath))
+	httpFile, err := os.Create(fmt.Sprintf("%s/http.go", serverPath))
 	if err != nil {
 		return err
 	}
@@ -244,7 +247,7 @@ func (o *createOption) createServer(path string) error {
 		return err
 	}
 
-	grpcFile, err := os.Create(fmt.Sprintf("%s/grpc.go", servicePath))
+	grpcFile, err := os.Create(fmt.Sprintf("%s/grpc.go", serverPath))
 	if err != nil {
 		return err
 	}
@@ -257,13 +260,13 @@ func (o *createOption) createServer(path string) error {
 }
 
 func (o *createOption) createCmd(path string) error {
-	servicePath := fmt.Sprintf("%s/cmd", path)
+	cmdPath := fmt.Sprintf("%s/cmd", path)
 
-	if err := os.Mkdir(servicePath, 0754); err != nil {
+	if err := os.Mkdir(cmdPath, 0754); err != nil {
 		return err
 	}
 
-	mainFile, err := os.Create(fmt.Sprintf("%s/main.go", servicePath))
+	mainFile, err := os.Create(fmt.Sprintf("%s/main.go", cmdPath))
 	if err != nil {
 		return err
 	}
@@ -272,12 +275,40 @@ func (o *createOption) createCmd(path string) error {
 		return err
 	}
 
-	wireFile, err := os.Create(fmt.Sprintf("%s/wire.go", servicePath))
+	wireFile, err := os.Create(fmt.Sprintf("%s/wire.go", cmdPath))
 	if err != nil {
 		return err
 	}
 	wireTpl := template.Must(template.New("wire").Parse(string(tpl.WireTemplate())))
 	if err := wireTpl.Execute(wireFile, o); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (o *createOption) createDeployment(path string) error {
+	deploymentPath := fmt.Sprintf("%s/deployment", path)
+
+	if err := os.Mkdir(deploymentPath, 0754); err != nil {
+		return err
+	}
+
+	deploymentFile, err := os.Create(fmt.Sprintf("%s/deployment.yaml", deploymentPath))
+	if err != nil {
+		return err
+	}
+	deploymentTpl := template.Must(template.New("main").Parse(string(tpl.DeploymentTemplate())))
+	if err := deploymentTpl.Execute(deploymentFile, o); err != nil {
+		return err
+	}
+
+	envFile, err := os.Create(fmt.Sprintf("%s/env.yaml", deploymentPath))
+	if err != nil {
+		return err
+	}
+	envTpl := template.Must(template.New("main").Parse(string(tpl.EnvTemplate())))
+	if err := envTpl.Execute(envFile, o); err != nil {
 		return err
 	}
 
