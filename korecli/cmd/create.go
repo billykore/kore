@@ -62,7 +62,7 @@ func newCreateCmd() *cobra.Command {
 				Mod:          mod,
 			}
 
-			return o.Create()
+			return o.create()
 		},
 	}
 
@@ -76,7 +76,7 @@ type createOption struct {
 	Mod          string
 }
 
-func (o *createOption) Create() error {
+func (o *createOption) create() error {
 	libsPath := o.AbsolutePath + "/libs"
 	// check if libs dir exist
 	if _, err := os.Stat(libsPath); os.IsNotExist(err) {
