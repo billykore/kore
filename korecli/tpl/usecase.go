@@ -34,9 +34,9 @@ func NewGreetUsecase(log *log.Logger, repo repository.Greeter) *GreetUsecase {
 	}
 }
 
-func (uc *GreetUsecase) Greet(ctx context.Context, req *v1.GreetRequest) (*v1.GreetReply, error) {
+func (uc *GreetUsecase) Greet(ctx context.Context, req *v1.{{ .StructName }}Request) (*v1.{{ .StructName }}Reply, error) {
 	uc.log.Usecase("Greet").Infof("Greet %s", req.GetName())
-	return &v1.GreetReply{
+	return &v1.{{ .StructName }}Reply{
 		Message: "Hello " + req.GetName(),
 	}, nil
 }

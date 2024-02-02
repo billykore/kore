@@ -48,7 +48,7 @@ func (hs *HTTPServer) Serve() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	err := v1.RegisterGreeterHandlerServer(ctx, mux, hs.{{ .ServiceName }}Svc)
+	err := v1.Register{{ .StructName }}HandlerServer(ctx, mux, hs.{{ .ServiceName }}Svc)
 	if err != nil {
 		hs.log.Fatalf("failed to register gateway: %v", err)
 	}
@@ -103,7 +103,7 @@ func (gs *GRPCServer) Serve() {
 	}
 
 	srv := grpc.NewServer()
-	v1.RegisterGreeterServer(srv, gs.{{ .ServiceName }}Svc)
+	v1.Register{{ .StructName }}Server(srv, gs.{{ .ServiceName }}Svc)
 	reflection.Register(srv)
 
 	gs.log.Infof("Run on grpc server port %s", gs.cfg.GRPCPort)

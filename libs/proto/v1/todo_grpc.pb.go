@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TodoService_GetTodos_FullMethodName    = "/monorepo.v1.TodoService/GetTodos"
-	TodoService_GetTodo_FullMethodName     = "/monorepo.v1.TodoService/GetTodo"
-	TodoService_AddTodo_FullMethodName     = "/monorepo.v1.TodoService/AddTodo"
-	TodoService_SetDoneTodo_FullMethodName = "/monorepo.v1.TodoService/SetDoneTodo"
-	TodoService_DeleteTodo_FullMethodName  = "/monorepo.v1.TodoService/DeleteTodo"
+	TodoService_GetTodos_FullMethodName    = "/kore.v1.TodoService/GetTodos"
+	TodoService_GetTodo_FullMethodName     = "/kore.v1.TodoService/GetTodo"
+	TodoService_AddTodo_FullMethodName     = "/kore.v1.TodoService/AddTodo"
+	TodoService_SetDoneTodo_FullMethodName = "/kore.v1.TodoService/SetDoneTodo"
+	TodoService_DeleteTodo_FullMethodName  = "/kore.v1.TodoService/DeleteTodo"
 )
 
 // TodoServiceClient is the client API for TodoService service.
@@ -228,7 +228,7 @@ func _TodoService_DeleteTodo_Handler(srv interface{}, ctx context.Context, dec f
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var TodoService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "monorepo.v1.TodoService",
+	ServiceName: "kore.v1.TodoService",
 	HandlerType: (*TodoServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

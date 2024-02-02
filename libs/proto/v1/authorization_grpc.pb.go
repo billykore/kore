@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Authorization_Login_FullMethodName = "/monorepo.v1.Authorization/Login"
+	Authorization_Login_FullMethodName = "/kore.v1.Authorization/Login"
 )
 
 // AuthorizationClient is the client API for Authorization service.
@@ -96,7 +96,7 @@ func _Authorization_Login_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Authorization_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "monorepo.v1.Authorization",
+	ServiceName: "kore.v1.Authorization",
 	HandlerType: (*AuthorizationServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

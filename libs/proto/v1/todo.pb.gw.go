@@ -263,7 +263,7 @@ func RegisterTodoServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/monorepo.v1.TodoService/GetTodos", runtime.WithHTTPPathPattern("/todos"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/kore.v1.TodoService/GetTodos", runtime.WithHTTPPathPattern("/todos"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -288,7 +288,7 @@ func RegisterTodoServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/monorepo.v1.TodoService/GetTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/kore.v1.TodoService/GetTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -313,7 +313,7 @@ func RegisterTodoServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/monorepo.v1.TodoService/AddTodo", runtime.WithHTTPPathPattern("/todos"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/kore.v1.TodoService/AddTodo", runtime.WithHTTPPathPattern("/todos"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -338,7 +338,7 @@ func RegisterTodoServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/monorepo.v1.TodoService/SetDoneTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/kore.v1.TodoService/SetDoneTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -363,7 +363,7 @@ func RegisterTodoServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/monorepo.v1.TodoService/DeleteTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/kore.v1.TodoService/DeleteTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -427,7 +427,7 @@ func RegisterTodoServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/monorepo.v1.TodoService/GetTodos", runtime.WithHTTPPathPattern("/todos"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/kore.v1.TodoService/GetTodos", runtime.WithHTTPPathPattern("/todos"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -449,7 +449,7 @@ func RegisterTodoServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/monorepo.v1.TodoService/GetTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/kore.v1.TodoService/GetTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -471,7 +471,7 @@ func RegisterTodoServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/monorepo.v1.TodoService/AddTodo", runtime.WithHTTPPathPattern("/todos"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/kore.v1.TodoService/AddTodo", runtime.WithHTTPPathPattern("/todos"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -493,7 +493,7 @@ func RegisterTodoServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/monorepo.v1.TodoService/SetDoneTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/kore.v1.TodoService/SetDoneTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -515,7 +515,7 @@ func RegisterTodoServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/monorepo.v1.TodoService/DeleteTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/kore.v1.TodoService/DeleteTodo", runtime.WithHTTPPathPattern("/todos/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

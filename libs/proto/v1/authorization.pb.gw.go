@@ -71,7 +71,7 @@ func RegisterAuthorizationHandlerServer(ctx context.Context, mux *runtime.ServeM
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/monorepo.v1.Authorization/Login", runtime.WithHTTPPathPattern("/login"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/kore.v1.Authorization/Login", runtime.WithHTTPPathPattern("/login"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -135,7 +135,7 @@ func RegisterAuthorizationHandlerClient(ctx context.Context, mux *runtime.ServeM
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/monorepo.v1.Authorization/Login", runtime.WithHTTPPathPattern("/login"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/kore.v1.Authorization/Login", runtime.WithHTTPPathPattern("/login"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

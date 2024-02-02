@@ -22,7 +22,7 @@ import (
 )
 
 type {{ .StructName }}Service struct {
-	v1.UnimplementedGreeterServer
+	v1.Unimplemented{{ .StructName }}Server
 
 	uc *usecase.GreetUsecase
 }
@@ -31,7 +31,7 @@ func New{{ .StructName }}Service(uc *usecase.GreetUsecase) *{{ .StructName }}Ser
 	return &{{ .StructName }}Service{uc: uc}
 }
 
-func (s *{{ .StructName }}Service) Greet(ctx context.Context, in *v1.GreetRequest) (*v1.GreetReply, error) {
+func (s *{{ .StructName }}Service) Greet(ctx context.Context, in *v1.{{ .StructName }}Request) (*v1.{{ .StructName }}Reply, error) {
 	greet, err := s.uc.Greet(ctx, in)
 	if err != nil {
 		return nil, err

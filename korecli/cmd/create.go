@@ -76,43 +76,66 @@ type createOption struct {
 	Mod          string
 }
 
-func (s *createOption) Create() error {
-	svcPath := s.AbsolutePath + "/services"
+func (o *createOption) Create() error {
+	libsPath := o.AbsolutePath + "/libs"
+	// check if libs dir exist
+	if _, err := os.Stat(libsPath); os.IsNotExist(err) {
+		return err
+	}
+	// create proto
+	if err := o.createProto(libsPath); err != nil {
+		return err
+	}
 
+	svcPath := o.AbsolutePath + "/services"
 	// check if services dir exist
 	if _, err := os.Stat(svcPath); os.IsNotExist(err) {
 		return err
 	}
-	svcPath = fmt.Sprintf("%s/%s", svcPath, s.ServiceName)
+	svcPath = fmt.Sprintf("%s/%s", svcPath, o.ServiceName)
 
-	// create service folder
+	// create service
 	if err := os.Mkdir(svcPath, 0754); err != nil {
 		return err
 	}
-
-	if err := s.createRepository(svcPath); err != nil {
+	if err := o.createRepository(svcPath); err != nil {
 		return err
 	}
-	if err := s.createUsecase(svcPath); err != nil {
+	if err := o.createUsecase(svcPath); err != nil {
 		return err
 	}
-	if err := s.createService(svcPath); err != nil {
+	if err := o.createService(svcPath); err != nil {
 		return err
 	}
-	if err := s.createServer(svcPath); err != nil {
+	if err := o.createServer(svcPath); err != nil {
 		return err
 	}
-	if err := s.createCmd(svcPath); err != nil {
+	if err := o.createCmd(svcPath); err != nil {
 		return err
 	}
-	if err := s.createDockerfile(svcPath); err != nil {
+	if err := o.createDockerfile(svcPath); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (s *createOption) createRepository(path string) error {
+func (o *createOption) createProto(path string) error {
+	protoPath := fmt.Sprintf("%s/proto/v1", path)
+
+	protoFile, err := os.Create(fmt.Sprintf("%s/%s.proto", protoPath, o.ServiceName))
+	if err != nil {
+		return err
+	}
+	protoTpl := template.Must(template.New(o.ServiceName).Parse(string(tpl.ProtoTemplate())))
+	if err := protoTpl.Execute(protoFile, o); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (o *createOption) createRepository(path string) error {
 	repoPath := fmt.Sprintf("%s/repository", path)
 
 	if err := os.Mkdir(repoPath, 0754); err != nil {
@@ -124,7 +147,7 @@ func (s *createOption) createRepository(path string) error {
 		return err
 	}
 	providerTpl := template.Must(template.New("provider").Parse(string(tpl.RepoProviderTemplate())))
-	if err := providerTpl.Execute(providerFile, s); err != nil {
+	if err := providerTpl.Execute(providerFile, o); err != nil {
 		return err
 	}
 
@@ -133,14 +156,14 @@ func (s *createOption) createRepository(path string) error {
 		return err
 	}
 	repoTpl := template.Must(template.New("greet_repository").Parse(string(tpl.RepoTemplate())))
-	if err := repoTpl.Execute(repoFile, s); err != nil {
+	if err := repoTpl.Execute(repoFile, o); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (s *createOption) createUsecase(path string) error {
+func (o *createOption) createUsecase(path string) error {
 	usecasePath := fmt.Sprintf("%s/usecase", path)
 
 	if err := os.Mkdir(usecasePath, 0754); err != nil {
@@ -152,7 +175,7 @@ func (s *createOption) createUsecase(path string) error {
 		return err
 	}
 	providerTpl := template.Must(template.New("provider").Parse(string(tpl.UsecaseProviderTemplate())))
-	if err := providerTpl.Execute(providerFile, s); err != nil {
+	if err := providerTpl.Execute(providerFile, o); err != nil {
 		return err
 	}
 
@@ -161,14 +184,14 @@ func (s *createOption) createUsecase(path string) error {
 		return err
 	}
 	usecaseTpl := template.Must(template.New("greet_usecase").Parse(string(tpl.UsecaseTemplate())))
-	if err := usecaseTpl.Execute(usecaseFile, s); err != nil {
+	if err := usecaseTpl.Execute(usecaseFile, o); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (s *createOption) createService(path string) error {
+func (o *createOption) createService(path string) error {
 	servicePath := fmt.Sprintf("%s/service", path)
 
 	if err := os.Mkdir(servicePath, 0754); err != nil {
@@ -180,7 +203,7 @@ func (s *createOption) createService(path string) error {
 		return err
 	}
 	providerTpl := template.Must(template.New("provider").Parse(string(tpl.ServiceProviderTemplate())))
-	if err := providerTpl.Execute(providerFile, s); err != nil {
+	if err := providerTpl.Execute(providerFile, o); err != nil {
 		return err
 	}
 
@@ -189,14 +212,14 @@ func (s *createOption) createService(path string) error {
 		return err
 	}
 	serviceTpl := template.Must(template.New("greet_service").Parse(string(tpl.ServiceTemplate())))
-	if err := serviceTpl.Execute(serviceFile, s); err != nil {
+	if err := serviceTpl.Execute(serviceFile, o); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (s *createOption) createServer(path string) error {
+func (o *createOption) createServer(path string) error {
 	servicePath := fmt.Sprintf("%s/server", path)
 
 	if err := os.Mkdir(servicePath, 0754); err != nil {
@@ -208,7 +231,7 @@ func (s *createOption) createServer(path string) error {
 		return err
 	}
 	providerTpl := template.Must(template.New("provider").Parse(string(tpl.ServerProviderTemplate())))
-	if err := providerTpl.Execute(providerFile, s); err != nil {
+	if err := providerTpl.Execute(providerFile, o); err != nil {
 		return err
 	}
 
@@ -217,7 +240,7 @@ func (s *createOption) createServer(path string) error {
 		return err
 	}
 	httpTpl := template.Must(template.New("http").Parse(string(tpl.HTTPServerTemplate())))
-	if err := httpTpl.Execute(httpFile, s); err != nil {
+	if err := httpTpl.Execute(httpFile, o); err != nil {
 		return err
 	}
 
@@ -226,14 +249,14 @@ func (s *createOption) createServer(path string) error {
 		return err
 	}
 	grpcTpl := template.Must(template.New("grpc").Parse(string(tpl.GRPCServerTemplate())))
-	if err := grpcTpl.Execute(grpcFile, s); err != nil {
+	if err := grpcTpl.Execute(grpcFile, o); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (s *createOption) createCmd(path string) error {
+func (o *createOption) createCmd(path string) error {
 	servicePath := fmt.Sprintf("%s/cmd", path)
 
 	if err := os.Mkdir(servicePath, 0754); err != nil {
@@ -245,7 +268,7 @@ func (s *createOption) createCmd(path string) error {
 		return err
 	}
 	mainTpl := template.Must(template.New("main").Parse(string(tpl.MainTemplate())))
-	if err := mainTpl.Execute(mainFile, s); err != nil {
+	if err := mainTpl.Execute(mainFile, o); err != nil {
 		return err
 	}
 
@@ -254,20 +277,20 @@ func (s *createOption) createCmd(path string) error {
 		return err
 	}
 	wireTpl := template.Must(template.New("wire").Parse(string(tpl.WireTemplate())))
-	if err := wireTpl.Execute(wireFile, s); err != nil {
+	if err := wireTpl.Execute(wireFile, o); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (s *createOption) createDockerfile(path string) error {
+func (o *createOption) createDockerfile(path string) error {
 	dockerfile, err := os.Create(fmt.Sprintf("%s/Dockerfile", path))
 	if err != nil {
 		return err
 	}
 	dockerfileTpl := template.Must(template.New("Dockerfile").Parse(string(tpl.DockerfileTemplate())))
-	if err := dockerfileTpl.Execute(dockerfile, s); err != nil {
+	if err := dockerfileTpl.Execute(dockerfile, o); err != nil {
 		return err
 	}
 	return nil
