@@ -26,54 +26,54 @@ func newRemoveCmd() *cobra.Command {
 				return err
 			}
 
-			o := &removeOption{
+			d := &removeData{
 				AbsolutePath: wd,
 				ServiceName:  args[0],
 			}
 
-			return o.remove()
+			return d.remove()
 		},
 	}
 	return cmd
 }
 
-type removeOption struct {
+type removeData struct {
 	AbsolutePath string
 	ServiceName  string
 }
 
-func (o *removeOption) remove() error {
-	if err := o.removeProto(); err != nil {
+func (d *removeData) remove() error {
+	if err := d.removeProto(); err != nil {
 		return err
 	}
-	if err := o.removeService(); err != nil {
+	if err := d.removeService(); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *removeOption) removeProto() error {
-	protoPath := o.AbsolutePath + "/libs/proto/v1"
+func (d *removeData) removeProto() error {
+	protoPath := d.AbsolutePath + "/libs/proto/v1"
 	if _, err := os.Stat(protoPath); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s.proto", protoPath, o.ServiceName)); err != nil {
+	if err := os.Remove(fmt.Sprintf("%s/%s.proto", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s.pb.go", protoPath, o.ServiceName)); err != nil {
+	if err := os.Remove(fmt.Sprintf("%s/%s.pb.go", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s.pb.gw.go", protoPath, o.ServiceName)); err != nil {
+	if err := os.Remove(fmt.Sprintf("%s/%s.pb.gw.go", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s_grpc.pb.go", protoPath, o.ServiceName)); err != nil {
+	if err := os.Remove(fmt.Sprintf("%s/%s_grpc.pb.go", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *removeOption) removeService() error {
-	svcPath := fmt.Sprintf("%s/services/%s", o.AbsolutePath, o.ServiceName)
+func (d *removeData) removeService() error {
+	svcPath := fmt.Sprintf("%s/services/%s", d.AbsolutePath, d.ServiceName)
 	if _, err := os.Stat(svcPath); err != nil {
 		return err
 	}
