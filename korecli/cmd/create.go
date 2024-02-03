@@ -19,11 +19,23 @@ This command create new service inside the monorepo services directory.
 Use --repo or -r flag for create new repository interface in the libs/repository directory.
 E.g.  korecli create todo --repo Todo
 
-For example, 'korecli create todo' will create a service inside the 'services/' directory
-that look something like this:
+For example, 'korecli create todo' will create a service inside the services/ directory 
+and a protobuf inside the  file that look something like this:
 
     kore/
-    ├── ...
+    ├──...
+    ├── libs/
+    │   ├──...
+    │   ├── proto/
+    │   │   └── v1/
+    │   │       ├──...
+    │   │       ├── todo.proto
+    │   │       └──...
+    │   ├──...
+    │   └── repository
+    │       ├──...
+    │       ├── todo.go
+    │       └──...
     ├── services/
     │   └── todo/
     │       ├── cmd/         # Contains main.go and wire.go injector files.
@@ -33,10 +45,10 @@ that look something like this:
     │       ├── service/     # Service API handlers.
     │       ├── usecase/     # Service usecases.
     │       └── Dockerfile
-    ├── ...
+    └──...
 
 'korecli create' take service name for an argument and the name will be same for new directory
-inside the 'services/' directory.
+inside the services/ directory.
 `
 
 func newCreateCmd() *cobra.Command {
