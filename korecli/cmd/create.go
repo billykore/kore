@@ -16,6 +16,9 @@ import (
 const createDesc = `
 This command create new service inside the monorepo services directory.
 
+Use --repo or -r flag for create new repository interface in the libs/repository directory.
+E.g.  korecli create todo --repo Todo
+
 For example, 'korecli create todo' will create a service inside the 'services/' directory
 that look something like this:
 
@@ -37,6 +40,8 @@ inside the 'services/' directory.
 `
 
 func newCreateCmd() *cobra.Command {
+	d := &createData{}
+
 	cmd := &cobra.Command{
 		Use:   "create SERVICE",
 		Short: "Create new service",
@@ -53,92 +58,96 @@ func newCreateCmd() *cobra.Command {
 			}
 
 			svcName := args[0]
-			structName := cases.Title(language.English).String(svcName)
+			d.AbsolutePath = wd
+			d.ServiceName = svcName
+			d.StructName = cases.Title(language.English).String(svcName)
+			d.Mod = mod
 
-			o := &createOption{
-				AbsolutePath: wd,
-				ServiceName:  svcName,
-				StructName:   structName,
-				Mod:          mod,
-			}
-
-			return o.create()
+			return d.create()
 		},
 	}
+
+	f := cmd.Flags()
+	f.StringVarP(&d.Repository, "repo", "r", "", "create new repository")
 
 	return cmd
 }
 
-type createOption struct {
+type createData struct {
 	AbsolutePath string
 	ServiceName  string
 	StructName   string
 	Mod          string
+	Repository   string
 }
 
-func (o *createOption) create() error {
-	libsPath := o.AbsolutePath + "/libs"
+func (d *createData) create() error {
+	libsPath := d.AbsolutePath + "/libs"
 	// check if libs dir exist
 	if _, err := os.Stat(libsPath); os.IsNotExist(err) {
 		return err
 	}
 	// create proto
-	if err := o.createProto(libsPath); err != nil {
+	if err := d.createProto(libsPath); err != nil {
+		return err
+	}
+	// create repository interface (if required)
+	if err := d.createIRepository(libsPath); err != nil {
 		return err
 	}
 
-	svcPath := o.AbsolutePath + "/services"
+	svcPath := d.AbsolutePath + "/services"
 	// check if services dir exist
 	if _, err := os.Stat(svcPath); os.IsNotExist(err) {
 		return err
 	}
-	svcPath = fmt.Sprintf("%s/%s", svcPath, o.ServiceName)
+	svcPath = fmt.Sprintf("%s/%s", svcPath, d.ServiceName)
 
 	// create service
 	if err := os.Mkdir(svcPath, 0754); err != nil {
 		return err
 	}
-	if err := o.createRepository(svcPath); err != nil {
+	if err := d.createRepository(svcPath); err != nil {
 		return err
 	}
-	if err := o.createUsecase(svcPath); err != nil {
+	if err := d.createUsecase(svcPath); err != nil {
 		return err
 	}
-	if err := o.createService(svcPath); err != nil {
+	if err := d.createService(svcPath); err != nil {
 		return err
 	}
-	if err := o.createServer(svcPath); err != nil {
+	if err := d.createServer(svcPath); err != nil {
 		return err
 	}
-	if err := o.createCmd(svcPath); err != nil {
+	if err := d.createCmd(svcPath); err != nil {
 		return err
 	}
-	if err := o.createDeployment(svcPath); err != nil {
+	if err := d.createDeployment(svcPath); err != nil {
 		return err
 	}
-	if err := o.createDockerfile(svcPath); err != nil {
+	if err := d.createDockerfile(svcPath); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (o *createOption) createProto(path string) error {
+func (d *createData) createProto(path string) error {
 	protoPath := fmt.Sprintf("%s/proto/v1", path)
 
-	protoFile, err := os.Create(fmt.Sprintf("%s/%s.proto", protoPath, o.ServiceName))
+	protoFile, err := os.Create(fmt.Sprintf("%s/%s.proto", protoPath, d.ServiceName))
 	if err != nil {
 		return err
 	}
-	protoTpl := template.Must(template.New(o.ServiceName).Parse(string(tpl.ProtoTemplate())))
-	if err := protoTpl.Execute(protoFile, o); err != nil {
+	protoTpl := template.Must(template.New(d.ServiceName).Parse(string(tpl.ProtoTemplate())))
+	if err := protoTpl.Execute(protoFile, d); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (o *createOption) createRepository(path string) error {
+func (d *createData) createRepository(path string) error {
 	repoPath := fmt.Sprintf("%s/repository", path)
 
 	if err := os.Mkdir(repoPath, 0754); err != nil {
@@ -150,7 +159,7 @@ func (o *createOption) createRepository(path string) error {
 		return err
 	}
 	providerTpl := template.Must(template.New("provider").Parse(string(tpl.RepoProviderTemplate())))
-	if err := providerTpl.Execute(providerFile, o); err != nil {
+	if err := providerTpl.Execute(providerFile, d); err != nil {
 		return err
 	}
 
@@ -159,14 +168,14 @@ func (o *createOption) createRepository(path string) error {
 		return err
 	}
 	repoTpl := template.Must(template.New("greet_repository").Parse(string(tpl.RepoTemplate())))
-	if err := repoTpl.Execute(repoFile, o); err != nil {
+	if err := repoTpl.Execute(repoFile, d); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (o *createOption) createUsecase(path string) error {
+func (d *createData) createUsecase(path string) error {
 	usecasePath := fmt.Sprintf("%s/usecase", path)
 
 	if err := os.Mkdir(usecasePath, 0754); err != nil {
@@ -178,7 +187,7 @@ func (o *createOption) createUsecase(path string) error {
 		return err
 	}
 	providerTpl := template.Must(template.New("provider").Parse(string(tpl.UsecaseProviderTemplate())))
-	if err := providerTpl.Execute(providerFile, o); err != nil {
+	if err := providerTpl.Execute(providerFile, d); err != nil {
 		return err
 	}
 
@@ -187,14 +196,14 @@ func (o *createOption) createUsecase(path string) error {
 		return err
 	}
 	usecaseTpl := template.Must(template.New("greet_usecase").Parse(string(tpl.UsecaseTemplate())))
-	if err := usecaseTpl.Execute(usecaseFile, o); err != nil {
+	if err := usecaseTpl.Execute(usecaseFile, d); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (o *createOption) createService(path string) error {
+func (d *createData) createService(path string) error {
 	servicePath := fmt.Sprintf("%s/service", path)
 
 	if err := os.Mkdir(servicePath, 0754); err != nil {
@@ -206,7 +215,7 @@ func (o *createOption) createService(path string) error {
 		return err
 	}
 	providerTpl := template.Must(template.New("provider").Parse(string(tpl.ServiceProviderTemplate())))
-	if err := providerTpl.Execute(providerFile, o); err != nil {
+	if err := providerTpl.Execute(providerFile, d); err != nil {
 		return err
 	}
 
@@ -215,14 +224,14 @@ func (o *createOption) createService(path string) error {
 		return err
 	}
 	serviceTpl := template.Must(template.New("greet_service").Parse(string(tpl.ServiceTemplate())))
-	if err := serviceTpl.Execute(serviceFile, o); err != nil {
+	if err := serviceTpl.Execute(serviceFile, d); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (o *createOption) createServer(path string) error {
+func (d *createData) createServer(path string) error {
 	serverPath := fmt.Sprintf("%s/server", path)
 
 	if err := os.Mkdir(serverPath, 0754); err != nil {
@@ -234,7 +243,7 @@ func (o *createOption) createServer(path string) error {
 		return err
 	}
 	providerTpl := template.Must(template.New("provider").Parse(string(tpl.ServerProviderTemplate())))
-	if err := providerTpl.Execute(providerFile, o); err != nil {
+	if err := providerTpl.Execute(providerFile, d); err != nil {
 		return err
 	}
 
@@ -243,7 +252,7 @@ func (o *createOption) createServer(path string) error {
 		return err
 	}
 	httpTpl := template.Must(template.New("http").Parse(string(tpl.HTTPServerTemplate())))
-	if err := httpTpl.Execute(httpFile, o); err != nil {
+	if err := httpTpl.Execute(httpFile, d); err != nil {
 		return err
 	}
 
@@ -252,14 +261,14 @@ func (o *createOption) createServer(path string) error {
 		return err
 	}
 	grpcTpl := template.Must(template.New("grpc").Parse(string(tpl.GRPCServerTemplate())))
-	if err := grpcTpl.Execute(grpcFile, o); err != nil {
+	if err := grpcTpl.Execute(grpcFile, d); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (o *createOption) createCmd(path string) error {
+func (d *createData) createCmd(path string) error {
 	cmdPath := fmt.Sprintf("%s/cmd", path)
 
 	if err := os.Mkdir(cmdPath, 0754); err != nil {
@@ -271,7 +280,7 @@ func (o *createOption) createCmd(path string) error {
 		return err
 	}
 	mainTpl := template.Must(template.New("main").Parse(string(tpl.MainTemplate())))
-	if err := mainTpl.Execute(mainFile, o); err != nil {
+	if err := mainTpl.Execute(mainFile, d); err != nil {
 		return err
 	}
 
@@ -280,14 +289,14 @@ func (o *createOption) createCmd(path string) error {
 		return err
 	}
 	wireTpl := template.Must(template.New("wire").Parse(string(tpl.WireTemplate())))
-	if err := wireTpl.Execute(wireFile, o); err != nil {
+	if err := wireTpl.Execute(wireFile, d); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (o *createOption) createDeployment(path string) error {
+func (d *createData) createDeployment(path string) error {
 	deploymentPath := fmt.Sprintf("%s/deployment", path)
 
 	if err := os.Mkdir(deploymentPath, 0754); err != nil {
@@ -299,7 +308,7 @@ func (o *createOption) createDeployment(path string) error {
 		return err
 	}
 	deploymentTpl := template.Must(template.New("main").Parse(string(tpl.DeploymentTemplate())))
-	if err := deploymentTpl.Execute(deploymentFile, o); err != nil {
+	if err := deploymentTpl.Execute(deploymentFile, d); err != nil {
 		return err
 	}
 
@@ -308,22 +317,41 @@ func (o *createOption) createDeployment(path string) error {
 		return err
 	}
 	envTpl := template.Must(template.New("main").Parse(string(tpl.EnvTemplate())))
-	if err := envTpl.Execute(envFile, o); err != nil {
+	if err := envTpl.Execute(envFile, d); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (o *createOption) createDockerfile(path string) error {
+func (d *createData) createDockerfile(path string) error {
 	dockerfile, err := os.Create(fmt.Sprintf("%s/Dockerfile", path))
 	if err != nil {
 		return err
 	}
 	dockerfileTpl := template.Must(template.New("Dockerfile").Parse(string(tpl.DockerfileTemplate())))
-	if err := dockerfileTpl.Execute(dockerfile, o); err != nil {
+	if err := dockerfileTpl.Execute(dockerfile, d); err != nil {
 		return err
 	}
+	return nil
+}
+
+func (d *createData) createIRepository(path string) error {
+	if d.Repository == "" {
+		return nil
+	}
+
+	repoPath := path + "/repository"
+
+	repoFile, err := os.Create(fmt.Sprintf("%s/%s.go", repoPath, strings.ToLower(d.Repository)))
+	if err != nil {
+		return err
+	}
+	repoTpl := template.Must(template.New("repository").Parse(string(tpl.IRepositoryTemplate())))
+	if err := repoTpl.Execute(repoFile, d); err != nil {
+		return err
+	}
+
 	return nil
 }
 
