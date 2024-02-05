@@ -24,10 +24,10 @@ import (
 type {{ .StructName }}Service struct {
 	v1.Unimplemented{{ .StructName }}Server
 
-	uc *usecase.GreetUsecase
+	uc *usecase.{{ .StructName }}Usecase
 }
 
-func New{{ .StructName }}Service(uc *usecase.GreetUsecase) *{{ .StructName }}Service {
+func New{{ .StructName }}Service(uc *usecase.{{ .StructName }}Usecase) *{{ .StructName }}Service {
 	return &{{ .StructName }}Service{uc: uc}
 }
 

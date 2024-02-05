@@ -175,11 +175,11 @@ func (d *createData) createRepository(path string) error {
 		return err
 	}
 
-	repoFile, err := os.Create(fmt.Sprintf("%s/greet_repository.go", repoPath))
+	repoFile, err := os.Create(fmt.Sprintf("%s/%s_repository.go", repoPath, d.ServiceName))
 	if err != nil {
 		return err
 	}
-	repoTpl := template.Must(template.New("greet_repository").Parse(string(tpl.RepoTemplate())))
+	repoTpl := template.Must(template.New("repository").Parse(string(tpl.RepoTemplate())))
 	if err := repoTpl.Execute(repoFile, d); err != nil {
 		return err
 	}
@@ -203,11 +203,11 @@ func (d *createData) createUsecase(path string) error {
 		return err
 	}
 
-	usecaseFile, err := os.Create(fmt.Sprintf("%s/greet_usecase.go", usecasePath))
+	usecaseFile, err := os.Create(fmt.Sprintf("%s/%s_usecase.go", usecasePath, d.ServiceName))
 	if err != nil {
 		return err
 	}
-	usecaseTpl := template.Must(template.New("greet_usecase").Parse(string(tpl.UsecaseTemplate())))
+	usecaseTpl := template.Must(template.New("usecase").Parse(string(tpl.UsecaseTemplate())))
 	if err := usecaseTpl.Execute(usecaseFile, d); err != nil {
 		return err
 	}
@@ -231,11 +231,11 @@ func (d *createData) createService(path string) error {
 		return err
 	}
 
-	serviceFile, err := os.Create(fmt.Sprintf("%s/greet_service.go", servicePath))
+	serviceFile, err := os.Create(fmt.Sprintf("%s/%s_service.go", servicePath, d.ServiceName))
 	if err != nil {
 		return err
 	}
-	serviceTpl := template.Must(template.New("greet_service").Parse(string(tpl.ServiceTemplate())))
+	serviceTpl := template.Must(template.New("service").Parse(string(tpl.ServiceTemplate())))
 	if err := serviceTpl.Execute(serviceFile, d); err != nil {
 		return err
 	}

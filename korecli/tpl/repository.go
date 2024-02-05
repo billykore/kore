@@ -7,7 +7,7 @@ import (
 	"github.com/google/wire"
 )
 
-var ProviderSet = wire.NewSet(NewGreetRepository)
+var ProviderSet = wire.NewSet(New{{ .StructName }}Repository)
 `)
 }
 
@@ -21,14 +21,14 @@ import (
 	"{{ .Mod }}/libs/repository"
 )
 
-type greetRepo struct {
+type {{ .ServiceName }}Repo struct {
 }
 
-func NewGreetRepository() repository.Greeter {
-	return &greetRepo{}
+func New{{ .StructName }}Repository() repository.Greeter {
+	return &{{ .ServiceName }}Repo{}
 }
 
-func (r *greetRepo) Get(ctx context.Context) (*model.Greet, error) {
+func (r *{{ .ServiceName }}Repo) Get(ctx context.Context) (*model.Greet, error) {
 	return &model.Greet{}, nil
 }
 `)

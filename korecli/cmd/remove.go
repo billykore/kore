@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -17,9 +18,10 @@ and '/libs/proto/v1/todo.proto' file with all the proto generated files.
 
 func newRemoveCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "rm SERVICE",
-		Short: "Remove a service",
-		Long:  removeDesc,
+		Use:     "remove SERVICE",
+		Short:   "Remove a service",
+		Long:    removeDesc,
+		Aliases: []string{"rm"},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			wd, err := os.Getwd()
 			if err != nil {
@@ -57,19 +59,27 @@ func (d *removeData) removeProto() error {
 	if _, err := os.Stat(protoPath); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s.proto", protoPath, d.ServiceName)); err != nil {
+	if err := removeIfExist(fmt.Sprintf("%s/%s.proto", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s.pb.go", protoPath, d.ServiceName)); err != nil {
+	if err := removeIfExist(fmt.Sprintf("%s/%s.pb.go", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s.pb.gw.go", protoPath, d.ServiceName)); err != nil {
+	if err := removeIfExist(fmt.Sprintf("%s/%s.pb.gw.go", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s_grpc.pb.go", protoPath, d.ServiceName)); err != nil {
+	if err := removeIfExist(fmt.Sprintf("%s/%s_grpc.pb.go", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
 	return nil
+}
+
+func removeIfExist(filename string) error {
+	err := os.Remove(filename)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
+	return err
 }
 
 func (d *removeData) removeService() error {
