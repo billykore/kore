@@ -17,9 +17,10 @@ and '/libs/proto/v1/todo.proto' file with all the proto generated files.
 
 func newRemoveCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "rm SERVICE",
-		Short: "Remove a service",
-		Long:  removeDesc,
+		Use:     "remove SERVICE",
+		Short:   "Remove a service",
+		Long:    removeDesc,
+		Aliases: []string{"rm"},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			wd, err := os.Getwd()
 			if err != nil {

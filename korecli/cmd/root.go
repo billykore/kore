@@ -11,7 +11,7 @@ const koreDesc = `Monorepo CLI tool
 Action for CLI:
 
 - korecli create: create new service
-- korecli rm:     remove a service
+- korecli remove: remove a service
 `
 
 func newRootCmd() *cobra.Command {
