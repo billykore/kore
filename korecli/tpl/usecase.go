@@ -7,7 +7,7 @@ import (
 	"github.com/google/wire"
 )
 
-var ProviderSet = wire.NewSet(NewGreetUsecase)
+var ProviderSet = wire.NewSet(New{{ .StructName }}Usecase)
 `)
 }
 
@@ -22,19 +22,19 @@ import (
 	"{{ .Mod }}/libs/repository"
 )
 
-type GreetUsecase struct {
+type {{ .StructName }}Usecase struct {
 	log  *log.Logger
 	repo repository.Greeter
 }
 
-func NewGreetUsecase(log *log.Logger, repo repository.Greeter) *GreetUsecase {
-	return &GreetUsecase{
+func New{{ .StructName }}Usecase(log *log.Logger, repo repository.Greeter) *{{ .StructName }}Usecase {
+	return &{{ .StructName }}Usecase{
 		log:  log,
 		repo: repo,
 	}
 }
 
-func (uc *GreetUsecase) Greet(ctx context.Context, req *v1.{{ .StructName }}Request) (*v1.{{ .StructName }}Reply, error) {
+func (uc *{{ .StructName }}Usecase) Greet(ctx context.Context, req *v1.{{ .StructName }}Request) (*v1.{{ .StructName }}Reply, error) {
 	uc.log.Usecase("Greet").Infof("Greet %s", req.GetName())
 	return &v1.{{ .StructName }}Reply{
 		Message: "Hello " + req.GetName(),

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -58,19 +59,27 @@ func (d *removeData) removeProto() error {
 	if _, err := os.Stat(protoPath); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s.proto", protoPath, d.ServiceName)); err != nil {
+	if err := removeIfExist(fmt.Sprintf("%s/%s.proto", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s.pb.go", protoPath, d.ServiceName)); err != nil {
+	if err := removeIfExist(fmt.Sprintf("%s/%s.pb.go", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s.pb.gw.go", protoPath, d.ServiceName)); err != nil {
+	if err := removeIfExist(fmt.Sprintf("%s/%s.pb.gw.go", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
-	if err := os.Remove(fmt.Sprintf("%s/%s_grpc.pb.go", protoPath, d.ServiceName)); err != nil {
+	if err := removeIfExist(fmt.Sprintf("%s/%s_grpc.pb.go", protoPath, d.ServiceName)); err != nil {
 		return err
 	}
 	return nil
+}
+
+func removeIfExist(filename string) error {
+	err := os.Remove(filename)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
+	return err
 }
 
 func (d *removeData) removeService() error {
