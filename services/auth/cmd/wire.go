@@ -7,14 +7,14 @@ import (
 	"github.com/billykore/kore/libs/config"
 	"github.com/billykore/kore/libs/database"
 	"github.com/billykore/kore/libs/pkg"
-	"github.com/billykore/kore/services/todo/repository"
-	"github.com/billykore/kore/services/todo/server"
-	"github.com/billykore/kore/services/todo/service"
-	"github.com/billykore/kore/services/todo/usecase"
+	"github.com/billykore/kore/services/auth/repository"
+	"github.com/billykore/kore/services/auth/server"
+	"github.com/billykore/kore/services/auth/service"
+	"github.com/billykore/kore/services/auth/usecase"
 	"github.com/google/wire"
 )
 
-func todoApp(cfg *config.Config) *app {
+func authApp(cfg *config.Config) *app {
 	wire.Build(
 		pkg.ProviderSet,
 		database.ProviderSet,

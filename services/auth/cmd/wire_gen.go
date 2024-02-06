@@ -10,10 +10,10 @@ import (
 	"github.com/billykore/kore/libs/config"
 	"github.com/billykore/kore/libs/database/firestore"
 	"github.com/billykore/kore/libs/pkg/log"
-	"github.com/billykore/kore/services/todo/repository"
-	"github.com/billykore/kore/services/todo/server"
-	"github.com/billykore/kore/services/todo/service"
-	"github.com/billykore/kore/services/todo/usecase"
+	"github.com/billykore/kore/services/auth/repository"
+	"github.com/billykore/kore/services/auth/server"
+	"github.com/billykore/kore/services/auth/service"
+	"github.com/billykore/kore/services/auth/usecase"
 )
 
 import (
@@ -22,14 +22,14 @@ import (
 
 // Injectors from wire.go:
 
-func todoApp(cfg *config.Config) *app {
+func authApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
 	client := firestore.New(cfg)
-	todo := repository.NewTodoRepository(client)
-	todoUsecase := usecase.NewTodoUsecase(logger, todo)
-	todoService := service.NewTodoService(todoUsecase)
-	httpServer := server.NewHTTPServer(logger, cfg, todoService)
-	grpcServer := server.NewGRPCServer(logger, cfg, todoService)
+	user := repository.NewUserRepository(client)
+	authUsecase := usecase.NewAuthUsecase(logger, user)
+	authService := service.NewAuthService(authUsecase)
+	httpServer := server.NewHTTPServer(logger, cfg, authService)
+	grpcServer := server.NewGRPCServer(logger, cfg, authService)
 	mainApp := newApp(httpServer, grpcServer)
 	return mainApp
 }
