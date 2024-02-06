@@ -3,6 +3,7 @@ package token
 import (
 	"time"
 
+	"github.com/billykore/kore/libs/config"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -25,10 +26,11 @@ func generateToken(username string) (*Token, error) {
 	claims["authorize"] = true
 	claims["exp"] = exp
 
+	cfg := config.Get()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token.Header["kid"] = "drPB_Wlr8gCYSaNp4GxJi6w61b8N1oosZQ8sxD9R1Is"
+	token.Header["kid"] = cfg.Token.HeaderKid
 
-	t, err := token.SignedString([]byte("token-secret"))
+	t, err := token.SignedString([]byte(cfg.Token.Secret))
 	if err != nil {
 		return nil, err
 	}

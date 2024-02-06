@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/billykore/kore/libs/config"
-	"github.com/billykore/kore/services/todo/server"
+	"github.com/billykore/kore/services/auth/server"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -20,8 +20,8 @@ func newApp(hs *server.HTTPServer, gs *server.GRPCServer) *app {
 
 func main() {
 	cfg := config.Get()
-	todo := todoApp(cfg)
+	auth := authApp(cfg)
 
-	go todo.gs.Serve()
-	todo.hs.Serve()
+	go auth.gs.Serve()
+	auth.hs.Serve()
 }
