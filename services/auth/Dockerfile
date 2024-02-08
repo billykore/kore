@@ -16,6 +16,6 @@ RUN apk add --no-cache protobuf && \
 
 FROM alpine:3.19
 COPY --from=build /app/out/app /
-COPY --from=build /app/todo-list-app-firebase-sdk.json /
+COPY --from=build /app/firebase-sdk.json /
 EXPOSE 8000 9000
 ENTRYPOINT ["./app"]
