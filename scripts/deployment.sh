@@ -51,8 +51,8 @@ function deploy_service() {
   kubectl apply -f "$K8S_DIR/env.yaml"
 }
 
-if [[ $KIND -eq "gateway" ]]; then
+if [[ $KIND == "gateway" ]]; then
   deploy_gateway
-elif [ $KIND -eq "service" ]; then
+elif [ $KIND == "service" ]; then
   deploy_service
 fi
