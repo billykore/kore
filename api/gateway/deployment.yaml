@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: krakend-deployment
+  name: monorepo-gateway-deployment
 spec:
   selector:
     matchLabels:
-      app: krakend
+      app: monorepo-gateway
   replicas: 1
   template:
     metadata:
       labels:
-        app: krakend
+        app: monorepo-gateway
     spec:
+      automountServiceAccountToken: false
       containers:
-        - name: krakend
-          image: billykore/todo-api-gateway:latest
+        - name: monorepo-gateway
+          image: billykore/monorepo-gateway:latest
           ports:
             - containerPort: 3000
           imagePullPolicy: Always
@@ -33,13 +34,20 @@ spec:
           env:
             - name: KRAKEND_PORT
               value: "3000"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 300m
+              memory: 300Mi
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: krakend-service
+  name: monorepo-gateway-service
 spec:
   type: NodePort
   ports:
