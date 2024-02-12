@@ -5,9 +5,9 @@ package main
 
 import (
 	"github.com/billykore/kore/libs/config"
-	"github.com/billykore/kore/libs/database"
+	"github.com/billykore/kore/libs/db"
 	"github.com/billykore/kore/libs/pkg"
-	"github.com/billykore/kore/services/auth/repository"
+	"github.com/billykore/kore/services/auth/repo"
 	"github.com/billykore/kore/services/auth/server"
 	"github.com/billykore/kore/services/auth/service"
 	"github.com/billykore/kore/services/auth/usecase"
@@ -17,8 +17,8 @@ import (
 func authApp(cfg *config.Config) *app {
 	wire.Build(
 		pkg.ProviderSet,
-		database.ProviderSet,
-		repository.ProviderSet,
+		db.ProviderSet,
+		repo.ProviderSet,
 		usecase.ProviderSet,
 		service.ProviderSet,
 		server.ProviderSet,

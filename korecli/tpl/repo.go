@@ -1,7 +1,7 @@
 package tpl
 
 func RepoProviderTemplate() []byte {
-	return []byte(`package repository
+	return []byte(`package repo
 
 import (
 	"github.com/google/wire"
@@ -12,19 +12,19 @@ var ProviderSet = wire.NewSet(New{{ .StructName }}Repository)
 }
 
 func RepoTemplate() []byte {
-	return []byte(`package repository
+	return []byte(`package repo
 
 import (
 	"context"
 
 	"{{ .Mod }}/libs/model"
-	"{{ .Mod }}/libs/repository"
+	"{{ .Mod }}/libs/repo"
 )
 
 type {{ .ServiceName }}Repo struct {
 }
 
-func New{{ .StructName }}Repository() repository.Greeter {
+func New{{ .StructName }}Repository() repo.Greeter {
 	return &{{ .ServiceName }}Repo{}
 }
 

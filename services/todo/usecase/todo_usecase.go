@@ -7,26 +7,26 @@ import (
 	"github.com/billykore/kore/libs/pkg/log"
 	"github.com/billykore/kore/libs/pkg/messages"
 	"github.com/billykore/kore/libs/proto/v1"
-	"github.com/billykore/kore/libs/repository"
+	"github.com/billykore/kore/libs/repo"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 type TodoUsecase struct {
-	log  *log.Logger
-	repo repository.Todo
+	log      *log.Logger
+	todoRepo repo.TodoRepository
 }
 
-func NewTodoUsecase(log *log.Logger, repo repository.Todo) *TodoUsecase {
+func NewTodoUsecase(log *log.Logger, todoRepo repo.TodoRepository) *TodoUsecase {
 	return &TodoUsecase{
-		log:  log,
-		repo: repo,
+		log:      log,
+		todoRepo: todoRepo,
 	}
 }
 
 func (uc *TodoUsecase) GetTodos(ctx context.Context, req *v1.GetTodosRequest) ([]*v1.Todo, error) {
-	todos, err := uc.repo.GetTodos(ctx, req.GetIsDone())
+	todos, err := uc.todoRepo.Get(ctx, req.GetIsDone())
 	if err != nil {
 		uc.log.Usecase("GetTodos").Error(err)
 		return nil, status.Error(codes.NotFound, messages.TodosNotFound)
@@ -44,7 +44,7 @@ func (uc *TodoUsecase) GetTodos(ctx context.Context, req *v1.GetTodosRequest) ([
 }
 
 func (uc *TodoUsecase) GetTodo(ctx context.Context, req *v1.TodoRequest) (*v1.Todo, error) {
-	todo, err := uc.repo.GetTodoById(ctx, req.GetId())
+	todo, err := uc.todoRepo.GetById(ctx, req.GetId())
 	if err != nil {
 		uc.log.Usecase("GetTodo").Error(err)
 		return nil, status.Error(codes.NotFound, messages.TodosNotFound)
@@ -63,7 +63,7 @@ func (uc *TodoUsecase) SaveTodo(ctx context.Context, req *v1.AddTodoRequest) err
 		uc.log.Usecase("SaveTodo").Error(err)
 		return status.Error(codes.Internal, messages.FailedSaveTodo)
 	}
-	err = uc.repo.SaveTodo(ctx, &model.Todo{
+	err = uc.todoRepo.Save(ctx, &model.Todo{
 		Id:          id.String(),
 		Title:       req.GetTitle(),
 		Description: req.GetDescription(),
@@ -76,7 +76,7 @@ func (uc *TodoUsecase) SaveTodo(ctx context.Context, req *v1.AddTodoRequest) err
 }
 
 func (uc *TodoUsecase) SetDoneTodo(ctx context.Context, req *v1.TodoRequest) error {
-	err := uc.repo.UpdateTodo(ctx, req.GetId())
+	err := uc.todoRepo.Update(ctx, req.GetId())
 	if err != nil {
 		uc.log.Usecase("SetDoneTodo").Error(err)
 		return status.Error(codes.Internal, messages.FailedSetDoneTodo)
@@ -85,7 +85,7 @@ func (uc *TodoUsecase) SetDoneTodo(ctx context.Context, req *v1.TodoRequest) err
 }
 
 func (uc *TodoUsecase) DeleteTodo(ctx context.Context, req *v1.TodoRequest) error {
-	err := uc.repo.DeleteTodo(ctx, req.GetId())
+	err := uc.todoRepo.Delete(ctx, req.GetId())
 	if err != nil {
 		uc.log.Usecase("DeleteTodo").Error(err)
 		return status.Error(codes.Internal, messages.FailedSetDoneTodo)

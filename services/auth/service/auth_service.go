@@ -24,3 +24,11 @@ func (s *AuthService) Login(ctx context.Context, in *v1.LoginRequest) (*v1.Login
 	}
 	return &v1.LoginReply{Token: token}, nil
 }
+
+func (s *AuthService) Logout(ctx context.Context, in *v1.LogoutRequest) (*v1.DefaultReply, error) {
+	err := s.uc.Logout(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.DefaultReply{Message: "Logout success"}, nil
+}

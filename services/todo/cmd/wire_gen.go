@@ -8,9 +8,9 @@ package main
 
 import (
 	"github.com/billykore/kore/libs/config"
-	"github.com/billykore/kore/libs/database/firestore"
+	"github.com/billykore/kore/libs/db"
 	"github.com/billykore/kore/libs/pkg/log"
-	"github.com/billykore/kore/services/todo/repository"
+	"github.com/billykore/kore/services/todo/repo"
 	"github.com/billykore/kore/services/todo/server"
 	"github.com/billykore/kore/services/todo/service"
 	"github.com/billykore/kore/services/todo/usecase"
@@ -24,9 +24,9 @@ import (
 
 func todoApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
-	client := firestore.New(cfg)
-	todo := repository.NewTodoRepository(client)
-	todoUsecase := usecase.NewTodoUsecase(logger, todo)
+	client := db.New(cfg)
+	todoRepository := repo.NewTodoRepository(client)
+	todoUsecase := usecase.NewTodoUsecase(logger, todoRepository)
 	todoService := service.NewTodoService(todoUsecase)
 	httpServer := server.NewHTTPServer(logger, cfg, todoService)
 	grpcServer := server.NewGRPCServer(logger, cfg, todoService)

@@ -1,6 +1,7 @@
 package token
 
 import (
+	"errors"
 	"time"
 
 	"github.com/billykore/kore/libs/config"
@@ -39,4 +40,22 @@ func generateToken(username string) (*Token, error) {
 		AccessToken: t,
 		ExpiredTime: exp,
 	}, nil
+}
+
+func Verify(token string) (string, error) {
+	return verifyToken(token)
+}
+
+func verifyToken(token string) (string, error) {
+	cfg := config.Get()
+	t, err := jwt.Parse(token, func(t *jwt.Token) (any, error) {
+		return []byte(cfg.Token.Secret), nil
+	})
+	if err != nil {
+		return "", err
+	}
+	if claims, ok := t.Claims.(jwt.MapClaims); ok || t.Valid {
+		return claims["username"].(string), nil
+	}
+	return "", errors.New("invalid token")
 }

@@ -23,15 +23,15 @@ deploy:
 generate-wire:
 	@./scripts/wire.sh
 
-# make generate-grpc
-.PHONY: generate-grpc
-generate-grpc:
-	@./scripts/grpc.sh
+# make generate-proto proto=todo.proto
+.PHONY: generate-proto
+generate-proto:
+	@./scripts/grpc.sh $(proto)
 
 # make generate
 .PHONY: generate
 generate: \
-	generate-grpc \
+	generate-proto \
 	generate-wire
 
 # make run service=todo

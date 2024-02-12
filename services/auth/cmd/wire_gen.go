@@ -8,9 +8,9 @@ package main
 
 import (
 	"github.com/billykore/kore/libs/config"
-	"github.com/billykore/kore/libs/database/firestore"
+	"github.com/billykore/kore/libs/db"
 	"github.com/billykore/kore/libs/pkg/log"
-	"github.com/billykore/kore/services/auth/repository"
+	"github.com/billykore/kore/services/auth/repo"
 	"github.com/billykore/kore/services/auth/server"
 	"github.com/billykore/kore/services/auth/service"
 	"github.com/billykore/kore/services/auth/usecase"
@@ -24,9 +24,10 @@ import (
 
 func authApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
-	client := firestore.New(cfg)
-	user := repository.NewUserRepository(client)
-	authUsecase := usecase.NewAuthUsecase(logger, user)
+	client := db.New(cfg)
+	userRepository := repo.NewUserRepository(client)
+	authRepository := repo.NewAuthRepository(client)
+	authUsecase := usecase.NewAuthUsecase(logger, userRepository, authRepository)
 	authService := service.NewAuthService(authUsecase)
 	httpServer := server.NewHTTPServer(logger, cfg, authService)
 	grpcServer := server.NewGRPCServer(logger, cfg, authService)

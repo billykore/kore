@@ -19,12 +19,12 @@ import (
 
 	"{{ .Mod }}/libs/pkg/log"
 	"{{ .Mod }}/libs/proto/v1"
-	"{{ .Mod }}/libs/repository"
+	"{{ .Mod }}/libs/repo"
 )
 
 type {{ .StructName }}Usecase struct {
 	log  *log.Logger
-	repo repository.Greeter
+	repo repo.Greeter
 }
 
 func New{{ .StructName }}Usecase(log *log.Logger, repo repository.Greeter) *{{ .StructName }}Usecase {
