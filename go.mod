@@ -5,7 +5,6 @@ go 1.21.5
 require (
 	cloud.google.com/go/firestore v1.14.0
 	firebase.google.com/go v3.13.0+incompatible
-	github.com/billykore/todolist v0.0.0-20240201051508-5a1cf676ac60
 	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.5.0
@@ -15,6 +14,7 @@ require (
 	github.com/spf13/cobra v1.8.0
 	go.uber.org/zap v1.26.0
 	golang.org/x/crypto v0.18.0
+	golang.org/x/text v0.14.0
 	google.golang.org/api v0.161.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240125205218-1f4bbc51befe
 	google.golang.org/grpc v1.61.0
@@ -49,7 +49,6 @@ require (
 	golang.org/x/oauth2 v0.16.0 // indirect
 	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/genproto v0.0.0-20240116215550-a9fa1716bcac // indirect

@@ -111,6 +111,5 @@ func (gs *GRPCServer) Serve() {
 		gs.log.Fatalf("failed to serve grpc: %v", err)
 	}
 }
-
 `)
 }
