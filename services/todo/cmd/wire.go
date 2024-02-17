@@ -12,6 +12,7 @@ import (
 	"github.com/billykore/kore/services/todo/service"
 	"github.com/billykore/kore/services/todo/usecase"
 	"github.com/google/wire"
+	"github.com/labstack/echo/v4"
 )
 
 func todoApp(cfg *config.Config) *app {
@@ -22,6 +23,7 @@ func todoApp(cfg *config.Config) *app {
 		usecase.ProviderSet,
 		service.ProviderSet,
 		server.ProviderSet,
+		echo.New,
 		newApp,
 	)
 	return &app{}

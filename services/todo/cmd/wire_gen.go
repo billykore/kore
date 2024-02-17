@@ -14,6 +14,7 @@ import (
 	"github.com/billykore/kore/services/todo/server"
 	"github.com/billykore/kore/services/todo/service"
 	"github.com/billykore/kore/services/todo/usecase"
+	"github.com/labstack/echo/v4"
 )
 
 import (
@@ -24,12 +25,13 @@ import (
 
 func todoApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
+	echoEcho := echo.New()
 	client := db.New(cfg)
 	todoRepository := repo.NewTodoRepository(client)
 	todoUsecase := usecase.NewTodoUsecase(logger, todoRepository)
 	todoService := service.NewTodoService(todoUsecase)
-	httpServer := server.NewHTTPServer(logger, cfg, todoService)
-	grpcServer := server.NewGRPCServer(logger, cfg, todoService)
-	mainApp := newApp(httpServer, grpcServer)
+	router := server.NewRouter(cfg, logger, echoEcho, todoService)
+	httpServer := server.NewHTTPServer(router)
+	mainApp := newApp(httpServer)
 	return mainApp
 }

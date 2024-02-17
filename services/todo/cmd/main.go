@@ -8,20 +8,16 @@ import (
 
 type app struct {
 	hs *server.HTTPServer
-	gs *server.GRPCServer
 }
 
-func newApp(hs *server.HTTPServer, gs *server.GRPCServer) *app {
+func newApp(hs *server.HTTPServer) *app {
 	return &app{
 		hs: hs,
-		gs: gs,
 	}
 }
 
 func main() {
 	cfg := config.Get()
 	todo := todoApp(cfg)
-
-	go todo.gs.Serve()
 	todo.hs.Serve()
 }
