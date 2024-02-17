@@ -24,7 +24,7 @@ import (
 type {{ .ServiceName }}Repo struct {
 }
 
-func New{{ .StructName }}Repository() repo.Greeter {
+func New{{ .StructName }}Repository() repo.GreeterRepository {
 	return &{{ .ServiceName }}Repo{}
 }
 

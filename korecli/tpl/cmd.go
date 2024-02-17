@@ -11,21 +11,17 @@ import (
 
 type app struct {
 	hs *server.HTTPServer
-	gs *server.GRPCServer
 }
 
-func newApp(hs *server.HTTPServer, gs *server.GRPCServer) *app {
+func newApp(hs *server.HTTPServer) *app {
 	return &app{
 		hs: hs,
-		gs: gs,
 	}
 }
 
 func main() {
 	cfg := config.Get()
 	{{ .ServiceName }} := {{ .ServiceName }}App(cfg)
-
-	go {{ .ServiceName }}.gs.Serve()
 	{{ .ServiceName }}.hs.Serve()
 }
 `)
@@ -40,20 +36,22 @@ package main
 import (
 	"{{ .Mod }}/libs/config"
 	"{{ .Mod }}/libs/pkg"
-	"{{ .Mod }}/services/{{ .ServiceName }}/repository"
+	"{{ .Mod }}/services/{{ .ServiceName }}/repo"
 	"{{ .Mod }}/services/{{ .ServiceName }}/server"
 	"{{ .Mod }}/services/{{ .ServiceName }}/service"
 	"{{ .Mod }}/services/{{ .ServiceName }}/usecase"
 	"github.com/google/wire"
+	"github.com/labstack/echo/v4"
 )
 
 func {{ .ServiceName }}App(cfg *config.Config) *app {
 	wire.Build(
 		pkg.ProviderSet,
-		repository.ProviderSet,
+		repo.ProviderSet,
 		usecase.ProviderSet,
 		service.ProviderSet,
 		server.ProviderSet,
+		echo.New,
 		newApp,
 	)
 	return &app{}

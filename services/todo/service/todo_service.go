@@ -1,16 +1,12 @@
 package service
 
 import (
-	"context"
-
-	v1 "github.com/billykore/kore/libs/proto/v1"
+	"github.com/billykore/kore/libs/entity"
 	"github.com/billykore/kore/services/todo/usecase"
-	"google.golang.org/grpc/codes"
+	"github.com/labstack/echo/v4"
 )
 
 type TodoService struct {
-	v1.UnimplementedTodoServiceServer
-
 	uc *usecase.TodoUsecase
 }
 
@@ -18,42 +14,62 @@ func NewTodoService(uc *usecase.TodoUsecase) *TodoService {
 	return &TodoService{uc: uc}
 }
 
-func (s *TodoService) GetTodos(ctx context.Context, in *v1.GetTodosRequest) (*v1.GetTodosReply, error) {
-	todos, err := s.uc.GetTodos(ctx, in)
-	if err != nil {
-		return nil, err
+func (s *TodoService) GetTodos(ctx echo.Context) error {
+	req := new(entity.GetTodosRequest)
+	if err := ctx.Bind(req); err != nil {
+		return ctx.JSON(entity.ResponseError(err))
 	}
-	return &v1.GetTodosReply{Todos: todos}, nil
+	todos, err := s.uc.GetTodos(ctx.Request().Context(), req)
+	if err != nil {
+		return ctx.JSON(entity.ResponseError(err))
+	}
+	return ctx.JSON(entity.ResponseSuccess(todos))
 }
 
-func (s *TodoService) GetTodo(ctx context.Context, in *v1.TodoRequest) (*v1.GetTodoReply, error) {
-	todo, err := s.uc.GetTodo(ctx, in)
-	if err != nil {
-		return nil, err
+func (s *TodoService) GetTodo(ctx echo.Context) error {
+	req := new(entity.ParamId)
+	if err := ctx.Bind(req); err != nil {
+		return ctx.JSON(entity.ResponseError(err))
 	}
-	return &v1.GetTodoReply{Todo: todo}, nil
+	todo, err := s.uc.GetTodo(ctx.Request().Context(), req)
+	if err != nil {
+		return ctx.JSON(entity.ResponseError(err))
+	}
+	return ctx.JSON(entity.ResponseSuccess(todo))
 }
 
-func (s *TodoService) AddTodo(ctx context.Context, in *v1.AddTodoRequest) (*v1.DefaultReply, error) {
-	err := s.uc.SaveTodo(ctx, in)
-	if err != nil {
-		return nil, err
+func (s *TodoService) AddTodo(ctx echo.Context) error {
+	req := new(entity.AddTodoRequest)
+	if err := ctx.Bind(req); err != nil {
+		return ctx.JSON(entity.ResponseError(err))
 	}
-	return &v1.DefaultReply{Message: codes.OK.String()}, nil
+	save, err := s.uc.SaveTodo(ctx.Request().Context(), req)
+	if err != nil {
+		return ctx.JSON(entity.ResponseError(err))
+	}
+	return ctx.JSON(entity.ResponseSuccess(save))
 }
 
-func (s *TodoService) SetDoneTodo(ctx context.Context, in *v1.TodoRequest) (*v1.DefaultReply, error) {
-	err := s.uc.SetDoneTodo(ctx, in)
-	if err != nil {
-		return nil, err
+func (s *TodoService) SetDoneTodo(ctx echo.Context) error {
+	req := new(entity.ParamId)
+	if err := ctx.Bind(req); err != nil {
+		return ctx.JSON(entity.ResponseError(err))
 	}
-	return &v1.DefaultReply{Message: codes.OK.String()}, nil
+	setDone, err := s.uc.SetDoneTodo(ctx.Request().Context(), req)
+	if err != nil {
+		return ctx.JSON(entity.ResponseError(err))
+	}
+	return ctx.JSON(entity.ResponseSuccess(setDone))
 }
 
-func (s *TodoService) DeleteTodo(ctx context.Context, in *v1.TodoRequest) (*v1.DefaultReply, error) {
-	err := s.uc.DeleteTodo(ctx, in)
-	if err != nil {
-		return nil, err
+func (s *TodoService) DeleteTodo(ctx echo.Context) error {
+	req := new(entity.ParamId)
+	if err := ctx.Bind(req); err != nil {
+		return ctx.JSON(entity.ResponseError(err))
 	}
-	return &v1.DefaultReply{Message: codes.OK.String()}, nil
+	del, err := s.uc.DeleteTodo(ctx.Request().Context(), req)
+	if err != nil {
+		return ctx.JSON(entity.ResponseError(err))
+	}
+	return ctx.JSON(entity.ResponseSuccess(del))
 }

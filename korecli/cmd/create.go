@@ -16,26 +16,20 @@ import (
 const createDesc = `
 This command create new service inside the monorepo services directory.
 
-Use --repo or -r flag for create new repository interface in the libs/repository directory.
-E.g.  korecli create todo --repo Todo
-
 For example, 'korecli create todo' will create a service inside the services/ directory 
 and a protobuf inside the  file that look something like this:
 
     kore/
     ├──...
     ├── libs/
-    │   ├── proto/
-    │   │   └── v1/
-    │   │       └── todo.proto
+    │   ├── entity/
+    │   │   └── todo.go
     │   ├──...
-    │   └── repository
-    │       └── todo.go
     ├── services/
     │   └── todo/
     │       ├── cmd/         # Contains main.go and wire.go injector files.
     │       ├── deployment/  # Kubernetes deployment configs.
-    │       ├── repository/  # Service repositories.
+    │       ├── repo/        # Service repositories.
     │       ├── server/      # Service http and gRPC servers.
     │       ├── service/     # Service API handlers.
     │       ├── usecase/     # Service usecases.
@@ -74,9 +68,6 @@ func newCreateCmd() *cobra.Command {
 		},
 	}
 
-	f := cmd.Flags()
-	f.StringVarP(&d.Repository, "repo", "r", "", "create new repository")
-
 	return cmd
 }
 
@@ -85,7 +76,6 @@ type createData struct {
 	ServiceName  string
 	StructName   string
 	Mod          string
-	Repository   string
 }
 
 func (d *createData) create() error {
@@ -94,12 +84,8 @@ func (d *createData) create() error {
 	if _, err := os.Stat(libsPath); os.IsNotExist(err) {
 		return err
 	}
-	// create proto
-	if err := d.createProto(libsPath); err != nil {
-		return err
-	}
-	// create repository interface (if required)
-	if err := d.createIRepository(libsPath); err != nil {
+	// create entity
+	if err := d.createEntity(libsPath); err != nil {
 		return err
 	}
 
@@ -139,15 +125,15 @@ func (d *createData) create() error {
 	return nil
 }
 
-func (d *createData) createProto(path string) error {
-	protoPath := fmt.Sprintf("%s/proto/v1", path)
+func (d *createData) createEntity(path string) error {
+	entityPath := fmt.Sprintf("%s/entity", path)
 
-	protoFile, err := os.Create(fmt.Sprintf("%s/%s.proto", protoPath, d.ServiceName))
+	entityFile, err := os.Create(fmt.Sprintf("%s/%s.go", entityPath, d.ServiceName))
 	if err != nil {
 		return err
 	}
-	protoTpl := template.Must(template.New(d.ServiceName).Parse(string(tpl.ProtoTemplate())))
-	if err := protoTpl.Execute(protoFile, d); err != nil {
+	protoTpl := template.Must(template.New(d.ServiceName).Parse(string(tpl.EntityTemplate())))
+	if err := protoTpl.Execute(entityFile, d); err != nil {
 		return err
 	}
 
@@ -155,7 +141,7 @@ func (d *createData) createProto(path string) error {
 }
 
 func (d *createData) createRepository(path string) error {
-	repoPath := fmt.Sprintf("%s/repository", path)
+	repoPath := fmt.Sprintf("%s/repo", path)
 
 	if err := os.Mkdir(repoPath, 0754); err != nil {
 		return err
@@ -170,11 +156,11 @@ func (d *createData) createRepository(path string) error {
 		return err
 	}
 
-	repoFile, err := os.Create(fmt.Sprintf("%s/%s_repository.go", repoPath, d.ServiceName))
+	repoFile, err := os.Create(fmt.Sprintf("%s/%s_repo.go", repoPath, d.ServiceName))
 	if err != nil {
 		return err
 	}
-	repoTpl := template.Must(template.New("repository").Parse(string(tpl.RepoTemplate())))
+	repoTpl := template.Must(template.New("repo").Parse(string(tpl.RepoTemplate())))
 	if err := repoTpl.Execute(repoFile, d); err != nil {
 		return err
 	}
@@ -263,12 +249,12 @@ func (d *createData) createServer(path string) error {
 		return err
 	}
 
-	grpcFile, err := os.Create(fmt.Sprintf("%s/grpc.go", serverPath))
+	routerFile, err := os.Create(fmt.Sprintf("%s/router.go", serverPath))
 	if err != nil {
 		return err
 	}
-	grpcTpl := template.Must(template.New("grpc").Parse(string(tpl.GRPCServerTemplate())))
-	if err := grpcTpl.Execute(grpcFile, d); err != nil {
+	routerTpl := template.Must(template.New("grpc").Parse(string(tpl.RouterTemplate())))
+	if err := routerTpl.Execute(routerFile, d); err != nil {
 		return err
 	}
 
@@ -340,25 +326,6 @@ func (d *createData) createDockerfile(path string) error {
 	if err := dockerfileTpl.Execute(dockerfile, d); err != nil {
 		return err
 	}
-	return nil
-}
-
-func (d *createData) createIRepository(path string) error {
-	if d.Repository == "" {
-		return nil
-	}
-
-	repoPath := path + "/repository"
-
-	repoFile, err := os.Create(fmt.Sprintf("%s/%s.go", repoPath, strings.ToLower(d.Repository)))
-	if err != nil {
-		return err
-	}
-	repoTpl := template.Must(template.New("repository").Parse(string(tpl.IRepositoryTemplate())))
-	if err := repoTpl.Execute(repoFile, d); err != nil {
-		return err
-	}
-
 	return nil
 }
 

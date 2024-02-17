@@ -12,6 +12,7 @@ import (
 	"github.com/billykore/kore/services/auth/service"
 	"github.com/billykore/kore/services/auth/usecase"
 	"github.com/google/wire"
+	"github.com/labstack/echo/v4"
 )
 
 func authApp(cfg *config.Config) *app {
@@ -22,6 +23,7 @@ func authApp(cfg *config.Config) *app {
 		usecase.ProviderSet,
 		service.ProviderSet,
 		server.ProviderSet,
+		echo.New,
 		newApp,
 	)
 	return &app{}

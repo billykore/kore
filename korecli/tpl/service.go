@@ -15,15 +15,12 @@ func ServiceTemplate() []byte {
 	return []byte(`package service
 
 import (
-	"context"
-
-	"{{ .Mod }}/libs/proto/v1"
+	"{{ .Mod }}/libs/entity"
 	"{{ .Mod }}/services/{{ .ServiceName }}/usecase"
+	"github.com/labstack/echo/v4"
 )
 
 type {{ .StructName }}Service struct {
-	v1.Unimplemented{{ .StructName }}Server
-
 	uc *usecase.{{ .StructName }}Usecase
 }
 
@@ -31,12 +28,16 @@ func New{{ .StructName }}Service(uc *usecase.{{ .StructName }}Usecase) *{{ .Stru
 	return &{{ .StructName }}Service{uc: uc}
 }
 
-func (s *{{ .StructName }}Service) Greet(ctx context.Context, in *v1.{{ .StructName }}Request) (*v1.{{ .StructName }}Reply, error) {
-	greet, err := s.uc.Greet(ctx, in)
+func (s *{{ .StructName }}Service) Greet(ctx echo.Context) error {
+	in := new(entity.{{ .StructName }}Request)
+	err := ctx.Bind(in)
 	if err != nil {
-		return nil, err
+		return ctx.JSON(entity.ResponseError(err))
 	}
-	return greet, nil
-}
-`)
+	greet, err := s.uc.Greet(ctx.Request().Context(), in)
+	if err != nil {
+		return ctx.JSON(entity.ResponseError(err))
+	}
+	return ctx.JSON(entity.ResponseSuccess(greet))
+}`)
 }

@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package kore.v1;
-
-option go_package = "kore/libs/proto/v1;v1";
-
-message DefaultReply {
-  string message = 1;
-}
