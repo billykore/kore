@@ -8,108 +8,76 @@ import (
 )
 
 var ProviderSet = wire.NewSet(
-	NewGRPCServer,
+	NewRouter,
 	NewHTTPServer,
 )
+`)
+}
+
+func RouterTemplate() []byte {
+	return []byte(`package server
+
+import (
+	"{{ .Mod }}/libs/config"
+	"{{ .Mod }}/libs/pkg/log"
+	"{{ .Mod }}/services/{{ .ServiceName }}/service"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+)
+
+type Router struct {
+	cfg     *config.Config
+	log     *log.Logger
+	router  *echo.Echo
+	{{ .ServiceName }}Svc *service.{{ .StructName }}Service
+}
+
+func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, {{ .ServiceName }}Svc *service.{{ .StructName }}Service) *Router {
+	return &Router{cfg: cfg, log: log, router: router, {{ .ServiceName }}Svc: {{ .ServiceName }}Svc}
+}
+
+func (r *Router) Run() {
+	r.setRoutes()
+	r.useMiddlewares()
+	r.run()
+}
+
+func (r *Router) setRoutes() {
+	r.router.GET("/greet", r.{{ .ServiceName }}Svc.Greet)
+}
+
+func (r *Router) useMiddlewares() {
+	r.router.Use(middleware.Logger())
+}
+
+func (r *Router) run() {
+	port := r.cfg.HTTPPort
+	if port == "" {
+		port = "8080"
+	}
+	r.log.Infof("running on port ::[:%v]", port)
+	if err := r.router.Start(":" + port); err != nil {
+		r.log.Fatalf("failed to run on port [::%v]", port)
+	}
+}
 `)
 }
 
 func HTTPServerTemplate() []byte {
 	return []byte(`package server
 
-import (
-	"context"
-	"fmt"
-	"net/http"
-
-	"{{ .Mod }}/libs/config"
-	"{{ .Mod }}/libs/pkg/log"
-	"{{ .Mod }}/libs/proto/v1"
-	"{{ .Mod }}/services/{{ .ServiceName }}/service"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-)
-
 type HTTPServer struct {
-	log     *log.Logger
-	cfg     *config.Config
-	{{ .ServiceName }}Svc *service.{{ .StructName }}Service
+	router *Router
 }
 
-func NewHTTPServer(log *log.Logger, cfg *config.Config, {{ .ServiceName }}Svc *service.{{ .StructName }}Service) *HTTPServer {
+func NewHTTPServer(router *Router) *HTTPServer {
 	return &HTTPServer{
-		log:     log,
-		cfg:     cfg,
-		{{ .ServiceName }}Svc: {{ .ServiceName }}Svc,
+		router: router,
 	}
 }
 
 func (hs *HTTPServer) Serve() {
-	mux := runtime.NewServeMux()
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	err := v1.Register{{ .StructName }}HandlerServer(ctx, mux, hs.{{ .ServiceName }}Svc)
-	if err != nil {
-		hs.log.Fatalf("failed to register gateway: %v", err)
-	}
-
-	port := hs.cfg.HTTPPort
-	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%s", port),
-		Handler: mux,
-	}
-
-	hs.log.Infof("Serving gRPC-Gateway for REST on port %s", port)
-	if err = srv.ListenAndServe(); err != nil {
-		hs.log.Fatalf("failed to serve http at port %s: %v", port, err)
-	}
-}
-`)
-}
-
-func GRPCServerTemplate() []byte {
-	return []byte(`package server
-
-import (
-	"fmt"
-	"net"
-
-	"{{ .Mod }}/libs/config"
-	"{{ .Mod }}/libs/pkg/log"
-	"{{ .Mod }}/libs/proto/v1"
-	"{{ .Mod }}/services/{{ .ServiceName }}/service"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
-)
-
-type GRPCServer struct {
-	log     *log.Logger
-	cfg     *config.Config
-	{{ .ServiceName }}Svc *service.{{ .StructName }}Service
-}
-
-func NewGRPCServer(log *log.Logger, cfg *config.Config, {{ .ServiceName }}Svc *service.{{ .StructName }}Service) *GRPCServer {
-	return &GRPCServer{
-		log:     log,
-		cfg:     cfg,
-		{{ .ServiceName }}Svc: {{ .ServiceName }}Svc,
-	}
-}
-
-func (gs *GRPCServer) Serve() {
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", gs.cfg.GRPCPort))
-	if err != nil {
-		gs.log.Fatalf("Failed to listen: %v", err)
-	}
-
-	srv := grpc.NewServer()
-	v1.Register{{ .StructName }}Server(srv, gs.{{ .ServiceName }}Svc)
-	reflection.Register(srv)
-
-	gs.log.Infof("Run on grpc server port %s", gs.cfg.GRPCPort)
-	if err = srv.Serve(lis); err != nil {
-		gs.log.Fatalf("failed to serve grpc: %v", err)
-	}
+	hs.router.Run()
 }
 `)
 }

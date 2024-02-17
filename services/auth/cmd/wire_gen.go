@@ -14,6 +14,7 @@ import (
 	"github.com/billykore/kore/services/auth/server"
 	"github.com/billykore/kore/services/auth/service"
 	"github.com/billykore/kore/services/auth/usecase"
+	"github.com/labstack/echo/v4"
 )
 
 import (
@@ -24,13 +25,14 @@ import (
 
 func authApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
+	echoEcho := echo.New()
 	client := db.New(cfg)
 	userRepository := repo.NewUserRepository(client)
 	authRepository := repo.NewAuthRepository(client)
 	authUsecase := usecase.NewAuthUsecase(logger, userRepository, authRepository)
 	authService := service.NewAuthService(authUsecase)
-	httpServer := server.NewHTTPServer(logger, cfg, authService)
-	grpcServer := server.NewGRPCServer(logger, cfg, authService)
-	mainApp := newApp(httpServer, grpcServer)
+	router := server.NewRouter(cfg, logger, echoEcho, authService)
+	httpServer := server.NewHTTPServer(router)
+	mainApp := newApp(httpServer)
 	return mainApp
 }

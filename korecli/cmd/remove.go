@@ -45,7 +45,7 @@ type removeData struct {
 }
 
 func (d *removeData) remove() error {
-	if err := d.removeProto(); err != nil {
+	if err := d.removeEntity(); err != nil {
 		return err
 	}
 	if err := d.removeService(); err != nil {
@@ -54,21 +54,12 @@ func (d *removeData) remove() error {
 	return nil
 }
 
-func (d *removeData) removeProto() error {
-	protoPath := d.AbsolutePath + "/libs/proto/v1"
-	if _, err := os.Stat(protoPath); err != nil {
+func (d *removeData) removeEntity() error {
+	entityPath := d.AbsolutePath + "/libs/entity"
+	if _, err := os.Stat(entityPath); err != nil {
 		return err
 	}
-	if err := removeIfExist(fmt.Sprintf("%s/%s.proto", protoPath, d.ServiceName)); err != nil {
-		return err
-	}
-	if err := removeIfExist(fmt.Sprintf("%s/%s.pb.go", protoPath, d.ServiceName)); err != nil {
-		return err
-	}
-	if err := removeIfExist(fmt.Sprintf("%s/%s.pb.gw.go", protoPath, d.ServiceName)); err != nil {
-		return err
-	}
-	if err := removeIfExist(fmt.Sprintf("%s/%s_grpc.pb.go", protoPath, d.ServiceName)); err != nil {
+	if err := removeIfExist(fmt.Sprintf("%s/%s.go", entityPath, d.ServiceName)); err != nil {
 		return err
 	}
 	return nil

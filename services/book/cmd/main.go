@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/billykore/kore/libs/config"
-	"github.com/billykore/kore/services/auth/server"
+	"github.com/billykore/kore/services/book/server"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -18,6 +18,6 @@ func newApp(hs *server.HTTPServer) *app {
 
 func main() {
 	cfg := config.Get()
-	auth := authApp(cfg)
-	auth.hs.Serve()
+	book := bookApp(cfg)
+	book.hs.Serve()
 }

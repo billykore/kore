@@ -1,15 +1,12 @@
 package service
 
 import (
-	"context"
-
-	"github.com/billykore/kore/libs/proto/v1"
+	"github.com/billykore/kore/libs/entity"
 	"github.com/billykore/kore/services/auth/usecase"
+	"github.com/labstack/echo/v4"
 )
 
 type AuthService struct {
-	v1.UnimplementedAuthorizationServer
-
 	uc *usecase.AuthUsecase
 }
 
@@ -17,18 +14,28 @@ func NewAuthService(uc *usecase.AuthUsecase) *AuthService {
 	return &AuthService{uc: uc}
 }
 
-func (s *AuthService) Login(ctx context.Context, in *v1.LoginRequest) (*v1.LoginReply, error) {
-	token, err := s.uc.Login(ctx, in)
+func (s *AuthService) Login(ctx echo.Context) error {
+	in := new(entity.LoginRequest)
+	err := ctx.Bind(in)
 	if err != nil {
-		return nil, err
+		return ctx.JSON(entity.ResponseError(err))
 	}
-	return &v1.LoginReply{Token: token}, nil
+	token, err := s.uc.Login(ctx.Request().Context(), in)
+	if err != nil {
+		return ctx.JSON(entity.ResponseError(err))
+	}
+	return ctx.JSON(entity.ResponseSuccess(token))
 }
 
-func (s *AuthService) Logout(ctx context.Context, in *v1.LogoutRequest) (*v1.DefaultReply, error) {
-	err := s.uc.Logout(ctx, in)
+func (s *AuthService) Logout(ctx echo.Context) error {
+	in := new(entity.LogoutRequest)
+	err := ctx.Bind(in)
 	if err != nil {
-		return nil, err
+		return ctx.JSON(entity.ResponseError(err))
 	}
-	return &v1.DefaultReply{Message: "Logout success"}, nil
+	logout, err := s.uc.Logout(ctx.Request().Context(), in)
+	if err != nil {
+		return ctx.JSON(entity.ResponseError(err))
+	}
+	return ctx.JSON(entity.ResponseSuccess(logout))
 }
