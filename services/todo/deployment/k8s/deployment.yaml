@@ -44,7 +44,4 @@ spec:
     - name: "http"
       port: 8001
       targetPort: 8001
-    - name: "grpc"
-      port: 9001
-      targetPort: 9001
   type: ClusterIP

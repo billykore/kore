@@ -1,21 +1,13 @@
 FROM golang:1.21-alpine AS build
 WORKDIR /app
 COPY . .
-RUN apk add --no-cache protobuf && \
-    go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28 && \
-    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2 && \
-    go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest && \
-    go install github.com/google/wire/cmd/wire@latest && \
+RUN go install github.com/google/wire/cmd/wire@latest && \
     go mod download && \
-    protoc --go_out=. --go_opt=paths=source_relative \
-        --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-        --grpc-gateway_out=. --grpc-gateway_opt=paths=source_relative \
-        libs/proto/v1/*.proto && \
     wire ./services/todo/... && \
     go build -o ./out/app ./services/auth/cmd
 
 FROM alpine:3.19
 COPY --from=build /app/out/app /
 COPY --from=build /app/firebase-sdk.json /
-EXPOSE 8000 9000
+EXPOSE 8000
 ENTRYPOINT ["./app"]
