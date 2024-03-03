@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"cloud.google.com/go/firestore"
-	"github.com/billykore/kore/libs/db"
-	"github.com/billykore/kore/libs/model"
-	"github.com/billykore/kore/libs/pkg/perrors"
-	"github.com/billykore/kore/libs/repo"
+	"github.com/billykore/kore/pkg/db"
+	"github.com/billykore/kore/pkg/model"
+	"github.com/billykore/kore/pkg/perrors"
+	"github.com/billykore/kore/pkg/repo"
 )
 
 type authRepo struct {

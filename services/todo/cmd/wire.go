@@ -4,9 +4,9 @@
 package main
 
 import (
-	"github.com/billykore/kore/libs/config"
-	"github.com/billykore/kore/libs/db"
-	"github.com/billykore/kore/libs/pkg"
+	"github.com/billykore/kore/pkg"
+	"github.com/billykore/kore/pkg/config"
+	"github.com/billykore/kore/pkg/db"
 	"github.com/billykore/kore/services/todo/repo"
 	"github.com/billykore/kore/services/todo/server"
 	"github.com/billykore/kore/services/todo/service"

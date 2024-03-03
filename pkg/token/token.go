@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/billykore/kore/libs/config"
+	"github.com/billykore/kore/libs/pkg/config"
 	"github.com/golang-jwt/jwt/v5"
 )
 

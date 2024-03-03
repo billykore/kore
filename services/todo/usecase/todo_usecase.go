@@ -3,11 +3,11 @@ package usecase
 import (
 	"context"
 
-	"github.com/billykore/kore/libs/entity"
-	"github.com/billykore/kore/libs/model"
-	"github.com/billykore/kore/libs/pkg/log"
-	"github.com/billykore/kore/libs/pkg/messages"
-	"github.com/billykore/kore/libs/repo"
+	"github.com/billykore/kore/pkg/entity"
+	"github.com/billykore/kore/pkg/log"
+	"github.com/billykore/kore/pkg/messages"
+	"github.com/billykore/kore/pkg/model"
+	"github.com/billykore/kore/pkg/repo"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
