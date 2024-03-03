@@ -5,9 +5,9 @@ import (
 	"errors"
 
 	"cloud.google.com/go/firestore"
-	"github.com/billykore/kore/libs/db"
-	"github.com/billykore/kore/libs/model"
-	"github.com/billykore/kore/libs/repo"
+	"github.com/billykore/kore/pkg/db"
+	"github.com/billykore/kore/pkg/model"
+	"github.com/billykore/kore/pkg/repo"
 )
 
 type userRepo struct {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/billykore/kore/libs/config"
+	"github.com/billykore/kore/pkg/config"
 	"github.com/billykore/kore/services/todo/server"
 	_ "github.com/joho/godotenv/autoload"
 )

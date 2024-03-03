@@ -3,7 +3,7 @@ package repo
 import (
 	"context"
 
-	"github.com/billykore/kore/libs/model"
+	"github.com/billykore/kore/pkg/model"
 )
 
 type UserRepository interface {

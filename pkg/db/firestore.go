@@ -5,9 +5,9 @@ import (
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
-	"github.com/billykore/kore/libs/config"
-	"github.com/billykore/kore/libs/pkg/log"
-	"github.com/billykore/kore/libs/pkg/path"
+	"github.com/billykore/kore/pkg/config"
+	"github.com/billykore/kore/pkg/log"
+	"github.com/billykore/kore/pkg/path"
 	"google.golang.org/api/option"
 )
 
