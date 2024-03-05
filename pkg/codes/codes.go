@@ -6,5 +6,6 @@ const (
 	OK Code = iota
 	BadRequest
 	Unauthenticated
+	NotFound
 	Internal
 )

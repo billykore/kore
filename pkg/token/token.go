@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/billykore/kore/libs/pkg/config"
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/billykore/kore/pkg/config"
+	"github.com/golang-jwt/jwt"
 )
 
 const tokenExpiredTime = 15 * time.Minute

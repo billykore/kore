@@ -3,14 +3,14 @@ package usecase
 import (
 	"context"
 
+	"github.com/billykore/kore/pkg/codes"
 	"github.com/billykore/kore/pkg/entity"
 	"github.com/billykore/kore/pkg/log"
 	"github.com/billykore/kore/pkg/messages"
 	"github.com/billykore/kore/pkg/model"
 	"github.com/billykore/kore/pkg/repo"
+	"github.com/billykore/kore/pkg/status"
 	"github.com/google/uuid"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 type TodoUsecase struct {

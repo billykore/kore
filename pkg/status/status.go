@@ -1,6 +1,6 @@
 package status
 
-import "github.com/billykore/kore/libs/pkg/codes"
+import "github.com/billykore/kore/pkg/codes"
 
 type Status struct {
 	Code    codes.Code

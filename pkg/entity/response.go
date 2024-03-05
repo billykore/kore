@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/billykore/kore/libs/pkg/status"
+	"github.com/billykore/kore/pkg/status"
 )
 
 type Response struct {
@@ -37,6 +37,7 @@ var responseCode = []int{
 	http.StatusOK,
 	http.StatusBadRequest,
 	http.StatusUnauthorized,
+	http.StatusNotFound,
 	http.StatusInternalServerError,
 }
 
@@ -44,6 +45,7 @@ var responseStatus = []string{
 	"OK",
 	"BAD_REQUEST",
 	"UNAUTHORIZED",
+	"NOT_FOUND",
 	"INTERNAL_SERVER_ERROR",
 }
 
