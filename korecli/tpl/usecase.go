@@ -17,9 +17,9 @@ func UsecaseTemplate() []byte {
 import (
 	"context"
 
-	"{{ .Mod }}/libs/entity"
-	"{{ .Mod }}/libs/pkg/log"
-	"{{ .Mod }}/libs/repo"
+	"{{ .GoMod }}/libs/entity"
+	"{{ .GoMod }}/libs/pkg/log"
+	"{{ .GoMod }}/libs/repo"
 )
 
 type {{ .StructName }}Usecase struct {

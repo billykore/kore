@@ -18,9 +18,9 @@ func RouterTemplate() []byte {
 	return []byte(`package server
 
 import (
-	"{{ .Mod }}/libs/config"
-	"{{ .Mod }}/libs/pkg/log"
-	"{{ .Mod }}/services/{{ .ServiceName }}/service"
+	"{{ .GoMod }}/libs/config"
+	"{{ .GoMod }}/libs/pkg/log"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/service"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )

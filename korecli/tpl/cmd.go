@@ -4,8 +4,8 @@ func MainTemplate() []byte {
 	return []byte(`package main
 
 import (
-	"{{ .Mod }}/libs/config"
-	"{{ .Mod }}/services/{{ .ServiceName }}/server"
+	"{{ .GoMod }}/libs/config"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/server"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -34,12 +34,12 @@ func WireTemplate() []byte {
 package main
 
 import (
-	"{{ .Mod }}/libs/config"
-	"{{ .Mod }}/libs/pkg"
-	"{{ .Mod }}/services/{{ .ServiceName }}/repo"
-	"{{ .Mod }}/services/{{ .ServiceName }}/server"
-	"{{ .Mod }}/services/{{ .ServiceName }}/service"
-	"{{ .Mod }}/services/{{ .ServiceName }}/usecase"
+	"{{ .GoMod }}/libs/config"
+	"{{ .GoMod }}/libs/pkg"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/repo"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/server"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/service"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/usecase"
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 )
