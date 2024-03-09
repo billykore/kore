@@ -10,10 +10,8 @@ import (
 
 const removeDesc = `
 This command remove a service from the monorepo 'services/'.
-Also will delete the protobuf and all proto generated files.
 
-For example, 'korecli rm todo' will remove 'service/todo' directory
-and '/libs/proto/v1/todo.proto' file with all the proto generated files.
+For example, 'korecli rm todo' will remove 'service/todo' directory.
 `
 
 func newRemoveCmd() *cobra.Command {

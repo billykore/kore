@@ -53,7 +53,7 @@ func newCreateCmd() *cobra.Command {
 				return err
 			}
 
-			mod, err := getMod()
+			goMod, err := getGoMod()
 			if err != nil {
 				return err
 			}
@@ -62,7 +62,7 @@ func newCreateCmd() *cobra.Command {
 			d.AbsolutePath = wd
 			d.ServiceName = svcName
 			d.StructName = cases.Title(language.English).String(svcName)
-			d.Mod = mod
+			d.GoMod = goMod
 
 			return d.create()
 		},
@@ -75,7 +75,7 @@ type createData struct {
 	AbsolutePath string
 	ServiceName  string
 	StructName   string
-	Mod          string
+	GoMod        string
 }
 
 func (d *createData) create() error {
@@ -329,7 +329,7 @@ func (d *createData) createDockerfile(path string) error {
 	return nil
 }
 
-func getMod() (string, error) {
+func getGoMod() (string, error) {
 	goMod, err := exec.Command("go", "list", "-m").Output()
 	return strings.TrimSpace(string(goMod)), err
 }

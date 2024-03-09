@@ -15,8 +15,8 @@ func ServiceTemplate() []byte {
 	return []byte(`package service
 
 import (
-	"{{ .Mod }}/libs/entity"
-	"{{ .Mod }}/services/{{ .ServiceName }}/usecase"
+	"{{ .GoMod }}/libs/entity"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/usecase"
 	"github.com/labstack/echo/v4"
 )
 

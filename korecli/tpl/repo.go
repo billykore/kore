@@ -17,8 +17,8 @@ func RepoTemplate() []byte {
 import (
 	"context"
 
-	"{{ .Mod }}/libs/model"
-	"{{ .Mod }}/libs/repo"
+	"{{ .GoMod }}/libs/model"
+	"{{ .GoMod }}/libs/repo"
 )
 
 type {{ .ServiceName }}Repo struct {
