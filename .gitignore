@@ -1,4 +1,2 @@
-.DS_Store
 .idea
-.env
-firebase-sdk.json
+.DS_Store
