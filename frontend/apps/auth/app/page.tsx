@@ -1,7 +1,9 @@
+import RootLayout from "./layout";
+
 export default function Home() {
   return (
-    <main>
+    <RootLayout>
       <h1>Login</h1>
-    </main>
-  )
+    </RootLayout>
+  );
 }
