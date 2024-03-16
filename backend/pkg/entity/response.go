@@ -11,7 +11,7 @@ import (
 type Response struct {
 	Status     string `json:"status,omitempty"`
 	Data       any    `json:"data,omitempty"`
-	Error      *Error `json:"error,omitempty"`
+	Message    string `json:"message,omitempty"`
 	ServerTime int64  `json:"serverTime,omitempty"`
 }
 
@@ -28,7 +28,7 @@ func ResponseError(err error) (int, *Response) {
 	errors.As(err, &s)
 	return responseCode[s.Code], &Response{
 		Status:     responseStatus[s.Code],
-		Error:      &Error{Message: s.Message},
+		Message:    s.Message,
 		ServerTime: time.Now().Unix(),
 	}
 }
@@ -47,8 +47,4 @@ var responseStatus = []string{
 	"UNAUTHORIZED",
 	"NOT_FOUND",
 	"INTERNAL_SERVER_ERROR",
-}
-
-type Error struct {
-	Message string `json:"message"`
 }

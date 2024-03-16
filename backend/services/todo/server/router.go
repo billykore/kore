@@ -30,7 +30,7 @@ func (r *Router) setRoutes() {
 	tr.GET("", r.todoSvc.GetTodos)
 	tr.GET("/:id", r.todoSvc.GetTodo)
 	tr.POST("", r.todoSvc.AddTodo)
-	tr.PUT("", r.todoSvc.SetDoneTodo)
+	tr.PUT("/:id", r.todoSvc.SetDoneTodo)
 	tr.DELETE("/:id", r.todoSvc.DeleteTodo)
 }
 
@@ -43,7 +43,7 @@ func (r *Router) run() {
 	if port == "" {
 		port = "8080"
 	}
-	r.log.Infof("running on port ::[:%v]", port)
+	r.log.Infof("running on port [::%v]", port)
 	if err := r.router.Start(":" + port); err != nil {
 		r.log.Fatalf("failed to run on port [::%v]", port)
 	}
