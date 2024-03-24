@@ -32,6 +32,7 @@ func (r *Router) setRoutes() {
 
 func (r *Router) useMiddlewares() {
 	r.router.Use(middleware.Logger())
+	r.router.Use(middleware.Recover())
 }
 
 func (r *Router) run() {

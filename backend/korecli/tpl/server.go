@@ -48,6 +48,7 @@ func (r *Router) setRoutes() {
 
 func (r *Router) useMiddlewares() {
 	r.router.Use(middleware.Logger())
+	r.router.Use(middleware.Recover())
 }
 
 func (r *Router) run() {
@@ -55,7 +56,7 @@ func (r *Router) run() {
 	if port == "" {
 		port = "8080"
 	}
-	r.log.Infof("running on port ::[:%v]", port)
+	r.log.Infof("running on port [::%v]", port)
 	if err := r.router.Start(":" + port); err != nil {
 		r.log.Fatalf("failed to run on port [::%v]", port)
 	}

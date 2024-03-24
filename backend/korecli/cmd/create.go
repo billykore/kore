@@ -21,7 +21,7 @@ and a protobuf inside the  file that look something like this:
 
     kore/
     ├──...
-    ├── libs/
+    ├── pkg/
     │   ├── entity/
     │   │   └── todo.go
     │   ├──...
@@ -79,13 +79,13 @@ type createData struct {
 }
 
 func (d *createData) create() error {
-	libsPath := d.AbsolutePath + "/libs"
-	// check if libs dir exist
-	if _, err := os.Stat(libsPath); os.IsNotExist(err) {
+	pkgPath := d.AbsolutePath + "/pkg"
+	// check if pkg dir exist
+	if _, err := os.Stat(pkgPath); os.IsNotExist(err) {
 		return err
 	}
 	// create entity
-	if err := d.createEntity(libsPath); err != nil {
+	if err := d.createEntity(pkgPath); err != nil {
 		return err
 	}
 

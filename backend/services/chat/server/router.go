@@ -3,7 +3,7 @@ package server
 import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/services/todo/service"
+	"github.com/billykore/kore/backend/services/chat/service"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -12,11 +12,11 @@ type Router struct {
 	cfg     *config.Config
 	log     *log.Logger
 	router  *echo.Echo
-	todoSvc *service.TodoService
+	chatSvc *service.ChatService
 }
 
-func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, todoSvc *service.TodoService) *Router {
-	return &Router{cfg: cfg, log: log, router: router, todoSvc: todoSvc}
+func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, chatSvc *service.ChatService) *Router {
+	return &Router{cfg: cfg, log: log, router: router, chatSvc: chatSvc}
 }
 
 func (r *Router) Run() {
@@ -26,12 +26,7 @@ func (r *Router) Run() {
 }
 
 func (r *Router) setRoutes() {
-	tr := r.router.Group("/todos")
-	tr.GET("", r.todoSvc.GetTodos)
-	tr.GET("/:id", r.todoSvc.GetTodo)
-	tr.POST("", r.todoSvc.AddTodo)
-	tr.PUT("/:id", r.todoSvc.SetDoneTodo)
-	tr.DELETE("/:id", r.todoSvc.DeleteTodo)
+	r.router.GET("/greet", r.chatSvc.Greet)
 }
 
 func (r *Router) useMiddlewares() {

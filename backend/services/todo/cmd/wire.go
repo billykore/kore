@@ -6,7 +6,6 @@ package main
 import (
 	"github.com/billykore/kore/backend/pkg"
 	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/pkg/db"
 	"github.com/billykore/kore/backend/services/todo/repo"
 	"github.com/billykore/kore/backend/services/todo/server"
 	"github.com/billykore/kore/backend/services/todo/service"
@@ -18,7 +17,6 @@ import (
 func todoApp(cfg *config.Config) *app {
 	wire.Build(
 		pkg.ProviderSet,
-		db.ProviderSet,
 		repo.ProviderSet,
 		usecase.ProviderSet,
 		service.ProviderSet,
