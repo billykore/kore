@@ -9,6 +9,7 @@ package main
 import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/log"
+	"github.com/billykore/kore/backend/pkg/websocket"
 	"github.com/billykore/kore/backend/services/chat/repo"
 	"github.com/billykore/kore/backend/services/chat/server"
 	"github.com/billykore/kore/backend/services/chat/service"
@@ -25,10 +26,11 @@ import (
 func chatApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
 	echoEcho := echo.New()
+	pool := websocket.NewPool()
 	greeterRepository := repo.NewChatRepository()
 	chatUsecase := usecase.NewChatUsecase(logger, greeterRepository)
-	chatService := service.NewChatService(chatUsecase)
-	router := server.NewRouter(cfg, logger, echoEcho, chatService)
+	chatService := service.NewChatService(chatUsecase, pool)
+	router := server.NewRouter(cfg, logger, echoEcho, pool, chatService)
 	httpServer := server.NewHTTPServer(router)
 	mainApp := newApp(httpServer)
 	return mainApp

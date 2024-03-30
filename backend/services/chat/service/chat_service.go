@@ -1,44 +1,32 @@
 package service
 
 import (
-	"fmt"
-	"time"
-
+	"github.com/billykore/kore/backend/pkg/websocket"
 	"github.com/billykore/kore/backend/services/chat/usecase"
-	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
 )
 
 type ChatService struct {
-	uc *usecase.ChatUsecase
+	uc   *usecase.ChatUsecase
+	pool *websocket.Pool
 }
 
-func NewChatService(uc *usecase.ChatUsecase) *ChatService {
-	return &ChatService{uc: uc}
+func NewChatService(uc *usecase.ChatUsecase, pool *websocket.Pool) *ChatService {
+	return &ChatService{
+		uc:   uc,
+		pool: pool,
+	}
 }
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:   1024,
-	WriteBufferSize:  1024,
-	HandshakeTimeout: 10 * time.Second,
-}
-
-func (s *ChatService) Greet(ctx echo.Context) error {
-	ws, err := upgrader.Upgrade(ctx.Response(), ctx.Request(), nil)
+func (s *ChatService) Chat(ctx echo.Context) error {
+	conn, err := websocket.Upgrade(ctx.Response(), ctx.Request())
 	if err != nil {
 		return err
 	}
-	defer ws.Close()
-	for {
-		err := ws.WriteMessage(websocket.TextMessage, []byte("Hello, Client!"))
-		if err != nil {
-			ctx.Logger().Error(err)
-		}
 
-		_, msg, err := ws.ReadMessage()
-		if err != nil {
-			ctx.Logger().Error(err)
-		}
-		fmt.Printf("%s\n", msg)
-	}
+	client := websocket.NewClient(conn, s.pool)
+	s.pool.Register <- client
+	client.Read()
+
+	return nil
 }
