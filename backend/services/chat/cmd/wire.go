@@ -6,15 +6,15 @@ package main
 import (
 	"github.com/billykore/kore/backend/pkg"
 	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/services/auth/repo"
-	"github.com/billykore/kore/backend/services/auth/server"
-	"github.com/billykore/kore/backend/services/auth/service"
-	"github.com/billykore/kore/backend/services/auth/usecase"
+	"github.com/billykore/kore/backend/services/chat/repo"
+	"github.com/billykore/kore/backend/services/chat/server"
+	"github.com/billykore/kore/backend/services/chat/service"
+	"github.com/billykore/kore/backend/services/chat/usecase"
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 )
 
-func authApp(cfg *config.Config) *app {
+func chatApp(cfg *config.Config) *app {
 	wire.Build(
 		pkg.ProviderSet,
 		repo.ProviderSet,

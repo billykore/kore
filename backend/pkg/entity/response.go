@@ -33,6 +33,14 @@ func ResponseError(err error) (int, *Response) {
 	}
 }
 
+func ResponseInternalServerError(err error) (int, *Response) {
+	return http.StatusInternalServerError, &Response{
+		Status:     "INTERNAL_SERVER_ERROR",
+		Message:    err.Error(),
+		ServerTime: time.Now().Unix(),
+	}
+}
+
 var responseCode = []int{
 	http.StatusOK,
 	http.StatusBadRequest,
