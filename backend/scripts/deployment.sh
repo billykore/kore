@@ -24,7 +24,7 @@ function deploy_gateway() {
 SERVICE=$2
 
 function deploy_service() {
-  K8S_DIR="$(pwd)/services/$SERVICE/deployment/k8s"
+  K8S_DIR="$(pwd)/services/$SERVICE/deployment"
 
   # check deployment folder.
   if [[ ! -d "$K8S_DIR" ]]; then
