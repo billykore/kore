@@ -36,7 +36,7 @@ func (pool *Pool) Start() {
 		case message := <-pool.Broadcast:
 			for c, _ := range pool.Clients {
 				pool.log.Infof("send message to client %s", c.Id)
-				if err := c.Conn.WriteJSON(message); err != nil {
+				if err := c.Conn.WriteJSON(message.Message); err != nil {
 					pool.log.Errorf("failed to send message to client %s: %v", c.Id, err)
 					return
 				}
