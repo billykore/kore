@@ -4,7 +4,11 @@
   "private": true,
   "exports": {
     "./button": "./src/button.tsx",
-    "./input": "./src/input.tsx"
+    "./input": "./src/input.tsx",
+    "./typography": "./src/typography.tsx",
+    "./textarea": "./src/textarea.tsx",
+    "./divider": "./src/divider.tsx",
+    "./card": "./src/card.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
