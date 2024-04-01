@@ -6,6 +6,7 @@ import { TextArea } from "@repo/ui/textarea"
 import { SecondaryButton } from "@repo/ui/button"
 import { Divider } from "@repo/ui/divider"
 import { Card } from "@repo/ui/card"
+import { Input } from "@repo/ui/input"
 
 function connectWebSocket(url: string): WebSocket {
   const socket = new WebSocket(url)
@@ -20,27 +21,45 @@ function connectWebSocket(url: string): WebSocket {
   return socket
 }
 
-const socket = connectWebSocket("ws://localhost:8000/chat")
+const socket = connectWebSocket("ws://192.168.161.78:8000/chat")
+
+interface ChatMessage {
+  name: string
+  message: string
+}
 
 export default function Home() {
-  const [messages, setMessages] = useState<string[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [name, setName] = useState<string>("")
   const [newMessage, setNewMessage] = useState<string>("")
 
   useEffect(() => {
-    socket.onmessage = (e: MessageEvent<string>) => {
-      setMessages((prevMessages) => [e.data, ...prevMessages])
+    socket.onmessage = (e: MessageEvent) => {
+      const msg = JSON.parse(e.data)
+      setMessages((prevMessages) => [msg, ...prevMessages])
     }
   }, [])
 
   const sendMessage = () => {
-    socket.send(newMessage)
+    const chatMessage: ChatMessage = {
+      name: name,
+      message: newMessage,
+    }
+    socket.send(JSON.stringify(chatMessage))
+    setName("")
     setNewMessage("")
   }
 
   return (
-    <main className="min-h-screen max-w-4xl py-12 mx-auto">
+    <main className="min-h-screen max-w-2xl py-12 mx-auto">
       <Title>WiChat</Title>
 
+      <Input
+        id="name"
+        label="Your name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <TextArea
         id="message"
         label="Your message"
@@ -53,8 +72,11 @@ export default function Home() {
 
       <Divider/>
 
-      {messages.length > 0 ? messages.map((msg, index) => (
-        <Card id={index}>{msg}</Card>
+      {messages.length > 0 ? messages.map((msg) => (
+        <Card
+          title={msg.name}
+          body={msg.message}
+        />
       )) : <BackgroundText>No Message</BackgroundText>}
     </main>
   )

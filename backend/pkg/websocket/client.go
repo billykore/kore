@@ -1,6 +1,8 @@
 package websocket
 
 import (
+	"encoding/json"
+
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -26,7 +28,7 @@ func NewClient(conn *websocket.Conn, pool *Pool) *Client {
 }
 
 type Message struct {
-	Type    int    `json:"type"`
+	Name    string `json:"name"`
 	Message string `json:"message"`
 }
 
@@ -38,15 +40,17 @@ func (c *Client) Read() {
 
 	logger := log.NewLogger()
 	for {
-		msgType, p, err := c.Conn.ReadMessage()
+		_, p, err := c.Conn.ReadMessage()
 		if err != nil {
 			logger.Error(err)
 			return
 		}
-
-		message := Message{Type: msgType, Message: string(p)}
+		message := Message{}
+		err = json.Unmarshal(p, &message)
+		if err != nil {
+			logger.Error(err)
+		}
 		c.Pool.Broadcast <- message
-
-		logger.Infof("Message Received: %+v", string(p))
+		logger.Infof("Message Received: %+v", message)
 	}
 }

@@ -3,7 +3,7 @@ import { ChangeEventHandler } from "react"
 interface TextAreaProps {
   id: string
   label: string
-  value: string
+  value?: string
   onChange?: ChangeEventHandler<HTMLTextAreaElement>
 }
 
