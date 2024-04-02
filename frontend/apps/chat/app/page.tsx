@@ -21,7 +21,7 @@ function connectWebSocket(url: string): WebSocket {
   return socket
 }
 
-const socket = connectWebSocket("ws://192.168.161.78:8000/chat")
+const socket = connectWebSocket("ws://localhost:8000/chat")
 
 interface ChatMessage {
   name: string
