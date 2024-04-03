@@ -37,6 +37,7 @@ func (r *Router) setRoutes() {
 func (r *Router) useMiddlewares() {
 	r.router.Use(middleware.Logger())
 	r.router.Use(middleware.Recover())
+	r.router.Use(middleware.CORS())
 }
 
 func (r *Router) run() {

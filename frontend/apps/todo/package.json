@@ -1,5 +1,5 @@
 {
-  "name": "todos",
+  "name": "todo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@repo/ui": "*",
+    "@repo/models": "*",
+    "@repo/helper": "*",
     "react": "^18",
     "react-dom": "^18",
     "next": "14.1.3"

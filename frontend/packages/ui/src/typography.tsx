@@ -4,7 +4,7 @@ interface TypographyProps {
 
 export const Title = ({children}: TypographyProps) => {
   return (
-    <h1 className="text-4xl mb-12 font-bold">{children}</h1>
+    <h1 className="text-4xl mt-4 mb-12 font-bold">{children}</h1>
   )
 }
 
