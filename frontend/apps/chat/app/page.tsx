@@ -5,8 +5,8 @@ import { BackgroundText, Title } from "@repo/ui/typography"
 import { TextArea } from "@repo/ui/textarea"
 import { SecondaryButton } from "@repo/ui/button"
 import { Divider } from "@repo/ui/divider"
-import { Card } from "@repo/ui/card"
 import { Input } from "@repo/ui/input"
+import Card from "@/app/card"
 
 function connectWebSocket(url: string): WebSocket {
   const socket = new WebSocket(url)
