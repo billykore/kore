@@ -3,12 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
+"./badge": "./src/badge.tsx",
     "./button": "./src/button.tsx",
+    "./container": "./src/container.tsx",
+    "./divider": "./src/divider.tsx",
     "./input": "./src/input.tsx",
     "./typography": "./src/typography.tsx",
-    "./textarea": "./src/textarea.tsx",
-    "./divider": "./src/divider.tsx",
-    "./card": "./src/card.tsx"
+    "./textarea": "./src/textarea.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
