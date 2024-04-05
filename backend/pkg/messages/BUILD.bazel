@@ -1,0 +1,11 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "messages",
+    srcs = [
+        "auth_messages.go",
+        "todo_messages.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/pkg/messages",
+    visibility = ["//visibility:public"],
+)

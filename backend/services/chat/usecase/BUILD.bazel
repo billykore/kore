@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "usecase",
+    srcs = [
+        "chat_usecase.go",
+        "provider.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/services/chat/usecase",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/log",
+        "//pkg/repo",
+        "@com_github_google_wire//:wire",
+    ],
+)

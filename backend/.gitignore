@@ -1,4 +1,15 @@
 .DS_Store
 ../.idea
-.env
+
+# Firebase credentials.
 firebase-sdk.json
+
+# env files.
+.env
+.env.sh
+
+# Bazel generated dirs.
+bazel-backend
+bazel-bin
+bazel-out
+bazel-testlogs

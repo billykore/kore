@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "db",
+    srcs = [
+        "collections.go",
+        "firestore.go",
+        "provider.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/pkg/db",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/config",
+        "//pkg/log",
+        "//pkg/path",
+        "@com_github_google_wire//:wire",
+        "@com_google_cloud_go_firestore//:firestore",
+        "@com_google_firebase_go//:go",
+        "@org_golang_google_api//option",
+    ],
+)

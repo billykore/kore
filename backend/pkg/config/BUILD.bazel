@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "config",
+    srcs = [
+        "config.go",
+        "firestore_config.go",
+        "token_config.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/pkg/config",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_kelseyhightower_envconfig//:envconfig"],
+)
