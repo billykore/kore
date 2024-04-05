@@ -7,13 +7,13 @@
 package main
 
 import (
-	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/pkg/db"
-	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/services/todo/repo"
-	"github.com/billykore/kore/backend/services/todo/server"
-	"github.com/billykore/kore/backend/services/todo/service"
-	"github.com/billykore/kore/backend/services/todo/usecase"
+	"github.com/billykore/kore/pkg/config"
+	"github.com/billykore/kore/pkg/db"
+	"github.com/billykore/kore/pkg/log"
+	"github.com/billykore/kore/services/todo/repo"
+	"github.com/billykore/kore/services/todo/server"
+	"github.com/billykore/kore/services/todo/service"
+	"github.com/billykore/kore/services/todo/usecase"
 	"github.com/labstack/echo/v4"
 )
 

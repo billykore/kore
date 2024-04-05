@@ -4,12 +4,12 @@
 package main
 
 import (
-	"github.com/billykore/kore/backend/pkg"
-	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/services/auth/repo"
-	"github.com/billykore/kore/backend/services/auth/server"
-	"github.com/billykore/kore/backend/services/auth/service"
-	"github.com/billykore/kore/backend/services/auth/usecase"
+	"github.com/billykore/kore/pkg"
+	"github.com/billykore/kore/pkg/config"
+	"github.com/billykore/kore/services/auth/repo"
+	"github.com/billykore/kore/services/auth/server"
+	"github.com/billykore/kore/services/auth/service"
+	"github.com/billykore/kore/services/auth/usecase"
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 )

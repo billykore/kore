@@ -1,9 +1,9 @@
 package pkg
 
 import (
-	"github.com/billykore/kore/backend/pkg/db"
-	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/pkg/websocket"
+	"github.com/billykore/kore/pkg/db"
+	"github.com/billykore/kore/pkg/log"
+	"github.com/billykore/kore/pkg/websocket"
 	"github.com/google/wire"
 )
 

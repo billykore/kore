@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/pkg/repo"
+	"github.com/billykore/kore/pkg/log"
+	"github.com/billykore/kore/pkg/repo"
 )
 
 type ChatUsecase struct {

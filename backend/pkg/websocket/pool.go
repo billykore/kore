@@ -1,7 +1,7 @@
 package websocket
 
 import (
-	"github.com/billykore/kore/backend/pkg/log"
+	"github.com/billykore/kore/pkg/log"
 )
 
 type Pool struct {

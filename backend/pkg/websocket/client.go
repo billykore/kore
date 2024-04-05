@@ -3,7 +3,7 @@ package websocket
 import (
 	"encoding/json"
 
-	"github.com/billykore/kore/backend/pkg/log"
+	"github.com/billykore/kore/pkg/log"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )

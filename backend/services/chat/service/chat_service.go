@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/billykore/kore/backend/pkg/websocket"
-	"github.com/billykore/kore/backend/services/chat/usecase"
+	"github.com/billykore/kore/pkg/websocket"
+	"github.com/billykore/kore/services/chat/usecase"
 	"github.com/labstack/echo/v4"
 )
 

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/billykore/kore/backend/pkg/status"
+	"github.com/billykore/kore/pkg/status"
 )
 
 type Response struct {

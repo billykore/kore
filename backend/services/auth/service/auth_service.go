@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/billykore/kore/backend/pkg/entity"
-	"github.com/billykore/kore/backend/services/auth/usecase"
+	"github.com/billykore/kore/pkg/entity"
+	"github.com/billykore/kore/services/auth/usecase"
 	"github.com/labstack/echo/v4"
 )
 

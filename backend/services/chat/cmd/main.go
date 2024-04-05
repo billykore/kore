@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/services/chat/server"
+	"github.com/billykore/kore/pkg/config"
+	"github.com/billykore/kore/services/chat/server"
 	_ "github.com/joho/godotenv/autoload"
 )
 

@@ -3,13 +3,13 @@ package usecase
 import (
 	"context"
 
-	"github.com/billykore/kore/backend/pkg/codes"
-	"github.com/billykore/kore/backend/pkg/entity"
-	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/pkg/messages"
-	"github.com/billykore/kore/backend/pkg/model"
-	"github.com/billykore/kore/backend/pkg/repo"
-	"github.com/billykore/kore/backend/pkg/status"
+	"github.com/billykore/kore/pkg/codes"
+	"github.com/billykore/kore/pkg/entity"
+	"github.com/billykore/kore/pkg/log"
+	"github.com/billykore/kore/pkg/messages"
+	"github.com/billykore/kore/pkg/model"
+	"github.com/billykore/kore/pkg/repo"
+	"github.com/billykore/kore/pkg/status"
 	"github.com/google/uuid"
 )
 

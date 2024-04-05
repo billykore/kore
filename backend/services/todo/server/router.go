@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/services/todo/service"
+	"github.com/billykore/kore/pkg/config"
+	"github.com/billykore/kore/pkg/log"
+	"github.com/billykore/kore/services/todo/service"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )

@@ -3,8 +3,8 @@ package repo
 import (
 	"context"
 
-	"github.com/billykore/kore/backend/pkg/model"
-	"github.com/billykore/kore/backend/pkg/repo"
+	"github.com/billykore/kore/pkg/model"
+	"github.com/billykore/kore/pkg/repo"
 )
 
 type chatRepo struct {

@@ -4,12 +4,12 @@
 package main
 
 import (
-	"github.com/billykore/kore/backend/pkg"
-	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/services/chat/repo"
-	"github.com/billykore/kore/backend/services/chat/server"
-	"github.com/billykore/kore/backend/services/chat/service"
-	"github.com/billykore/kore/backend/services/chat/usecase"
+	"github.com/billykore/kore/pkg"
+	"github.com/billykore/kore/pkg/config"
+	"github.com/billykore/kore/services/chat/repo"
+	"github.com/billykore/kore/services/chat/server"
+	"github.com/billykore/kore/services/chat/service"
+	"github.com/billykore/kore/services/chat/usecase"
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 )
