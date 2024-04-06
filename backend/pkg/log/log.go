@@ -59,6 +59,13 @@ func (l *Logger) Fatalf(format string, a ...any) {
 	)
 }
 
+func (l *Logger) Info(v any) {
+	l.zapLogger.Info(
+		"info",
+		zap.String("usecase", l.usecase),
+		zap.Any("info", v))
+}
+
 func (l *Logger) Infof(format string, a ...any) {
 	l.zapLogger.Info(
 		"info",

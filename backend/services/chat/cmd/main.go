@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/services/chat/server"
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -19,7 +18,6 @@ func newApp(hs *server.HTTPServer) *app {
 
 func main() {
 	cfg := config.Get()
-	log.NewLogger().Infof("cfg: %+v", cfg)
 	chat := chatApp(cfg)
 	chat.hs.Serve()
 }
