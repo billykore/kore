@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "entity",
+    srcs = [
+        "auth.go",
+        "book.go",
+        "chat.go",
+        "default.go",
+        "response.go",
+        "todo.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/pkg/entity",
+    visibility = ["//visibility:public"],
+    deps = ["//pkg/status"],
+)

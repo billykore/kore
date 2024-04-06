@@ -1,0 +1,13 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "model",
+    srcs = [
+        "auth.go",
+        "greet.go",
+        "todo.go",
+        "user.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/pkg/model",
+    visibility = ["//visibility:public"],
+)

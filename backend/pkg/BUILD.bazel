@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "pkg",
+    srcs = ["provider.go"],
+    importpath = "github.com/billykore/kore/backend/pkg",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/db",
+        "//pkg/log",
+        "//pkg/websocket",
+        "@com_github_google_wire//:wire",
+    ],
+)
