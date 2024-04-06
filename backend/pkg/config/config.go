@@ -8,7 +8,7 @@ import (
 
 type Config struct {
 	HTTPPort  string `envconfig:"HTTP_PORT"`
-	GRPCPort  string `envconfig:"GRPC_PORT"`
+	Postgres  Postgres
 	Firestore Firestore
 	Token     Token
 }

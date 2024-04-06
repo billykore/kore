@@ -2,22 +2,13 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
     name = "cmd_lib",
-    srcs = [
-        "main.go",
-        "wire_gen.go",
-    ],
+    srcs = ["main.go"],
     importpath = "github.com/billykore/kore/backend/services/auth/cmd",
     visibility = ["//visibility:private"],
     deps = [
         "//pkg/config",
-        "//pkg/db",
-        "//pkg/log",
-        "//services/auth/repo",
         "//services/auth/server",
-        "//services/auth/service",
-        "//services/auth/usecase",
         "@com_github_joho_godotenv//autoload",
-        "@com_github_labstack_echo_v4//:echo",
     ],
 )
 

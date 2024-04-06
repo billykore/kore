@@ -12,7 +12,6 @@ go_library(
     deps = [
         "//pkg/db",
         "//pkg/model",
-        "//pkg/perrors",
         "//pkg/repo",
         "@com_github_google_wire//:wire",
         "@com_google_cloud_go_firestore//:firestore",

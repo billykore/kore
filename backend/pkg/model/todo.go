@@ -1,8 +1,7 @@
 package model
 
 type Todo struct {
-	Id          string
-	UserId      string
+	Id          int64
 	Title       string
 	Description string
 	IsDone      bool

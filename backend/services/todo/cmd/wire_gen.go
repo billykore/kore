@@ -26,8 +26,8 @@ import (
 func todoApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
 	echoEcho := echo.New()
-	client := db.New(cfg)
-	todoRepository := repo.NewTodoRepository(client)
+	gormDB := db.NewPostgres(cfg)
+	todoRepository := repo.NewTodoRepository(gormDB)
 	todoUsecase := usecase.NewTodoUsecase(logger, todoRepository)
 	todoService := service.NewTodoService(todoUsecase)
 	router := server.NewRouter(cfg, logger, echoEcho, todoService)
