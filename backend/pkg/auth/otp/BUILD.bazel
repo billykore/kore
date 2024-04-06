@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "otp",
+    srcs = ["otp.go"],
+    importpath = "github.com/billykore/kore/backend/pkg/auth/otp",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "otp_test",
+    srcs = ["otp_test.go"],
+    embed = [":otp"],
+    deps = ["@com_github_stretchr_testify//assert"],
+)

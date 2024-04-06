@@ -23,7 +23,7 @@ func (h *TodoHandler) GetTodos(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("todos", todos))
+	return ctx.JSON(entity.ResponseSuccess(todos))
 }
 
 func (h *TodoHandler) GetTodo(ctx echo.Context) error {
@@ -35,7 +35,7 @@ func (h *TodoHandler) GetTodo(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("todo", todo))
+	return ctx.JSON(entity.ResponseSuccess(todo))
 }
 
 func (h *TodoHandler) AddTodo(ctx echo.Context) error {
@@ -47,7 +47,7 @@ func (h *TodoHandler) AddTodo(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("save", save))
+	return ctx.JSON(entity.ResponseSuccess(save))
 }
 
 func (h *TodoHandler) SetDoneTodo(ctx echo.Context) error {
@@ -59,7 +59,7 @@ func (h *TodoHandler) SetDoneTodo(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("done", setDone))
+	return ctx.JSON(entity.ResponseSuccess(setDone))
 }
 
 func (h *TodoHandler) DeleteTodo(ctx echo.Context) error {
@@ -71,5 +71,5 @@ func (h *TodoHandler) DeleteTodo(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("delete", del))
+	return ctx.JSON(entity.ResponseSuccess(del))
 }

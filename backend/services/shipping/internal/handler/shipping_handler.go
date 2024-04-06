@@ -19,11 +19,11 @@ func (h *ShippingHandler) CreateShipping(ctx echo.Context) error {
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
-	resp, err := h.uc.CreateShipping(ctx.Request().Context(), req)
+	shipping, err := h.uc.CreateShipping(ctx.Request().Context(), req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("shipping", resp))
+	return ctx.JSON(entity.ResponseSuccess(shipping))
 }
 
 func (h *ShippingHandler) UpdateShippingStatus(ctx echo.Context) error {

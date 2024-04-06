@@ -8,8 +8,8 @@ import (
 )
 
 // NewPostgres returns postgres db connection instance.
-func NewPostgres(appCfg *config.Config) *gorm.DB {
-	dsn := appCfg.Postgres.DSN
+func NewPostgres(cfg *config.Config) *gorm.DB {
+	dsn := cfg.Postgres.DSN
 	logger := log.NewLogger()
 	db, err := gorm.Open(postgres.Open(dsn))
 	if err != nil {

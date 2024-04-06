@@ -16,7 +16,7 @@ func HandlerTemplate() []byte {
 
 import (
 	"{{ .GoMod }}/pkg/entity"
-	"{{ .GoMod }}/services/{{ .ServiceName }}/usecase"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/internal/usecase"
 	"github.com/labstack/echo/v4"
 )
 

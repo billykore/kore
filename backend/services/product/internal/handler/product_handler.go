@@ -23,7 +23,7 @@ func (s *ProductHandler) GetProductList(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("products", products))
+	return ctx.JSON(entity.ResponseSuccess(products))
 }
 
 func (s *ProductHandler) GetProductById(ctx echo.Context) error {
@@ -35,5 +35,5 @@ func (s *ProductHandler) GetProductById(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("product", product))
+	return ctx.JSON(entity.ResponseSuccess(product))
 }

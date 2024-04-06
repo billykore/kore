@@ -42,7 +42,7 @@ func (h *OrderHandler) GetOrderById(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("order", order))
+	return ctx.JSON(entity.ResponseSuccess(order))
 }
 
 func (h *OrderHandler) PayOrder(ctx echo.Context) error {
@@ -54,7 +54,7 @@ func (h *OrderHandler) PayOrder(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("payment", payment))
+	return ctx.JSON(entity.ResponseSuccess(payment))
 }
 
 func (h *OrderHandler) ShipOrder(ctx echo.Context) error {
@@ -66,7 +66,7 @@ func (h *OrderHandler) ShipOrder(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("shipping", shipping))
+	return ctx.JSON(entity.ResponseSuccess(shipping))
 }
 
 func (h *OrderHandler) CancelOrder(ctx echo.Context) error {

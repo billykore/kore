@@ -4,6 +4,7 @@ go_library(
     name = "messages",
     srcs = [
         "auth_messages.go",
+        "otp_messages.go",
         "todo_messages.go",
     ],
     importpath = "github.com/billykore/kore/backend/pkg/messages",

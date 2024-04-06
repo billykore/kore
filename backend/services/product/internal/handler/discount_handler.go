@@ -25,5 +25,5 @@ func (s *DiscountHandler) GetDiscountList(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("discounts", discounts))
+	return ctx.JSON(entity.ResponseSuccess(discounts))
 }

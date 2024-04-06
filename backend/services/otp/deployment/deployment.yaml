@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monorepo-otp-app
+  labels:
+    name: monorepo-otp-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: monorepo-otp-service
+  template:
+    metadata:
+      name: monorepo-otp-service
+      labels:
+        name: monorepo-otp-service
+    spec:
+      containers:
+        - name: monorepo-otp-app
+          image: billykore/monorepo-otp:latest
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: monorepo-otp-env
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 300m
+              memory: 300Mi
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: monorepo-otp-service
+spec:
+  selector:
+    name: monorepo-otp-service
+  ports:
+    - name: "http"
+      port: 8000
+      targetPort: 8000
+    - name: "grpc"
+      port: 9000
+      targetPort: 9000
+  type: ClusterIP

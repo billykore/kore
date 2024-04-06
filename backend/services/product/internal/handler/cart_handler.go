@@ -25,7 +25,7 @@ func (s *CartHandler) GetCartItemList(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("carts", items))
+	return ctx.JSON(entity.ResponseSuccess(items))
 }
 
 func (s *CartHandler) AddCartItem(ctx echo.Context) error {

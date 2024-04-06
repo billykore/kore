@@ -8,25 +8,17 @@ import (
 	"github.com/billykore/kore/backend/pkg/status"
 )
 
-type Data map[string]any
-
-func makeData(fieldName string, fieldValue any) Data {
-	data := make(Data)
-	data[fieldName] = fieldValue
-	return data
-}
-
 type Response struct {
 	Status     string `json:"status,omitempty"`
 	Message    string `json:"message,omitempty"`
-	Data       Data   `json:"data,omitempty"`
+	Data       any    `json:"data,omitempty"`
 	ServerTime int64  `json:"serverTime,omitempty"`
 }
 
-func ResponseSuccess(fieldName string, fieldValue any) (int, *Response) {
+func ResponseSuccess(data any) (int, *Response) {
 	return http.StatusOK, &Response{
 		Status:     "OK",
-		Data:       makeData(fieldName, fieldValue),
+		Data:       data,
 		ServerTime: time.Now().Unix(),
 	}
 }

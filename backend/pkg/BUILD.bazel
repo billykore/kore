@@ -8,6 +8,7 @@ go_library(
     deps = [
         "//pkg/db",
         "//pkg/log",
+        "//pkg/mail",
         "//pkg/net/rabbit",
         "//pkg/net/websocket",
         "@com_github_google_wire//:wire",

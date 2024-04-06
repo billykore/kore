@@ -20,7 +20,7 @@ func RouterTemplate() []byte {
 import (
 	"{{ .GoMod }}/pkg/config"
 	"{{ .GoMod }}/pkg/log"
-	"{{ .GoMod }}/services/{{ .ServiceName }}/handler"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/internal/handler"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )

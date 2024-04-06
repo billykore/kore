@@ -29,10 +29,11 @@ and a protobuf inside the  file that look something like this:
     │   └── todo/
     │       ├── cmd/         # Contains main.go and wire.go injector files.
     │       ├── deployment/  # Kubernetes deployment configs.
-    │       ├── repo/        # Service repositories.
-    │       ├── server/      # Service http and gRPC servers.
-    │       ├── handler/     # Service API handlers.
-    │       ├── usecase/     # Service usecases.
+    │       ├── internal/    # Application internal.
+    │       │   ├── repo/    # Service repositories.
+    │       │   ├── server/  # Service http and gRPC servers.
+    │       │   ├── handler/ # Service API handlers.
+    │       │   └── usecase/ # Service use cases.
     │       └── Dockerfile
     └──...
 
@@ -100,16 +101,19 @@ func (d *createData) create() error {
 	if err := os.Mkdir(svcPath, 0754); err != nil {
 		return err
 	}
-	if err := d.createRepository(svcPath); err != nil {
+	if err := os.Mkdir(svcPath+"/internal", 0754); err != nil {
 		return err
 	}
-	if err := d.createUsecase(svcPath); err != nil {
+	if err := d.createRepository(svcPath + "/internal"); err != nil {
 		return err
 	}
-	if err := d.createHandler(svcPath); err != nil {
+	if err := d.createUsecase(svcPath + "/internal"); err != nil {
 		return err
 	}
-	if err := d.createServer(svcPath); err != nil {
+	if err := d.createHandler(svcPath + "/internal"); err != nil {
+		return err
+	}
+	if err := d.createServer(svcPath + "/internal"); err != nil {
 		return err
 	}
 	if err := d.createCmd(svcPath); err != nil {

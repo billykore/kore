@@ -5,6 +5,7 @@ go_library(
     srcs = [
         "broker_config.go",
         "config.go",
+        "email_config.go",
         "firestore_config.go",
         "postgres_config.go",
         "token_config.go",

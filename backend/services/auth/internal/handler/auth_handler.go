@@ -24,7 +24,7 @@ func (s *AuthHandler) Login(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("token", token))
+	return ctx.JSON(entity.ResponseSuccess(token))
 }
 
 func (s *AuthHandler) Logout(ctx echo.Context) error {
@@ -37,5 +37,5 @@ func (s *AuthHandler) Logout(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("logout", logout))
+	return ctx.JSON(entity.ResponseSuccess(logout))
 }

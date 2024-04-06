@@ -1,3 +1,5 @@
+// Package config contains all the services configuration values.
+// The configuration is from .env file.
 package config
 
 import (
@@ -6,13 +8,14 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-// Config is app configurations use by services.
+// Config contains app configurations use by services.
 type Config struct {
 	HTTPPort  string `envconfig:"HTTP_PORT" default:"8000"`
 	Postgres  Postgres
 	Firestore Firestore
 	Token     Token
 	Rabbit    Rabbit
+	Email     Email
 }
 
 var (

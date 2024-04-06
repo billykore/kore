@@ -1,6 +1,6 @@
 FROM golang:1.22-alpine AS build
 WORKDIR /app
-COPY .. .
+COPY . .
 RUN go install github.com/google/wire/cmd/wire@latest && \
     go mod download && \
     wire ./services/todo/... && \

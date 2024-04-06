@@ -21,5 +21,5 @@ func (s *ProductCategoryHandler) GetCategoryList(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess("categories", categories))
+	return ctx.JSON(entity.ResponseSuccess(categories))
 }

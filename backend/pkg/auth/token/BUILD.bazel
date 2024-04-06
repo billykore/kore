@@ -3,7 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "token",
     srcs = ["token.go"],
-    importpath = "github.com/billykore/kore/backend/pkg/token",
+    importpath = "github.com/billykore/kore/backend/pkg/auth/token",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/config",

@@ -17,6 +17,7 @@ go_library(
         "//services/todo/internal/server",
         "//services/todo/internal/usecase",
         "@com_github_joho_godotenv//autoload",
+        "@com_github_labstack_echo_v4//:echo",
     ],
 )
 

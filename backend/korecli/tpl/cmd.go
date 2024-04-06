@@ -5,7 +5,7 @@ func MainTemplate() []byte {
 
 import (
 	"{{ .GoMod }}/pkg/config"
-	"{{ .GoMod }}/services/{{ .ServiceName }}/server"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/internal/server"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -36,10 +36,10 @@ package main
 import (
 	"{{ .GoMod }}/libs/pkg/config"
 	"{{ .GoMod }}/libs/pkg"
-	"{{ .GoMod }}/services/{{ .ServiceName }}/repo"
-	"{{ .GoMod }}/services/{{ .ServiceName }}/server"
-	"{{ .GoMod }}/services/{{ .ServiceName }}/service"
-	"{{ .GoMod }}/services/{{ .ServiceName }}/usecase"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/internal/repo"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/internal/server"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/internal/service"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/internal/usecase"
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 )
