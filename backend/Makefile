@@ -45,3 +45,14 @@ run:
 install-cli:
 	@echo "Install monorepo CLI..."
 	@go install ./korecli
+
+# make gazelle-update-repos
+.PHONY: gazelle-update-repos
+gazelle-update-repos:
+	@gazelle update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies -prune
+
+# make bazel-run service=todo
+.PHONY: bazel-run
+bazel-run:
+	@echo "Run $(service) service with bazel..."
+	@bazel run //services/$(service)/cmd

@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type Auth struct {
+type AuthActivities struct {
 	Id          string
 	Username    string
 	Token       string

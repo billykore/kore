@@ -26,9 +26,9 @@ import (
 func authApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
 	echoEcho := echo.New()
-	client := db.New(cfg)
-	userRepository := repo.NewUserRepository(client)
-	authRepository := repo.NewAuthRepository(client)
+	gormDB := db.NewPostgres(cfg)
+	userRepository := repo.NewUserRepository(gormDB)
+	authRepository := repo.NewAuthRepository(gormDB)
 	authUsecase := usecase.NewAuthUsecase(logger, userRepository, authRepository)
 	authService := service.NewAuthService(authUsecase)
 	router := server.NewRouter(cfg, logger, echoEcho, authService)

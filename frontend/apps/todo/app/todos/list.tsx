@@ -5,6 +5,7 @@ import { Card } from "@/app/todos/card"
 import { getTodos, deleteTodo, editTodo } from "@/app/todos/api"
 import { handleError } from "@repo/helper/error"
 import Filter from "@/app/todos/filter"
+import { BackgroundText } from "@repo/ui/typography"
 
 export default async function TodoList() {
   const todos: Todo[] = await getTodos()
@@ -31,7 +32,7 @@ export default async function TodoList() {
     <>
       <Filter/>
 
-      {todos.map(todo => (
+      {todos != null ? todos.map(todo => (
         <Card
           key={todo.id}
           title={todo.title}
@@ -40,7 +41,7 @@ export default async function TodoList() {
           onDone={() => onDone(todo.id)}
           onDelete={() => onDelete(todo.id)}
         />
-      ))}
+      )): <BackgroundText>No Todos</BackgroundText>}
     </>
   )
 }

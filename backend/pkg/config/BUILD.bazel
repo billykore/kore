@@ -5,6 +5,7 @@ go_library(
     srcs = [
         "config.go",
         "firestore_config.go",
+        "postgres_config.go",
         "token_config.go",
     ],
     importpath = "github.com/billykore/kore/backend/pkg/config",

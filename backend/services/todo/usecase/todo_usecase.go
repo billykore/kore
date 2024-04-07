@@ -10,7 +10,6 @@ import (
 	"github.com/billykore/kore/backend/pkg/model"
 	"github.com/billykore/kore/backend/pkg/repo"
 	"github.com/billykore/kore/backend/pkg/status"
-	"github.com/google/uuid"
 )
 
 type TodoUsecase struct {
@@ -58,13 +57,7 @@ func (uc *TodoUsecase) GetTodo(ctx context.Context, req *entity.ParamId) (*entit
 }
 
 func (uc *TodoUsecase) SaveTodo(ctx context.Context, req *entity.AddTodoRequest) (*entity.Message, error) {
-	id, err := uuid.NewUUID()
-	if err != nil {
-		uc.log.Usecase("SaveTodo").Error(err)
-		return nil, status.Error(codes.Internal, messages.FailedSaveTodo)
-	}
-	err = uc.todoRepo.Save(ctx, &model.Todo{
-		Id:          id.String(),
+	err := uc.todoRepo.Save(ctx, &model.Todo{
 		Title:       req.Title,
 		Description: req.Description,
 	})
