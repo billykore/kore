@@ -1,7 +1,7 @@
 package entity
 
 type ParamId struct {
-	Id string `param:"id"`
+	Id int64 `param:"id"`
 }
 
 type Message struct {

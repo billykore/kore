@@ -49,15 +49,10 @@ install-cli:
 # make gazelle-update-repos
 .PHONY: gazelle-update-repos
 gazelle-update-repos:
-	@bazel run //:gazelle
-
-# make load-env
-.PHONY: load-env
-load-env:
-	@./scripts/env.sh
+	@gazelle update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies -prune
 
 # make bazel-run service=todo
 .PHONY: bazel-run
-bazel-run: load-env
+bazel-run:
 	@echo "Run $(service) service with bazel..."
 	@bazel run //services/$(service)/cmd

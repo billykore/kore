@@ -7,9 +7,6 @@ echo "Load env variables..."
 export HTTP_PORT=8000
 
 #--- Database ---
-export PROJECT_ID=todo-list-app-a5058
-export FIRESTORE_SDK=firebase-sdk.json
-export TODO_COLLECTIONS=
 export POSTGRES_DSN="host=localhost user=postgres password=postgres dbname=kore port=5432 sslmode=disable TimeZone=Asia/Jakarta"
 
 #--- Auth ---

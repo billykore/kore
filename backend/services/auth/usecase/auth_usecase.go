@@ -57,7 +57,7 @@ func (uc *AuthUsecase) Login(ctx context.Context, req *entity.LoginRequest) (*en
 		return nil, status.Error(codes.Internal, messages.LoginFailed)
 	}
 
-	err = uc.authRepo.Login(ctx, &model.Auth{
+	err = uc.authRepo.Login(ctx, &model.AuthActivities{
 		Id:        id.String(),
 		Username:  req.Username,
 		Token:     t.AccessToken,
@@ -82,7 +82,7 @@ func (uc *AuthUsecase) Logout(ctx context.Context, req *entity.LogoutRequest) (*
 		return nil, status.Error(codes.Unauthenticated, messages.LogoutFailed)
 	}
 
-	err = uc.authRepo.Logout(ctx, &model.Auth{
+	err = uc.authRepo.Logout(ctx, &model.AuthActivities{
 		Id:       req.LoginId,
 		Username: username,
 	})

@@ -25,7 +25,7 @@ func (r *todoRepo) Get(ctx context.Context, isDone string) ([]*model.Todo, error
 	return todos, nil
 }
 
-func (r *todoRepo) GetById(ctx context.Context, id string) (*model.Todo, error) {
+func (r *todoRepo) GetById(ctx context.Context, id int64) (*model.Todo, error) {
 	todo := new(model.Todo)
 	res := r.postgres.WithContext(ctx).
 		Where("id = ?", id).
@@ -42,7 +42,7 @@ func (r *todoRepo) Save(ctx context.Context, todo *model.Todo) error {
 	return err
 }
 
-func (r *todoRepo) Update(ctx context.Context, id string) error {
+func (r *todoRepo) Update(ctx context.Context, id int64) error {
 	todo := new(model.Todo)
 	res := r.postgres.WithContext(ctx).
 		Model(todo).
@@ -52,7 +52,7 @@ func (r *todoRepo) Update(ctx context.Context, id string) error {
 	return err
 }
 
-func (r *todoRepo) Delete(ctx context.Context, id string) error {
+func (r *todoRepo) Delete(ctx context.Context, id int64) error {
 	todo := new(model.Todo)
 	res := r.postgres.WithContext(ctx).
 		Where("id = ?", id).
