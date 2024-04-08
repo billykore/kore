@@ -10,6 +10,6 @@ export const Title = ({children}: TypographyProps) => {
 
 export const BackgroundText = ({children}: TypographyProps) => {
   return (
-    <h1 className="text-2xl text-center text-gray-400">{children}</h1>
+    <h1 className="mt-12 text-2xl text-center text-gray-400">{children}</h1>
   )
 }

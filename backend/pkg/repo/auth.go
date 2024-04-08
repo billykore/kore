@@ -7,6 +7,6 @@ import (
 )
 
 type AuthRepository interface {
-	Login(ctx context.Context, auth *model.Auth) error
-	Logout(ctx context.Context, auth *model.Auth) error
+	Login(ctx context.Context, auth *model.AuthActivities) error
+	Logout(ctx context.Context, auth *model.AuthActivities) error
 }

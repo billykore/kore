@@ -18,10 +18,10 @@ deploy-gateway:
 deploy:
 	@./scripts/deployment.sh "service" $(service)
 
-# make generate-wire
+# make generate-wire service=todo
 .PHONY: generate-wire
 generate-wire:
-	@./scripts/wire.sh
+	@./scripts/wire.sh $(service)
 
 # make generate-proto proto=todo.proto
 .PHONY: generate-proto
@@ -45,3 +45,14 @@ run:
 install-cli:
 	@echo "Install monorepo CLI..."
 	@go install ./korecli
+
+# make gazelle-update-repos
+.PHONY: gazelle-update-repos
+gazelle-update-repos:
+	@gazelle update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies -prune
+
+# make bazel-run service=todo
+.PHONY: bazel-run
+bazel-run:
+	@echo "Run $(service) service with bazel..."
+	@bazel run //services/$(service)/cmd

@@ -8,7 +8,7 @@ import (
 )
 
 var ProviderSet = wire.NewSet(
-	db.New,
+	db.NewPostgres,
 	log.NewLogger,
 	websocket.NewPool,
 )

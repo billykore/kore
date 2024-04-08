@@ -10,10 +10,10 @@ import (
 	"github.com/billykore/kore/pkg/config"
 	"github.com/billykore/kore/pkg/db"
 	"github.com/billykore/kore/pkg/log"
-	"github.com/billykore/kore/services/todo/repo"
-	"github.com/billykore/kore/services/todo/server"
-	"github.com/billykore/kore/services/todo/service"
-	"github.com/billykore/kore/services/todo/usecase"
+	"github.com/billykore/kore/services/auth/repo"
+	"github.com/billykore/kore/services/auth/server"
+	"github.com/billykore/kore/services/auth/service"
+	"github.com/billykore/kore/services/auth/usecase"
 	"github.com/labstack/echo/v4"
 )
 
@@ -23,14 +23,15 @@ import (
 
 // Injectors from wire.go:
 
-func todoApp(cfg *config.Config) *app {
+func authApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
 	echoEcho := echo.New()
 	gormDB := db.NewPostgres(cfg)
-	todoRepository := repo.NewTodoRepository(gormDB)
-	todoUsecase := usecase.NewTodoUsecase(logger, todoRepository)
-	todoService := service.NewTodoService(todoUsecase)
-	router := server.NewRouter(cfg, logger, echoEcho, todoService)
+	userRepository := repo.NewUserRepository(gormDB)
+	authRepository := repo.NewAuthRepository(gormDB)
+	authUsecase := usecase.NewAuthUsecase(logger, userRepository, authRepository)
+	authService := service.NewAuthService(authUsecase)
+	router := server.NewRouter(cfg, logger, echoEcho, authService)
 	httpServer := server.NewHTTPServer(router)
 	mainApp := newApp(httpServer)
 	return mainApp

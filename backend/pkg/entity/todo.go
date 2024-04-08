@@ -7,7 +7,7 @@ type GetTodosRequest struct {
 type GetTodosResponse []*GetTodoResponse
 
 type GetTodoResponse struct {
-	Id          string `json:"id"`
+	Id          int64  `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	IsDone      bool   `json:"isDone"`
