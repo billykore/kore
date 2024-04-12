@@ -30,6 +30,7 @@ spec:
               cpu: 300m
               memory: 300Mi
       restartPolicy: Always
+      automountServiceAccountToken: false
 
 ---
 
@@ -42,6 +43,6 @@ spec:
     name: monorepo-todo-service
   ports:
     - name: "http"
-      port: 8001
-      targetPort: 8001
+      port: 8000
+      targetPort: 8000
   type: ClusterIP
