@@ -1,15 +1,12 @@
 import Todo from "@repo/models/todo"
-
-enum Status {
-  OK = "OK"
-}
+import { APIResponse, Status } from "@repo/models/apiResponse"
 
 export const getTodos = async (isDone?: boolean) => {
   const res = await fetch(`http://localhost:8000/todos?isDone=${isDone}`, {
     method: "GET",
     cache: "no-store",
   })
-  const resJson = await res.json()
+  const resJson: APIResponse = await res.json()
   if (resJson.status != Status.OK) {
     throw new Error(resJson.message)
   }
@@ -21,9 +18,9 @@ export const addTodo = async (todo: Todo) => {
     method: "POST",
     mode: "cors",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(todo)
+    body: JSON.stringify(todo),
   })
-  const resJson = await res.json()
+  const resJson: APIResponse = await res.json()
   if (resJson.status != Status.OK) {
     throw new Error(resJson.message)
   }
@@ -33,9 +30,9 @@ export const addTodo = async (todo: Todo) => {
 export const editTodo = async (id?: string) => {
   const res = await fetch(`http://localhost:8000/todos/${id}`, {
     method: "PUT",
-    mode: "cors"
+    mode: "cors",
   })
-  const resJson = await res.json()
+  const resJson: APIResponse = await res.json()
   if (resJson.status != Status.OK) {
     throw new Error(resJson.message)
   }
@@ -45,9 +42,9 @@ export const editTodo = async (id?: string) => {
 export const deleteTodo = async (id?: string) => {
   const res = await fetch(`http://localhost:8000/todos/${id}`, {
     method: "DELETE",
-    mode: "cors"
+    mode: "cors",
   })
-  const resJson = await res.json()
+  const resJson: APIResponse = await res.json()
   if (resJson.status != Status.OK) {
     throw new Error(resJson.message)
   }
