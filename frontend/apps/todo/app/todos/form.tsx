@@ -6,10 +6,13 @@ import { TextArea } from "@repo/ui/textarea"
 import { PrimaryButton } from "@repo/ui/button"
 import { addTodo } from "@/app/todos/api"
 import { handleError } from "@repo/helper/error"
+import { useRouter } from "next/navigation"
 
 export default function Form() {
   const [title, setTitle] = useState<string>("")
   const [description, setDescription] = useState<string>("")
+
+  const router = useRouter()
 
   const saveTodo = async () => {
     try {
@@ -20,6 +23,7 @@ export default function Form() {
     } catch (err) {
       alert(handleError(err))
     }
+    router.refresh()
   }
 
   return (
