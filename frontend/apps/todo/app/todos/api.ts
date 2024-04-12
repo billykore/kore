@@ -1,4 +1,5 @@
 import Todo from "@repo/models/todo"
+import APIResponse from "@repo/models/apiResponse"
 
 enum Status {
   OK = "OK"
@@ -9,7 +10,7 @@ export const getTodos = async (isDone?: boolean) => {
     method: "GET",
     cache: "no-store",
   })
-  const resJson = await res.json()
+  const resJson: APIResponse = await res.json()
   if (resJson.status != Status.OK) {
     throw new Error(resJson.message)
   }
@@ -23,7 +24,7 @@ export const addTodo = async (todo: Todo) => {
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(todo)
   })
-  const resJson = await res.json()
+  const resJson: APIResponse = await res.json()
   if (resJson.status != Status.OK) {
     throw new Error(resJson.message)
   }
@@ -35,7 +36,7 @@ export const editTodo = async (id?: string) => {
     method: "PUT",
     mode: "cors"
   })
-  const resJson = await res.json()
+  const resJson: APIResponse = await res.json()
   if (resJson.status != Status.OK) {
     throw new Error(resJson.message)
   }
@@ -47,7 +48,7 @@ export const deleteTodo = async (id?: string) => {
     method: "DELETE",
     mode: "cors"
   })
-  const resJson = await res.json()
+  const resJson: APIResponse = await res.json()
   if (resJson.status != Status.OK) {
     throw new Error(resJson.message)
   }
