@@ -8,6 +8,7 @@ go_library(
         "chat.go",
         "default.go",
         "response.go",
+        "songke.go",
         "todo.go",
     ],
     importpath = "github.com/billykore/kore/backend/pkg/entity",

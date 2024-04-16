@@ -49,10 +49,28 @@ install-cli:
 # make gazelle-update-repos
 .PHONY: gazelle-update-repos
 gazelle-update-repos:
-	@gazelle update-repos -from_file=go.mod -to_macro=deps.bzl%go_dependencies -prune
+	@bazel run //:gazelle
 
 # make bazel-run service=todo
 .PHONY: bazel-run
 bazel-run:
 	@echo "Run $(service) service with bazel..."
 	@bazel run //services/$(service)/cmd
+
+# make create-migration name=create_table_products
+.PHONY: create-migration
+create-migration:
+	@echo "Create migration..."
+	@migrate create -ext sql -dir pkg/db/migrations -seq $(name)
+
+# make migrate-up step=1
+.PHONY: migrate-up
+migrate-up:
+	@echo "Migrate up..."
+	@migrate -path pkg/db/migrations -database 'postgres://postgres:postgres@localhost:5432/kore?sslmode=disable' -verbose up $(step)
+
+# make migrate-down step=1
+.PHONY: migrate-down
+migrate-down:
+	@echo "Migrate down..."
+	@migrate -path pkg/db/migrations -database 'postgres://postgres:postgres@localhost:5432/kore?sslmode=disable' -verbose down $(step)

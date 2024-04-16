@@ -16,7 +16,7 @@ func NewTodoRepository(postgres *gorm.DB) repo.TodoRepository {
 	return &todoRepo{postgres: postgres}
 }
 
-func (r *todoRepo) Get(ctx context.Context, isDone string) ([]*model.Todo, error) {
+func (r *todoRepo) List(ctx context.Context, isDone string) ([]*model.Todo, error) {
 	var todos []*model.Todo
 	res := r.postgres.WithContext(ctx).Find(&todos)
 	if err := res.Error; err != nil {
