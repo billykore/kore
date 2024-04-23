@@ -16,8 +16,8 @@ go_library(
         "//services/chat/server",
         "//services/chat/service",
         "//services/chat/usecase",
-        "@com_github_joho_godotenv//autoload",
-        "@com_github_labstack_echo_v4//:echo",
+        "@com_github_joho_godotenv//autoload:go_default_library",
+        "@com_github_labstack_echo_v4//:go_default_library",
     ],
 )
 

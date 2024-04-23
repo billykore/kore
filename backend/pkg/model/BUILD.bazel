@@ -4,10 +4,15 @@ go_library(
     name = "model",
     srcs = [
         "auth.go",
+        "discount.go",
         "greet.go",
+        "product.go",
+        "product_category.go",
+        "product_inventory.go",
         "todo.go",
         "user.go",
     ],
     importpath = "github.com/billykore/kore/backend/pkg/model",
     visibility = ["//visibility:public"],
+    deps = ["@io_gorm_gorm//:go_default_library"],
 )

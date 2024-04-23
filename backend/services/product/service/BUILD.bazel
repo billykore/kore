@@ -3,14 +3,14 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "service",
     srcs = [
+        "product_service.go",
         "provider.go",
-        "todo_service.go",
     ],
-    importpath = "github.com/billykore/kore/backend/services/todo/service",
+    importpath = "github.com/billykore/kore/backend/services/product/service",
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/entity",
-        "//services/todo/usecase",
+        "//services/product/usecase",
         "@com_github_google_wire//:go_default_library",
         "@com_github_labstack_echo_v4//:go_default_library",
     ],

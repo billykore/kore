@@ -9,9 +9,9 @@ import (
 )
 
 type Router struct {
-	cfg     *config.Config
-	log     *log.Logger
-	router  *echo.Echo
+	cfg        *config.Config
+	log        *log.Logger
+	router     *echo.Echo
 	productSvc *service.ProductService
 }
 
@@ -26,7 +26,7 @@ func (r *Router) Run() {
 }
 
 func (r *Router) setRoutes() {
-	r.router.GET("/greet", r.productSvc.Greet)
+	r.router.GET("/products", r.productSvc.ProductList)
 }
 
 func (r *Router) useMiddlewares() {

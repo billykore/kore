@@ -10,19 +10,25 @@ import (
 
 type ProductUsecase struct {
 	log  *log.Logger
-	repo repo.GreeterRepository
+	repo repo.ProductRepository
 }
 
-func NewProductUsecase(log *log.Logger, repo repo.GreeterRepository) *ProductUsecase {
+func NewProductUsecase(log *log.Logger, repo repo.ProductRepository) *ProductUsecase {
 	return &ProductUsecase{
 		log:  log,
 		repo: repo,
 	}
 }
 
-func (uc *ProductUsecase) Greet(ctx context.Context, req *entity.ProductRequest) (*entity.ProductResponse, error) {
-	uc.log.Usecase("Greet").Infof("Greet %s", req.Name)
-	return &entity.ProductResponse{
-		Message: "Hello " + req.Name,
-	}, nil
+func (uc *ProductUsecase) ProductList(ctx context.Context) ([]entity.ProductResponse, error) {
+	products, err := uc.repo.List(ctx)
+	if err != nil {
+		uc.log.Usecase("ProductList").Error(err)
+		return nil, err
+	}
+	var resp []entity.ProductResponse
+	for _, product := range products {
+		resp = append(resp, entity.MakeProductResponse(product))
+	}
+	return resp, nil
 }

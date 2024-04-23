@@ -9,6 +9,6 @@ CREATE TABLE IF NOT EXISTS products
     inventory_id INT                 NOT NULL,
     discount_id  INT                 NOT NULL,
     created_at   TIMESTAMP                    DEFAULT NOW(),
-    updated_at   TIMESTAMP           NOT NULL,
-    deleted_at   TIMESTAMP           NOT NULL
+    updated_at   TIMESTAMP           NULL,
+    deleted_at   TIMESTAMP           NULL
 );

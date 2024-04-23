@@ -9,16 +9,16 @@ import (
 )
 
 type todoRepo struct {
-	postgres *gorm.DB
+	db *gorm.DB
 }
 
 func NewTodoRepository(postgres *gorm.DB) repo.TodoRepository {
-	return &todoRepo{postgres: postgres}
+	return &todoRepo{db: postgres}
 }
 
 func (r *todoRepo) List(ctx context.Context, isDone string) ([]*model.Todo, error) {
 	var todos []*model.Todo
-	res := r.postgres.WithContext(ctx).Find(&todos)
+	res := r.db.WithContext(ctx).Find(&todos)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (r *todoRepo) List(ctx context.Context, isDone string) ([]*model.Todo, erro
 
 func (r *todoRepo) GetById(ctx context.Context, id int64) (*model.Todo, error) {
 	todo := new(model.Todo)
-	res := r.postgres.WithContext(ctx).
+	res := r.db.WithContext(ctx).
 		Where("id = ?", id).
 		First(todo)
 	if err := res.Error; err != nil {
@@ -37,14 +37,14 @@ func (r *todoRepo) GetById(ctx context.Context, id int64) (*model.Todo, error) {
 }
 
 func (r *todoRepo) Save(ctx context.Context, todo *model.Todo) error {
-	res := r.postgres.WithContext(ctx).Save(todo)
+	res := r.db.WithContext(ctx).Save(todo)
 	err := res.Error
 	return err
 }
 
 func (r *todoRepo) Update(ctx context.Context, id int64) error {
 	todo := new(model.Todo)
-	res := r.postgres.WithContext(ctx).
+	res := r.db.WithContext(ctx).
 		Model(todo).
 		Where("id = ?", id).
 		UpdateColumn("is_done", true)
@@ -54,7 +54,7 @@ func (r *todoRepo) Update(ctx context.Context, id int64) error {
 
 func (r *todoRepo) Delete(ctx context.Context, id int64) error {
 	todo := new(model.Todo)
-	res := r.postgres.WithContext(ctx).
+	res := r.db.WithContext(ctx).
 		Where("id = ?", id).
 		Delete(todo)
 	err := res.Error

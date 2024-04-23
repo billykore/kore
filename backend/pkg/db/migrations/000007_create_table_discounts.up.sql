@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS discounts
     discount_percentage DECIMAL      NOT NULL,
     active              BOOL      DEFAULT FALSE,
     created_at          TIMESTAMP DEFAULT NOW(),
-    updated_at          TIMESTAMP    NOT NULL,
-    deleted_at          TIMESTAMP    NOT NULL
+    updated_at          TIMESTAMP    NULL,
+    deleted_at          TIMESTAMP    NULL
 );

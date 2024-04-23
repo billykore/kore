@@ -7,11 +7,14 @@ go_library(
         "book.go",
         "chat.go",
         "default.go",
+        "product.go",
         "response.go",
-        "songke.go",
         "todo.go",
     ],
     importpath = "github.com/billykore/kore/backend/pkg/entity",
     visibility = ["//visibility:public"],
-    deps = ["//pkg/status"],
+    deps = [
+        "//pkg/model",
+        "//pkg/status",
+    ],
 )

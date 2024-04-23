@@ -5,5 +5,5 @@ go_library(
     srcs = ["password.go"],
     importpath = "github.com/billykore/kore/backend/pkg/password",
     visibility = ["//visibility:public"],
-    deps = ["@org_golang_x_crypto//bcrypt"],
+    deps = ["@org_golang_x_crypto//bcrypt:go_default_library"],
 )

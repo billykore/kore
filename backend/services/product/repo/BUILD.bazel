@@ -1,0 +1,29 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "repo",
+    srcs = [
+        "product_repo.go",
+        "provider.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/services/product/repo",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/model",
+        "//pkg/repo",
+        "@com_github_google_wire//:go_default_library",
+        "@io_gorm_gorm//:go_default_library",
+    ],
+)
+
+go_test(
+    name = "repo_test",
+    srcs = ["product_repo_test.go"],
+    embed = [":repo"],
+    deps = [
+        "//pkg/config",
+        "//pkg/db",
+        "@com_github_joho_godotenv//:go_default_library",
+        "@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)

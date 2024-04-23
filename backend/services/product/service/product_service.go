@@ -14,15 +14,10 @@ func NewProductService(uc *usecase.ProductUsecase) *ProductService {
 	return &ProductService{uc: uc}
 }
 
-func (s *ProductService) Greet(ctx echo.Context) error {
-	in := new(entity.ProductRequest)
-	err := ctx.Bind(in)
+func (s *ProductService) ProductList(ctx echo.Context) error {
+	products, err := s.uc.ProductList(ctx.Request().Context())
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	greet, err := s.uc.Greet(ctx.Request().Context(), in)
-	if err != nil {
-		return ctx.JSON(entity.ResponseError(err))
-	}
-	return ctx.JSON(entity.ResponseSuccess(greet))
+	return ctx.JSON(entity.ResponseSuccess(products))
 }

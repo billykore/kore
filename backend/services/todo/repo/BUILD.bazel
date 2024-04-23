@@ -11,7 +11,7 @@ go_library(
     deps = [
         "//pkg/model",
         "//pkg/repo",
-        "@com_github_google_wire//:wire",
-        "@io_gorm_gorm//:gorm",
+        "@com_github_google_wire//:go_default_library",
+        "@io_gorm_gorm//:go_default_library",
     ],
 )

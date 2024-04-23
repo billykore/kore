@@ -19,7 +19,7 @@ go_library(
         "//pkg/repo",
         "//pkg/status",
         "//pkg/token",
-        "@com_github_google_uuid//:uuid",
-        "@com_github_google_wire//:wire",
+        "@com_github_google_uuid//:go_default_library",
+        "@com_github_google_wire//:go_default_library",
     ],
 )
