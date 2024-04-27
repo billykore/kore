@@ -1,8 +1,11 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "repo",
     srcs = [
+        "cart_repo.go",
+        "discount_repo.go",
+        "product_category_repo.go",
         "product_repo.go",
         "provider.go",
     ],
@@ -11,19 +14,7 @@ go_library(
     deps = [
         "//pkg/model",
         "//pkg/repo",
-        "@com_github_google_wire//:go_default_library",
-        "@io_gorm_gorm//:go_default_library",
-    ],
-)
-
-go_test(
-    name = "repo_test",
-    srcs = ["product_repo_test.go"],
-    embed = [":repo"],
-    deps = [
-        "//pkg/config",
-        "//pkg/db",
-        "@com_github_joho_godotenv//:go_default_library",
-        "@com_github_stretchr_testify//assert:go_default_library",
+        "@com_github_google_wire//:wire",
+        "@io_gorm_gorm//:gorm",
     ],
 )

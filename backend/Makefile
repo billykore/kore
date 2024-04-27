@@ -18,10 +18,10 @@ deploy-gateway:
 deploy:
 	@./scripts/deployment.sh "service" $(service)
 
-# make generate-wire
+# make generate-wire service=product
 .PHONY: generate-wire
 generate-wire:
-	@./scripts/wire.sh
+	@./scripts/wire.sh $(service)
 
 # make generate-proto proto=todo.proto
 .PHONY: generate-proto

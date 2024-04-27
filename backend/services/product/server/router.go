@@ -9,14 +9,33 @@ import (
 )
 
 type Router struct {
-	cfg        *config.Config
-	log        *log.Logger
-	router     *echo.Echo
-	productSvc *service.ProductService
+	cfg                *config.Config
+	log                *log.Logger
+	router             *echo.Echo
+	productSvc         *service.ProductService
+	productCategorySvc *service.ProductCategoryService
+	discountSvc        *service.DiscountService
+	cartSvc            *service.CartService
 }
 
-func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, productSvc *service.ProductService) *Router {
-	return &Router{cfg: cfg, log: log, router: router, productSvc: productSvc}
+func NewRouter(
+	cfg *config.Config,
+	log *log.Logger,
+	router *echo.Echo,
+	productSvc *service.ProductService,
+	productCategorySvc *service.ProductCategoryService,
+	discountSvc *service.DiscountService,
+	cartSvc *service.CartService,
+) *Router {
+	return &Router{
+		cfg:                cfg,
+		log:                log,
+		router:             router,
+		productSvc:         productSvc,
+		productCategorySvc: productCategorySvc,
+		discountSvc:        discountSvc,
+		cartSvc:            cartSvc,
+	}
 }
 
 func (r *Router) Run() {
@@ -26,7 +45,14 @@ func (r *Router) Run() {
 }
 
 func (r *Router) setRoutes() {
-	r.router.GET("/products", r.productSvc.ProductList)
+	r.router.GET("/products", r.productSvc.GetProductList)
+	r.router.GET("/products/:productId", r.productSvc.GetProductById)
+	r.router.GET("/categories", r.productCategorySvc.GetCategoryList)
+	r.router.GET("/discounts", r.discountSvc.GetDiscountList)
+	r.router.GET("/carts", r.cartSvc.GetCartItemList)
+	r.router.POST("/carts", r.cartSvc.AddCartItem)
+	r.router.PUT("/carts/:cartId", r.cartSvc.UpdateCartItemQuantity)
+	r.router.DELETE("/carts/:cartId", r.cartSvc.DeleteCartItem)
 }
 
 func (r *Router) useMiddlewares() {

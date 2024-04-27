@@ -5,9 +5,13 @@ go_library(
     srcs = [
         "auth.go",
         "book.go",
+        "cart.go",
         "chat.go",
         "default.go",
+        "discount.go",
         "product.go",
+        "product_category.go",
+        "product_inventory.go",
         "response.go",
         "todo.go",
     ],
