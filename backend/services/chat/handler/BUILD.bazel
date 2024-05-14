@@ -15,3 +15,19 @@ go_library(
         "@com_github_labstack_echo_v4//:echo",
     ],
 )
+
+go_library(
+    name = "handler",
+    srcs = [
+        "chat_handler.go",
+        "provider.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/services/chat/handler",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/websocket",
+        "//services/chat/usecase",
+        "@com_github_google_wire//:wire",
+        "@com_github_labstack_echo_v4//:echo",
+    ],
+)

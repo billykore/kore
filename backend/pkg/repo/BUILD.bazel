@@ -7,6 +7,7 @@ go_library(
         "cart.go",
         "discount.go",
         "greet.go",
+        "order.go",
         "product.go",
         "product_category.go",
         "todo.go",

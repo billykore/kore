@@ -7,12 +7,12 @@ import (
 	"github.com/google/wire"
 )
 
-var ProviderSet = wire.NewSet(New{{ .StructName }}Service)
+var ProviderSet = wire.NewSet(New{{ .StructName }}Handler)
 `)
 }
 
-func ServiceTemplate() []byte {
-	return []byte(`package service
+func HandlerTemplate() []byte {
+	return []byte(`package handler
 
 import (
 	"{{ .GoMod }}/pkg/entity"
@@ -20,15 +20,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type {{ .StructName }}Service struct {
+type {{ .StructName }}Handler struct {
 	uc *usecase.{{ .StructName }}Usecase
 }
 
-func New{{ .StructName }}Service(uc *usecase.{{ .StructName }}Usecase) *{{ .StructName }}Service {
-	return &{{ .StructName }}Service{uc: uc}
+func New{{ .StructName }}Handler(uc *usecase.{{ .StructName }}Usecase) *{{ .StructName }}Service {
+	return &{{ .StructName }}Handler{uc: uc}
 }
 
-func (s *{{ .StructName }}Service) Greet(ctx echo.Context) error {
+func (s *{{ .StructName }}Handler) Greet(ctx echo.Context) error {
 	in := new(entity.{{ .StructName }}Request)
 	err := ctx.Bind(in)
 	if err != nil {
@@ -38,6 +38,6 @@ func (s *{{ .StructName }}Service) Greet(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess(greet))
+	return ctx.JSON(entity.ResponseSuccess("greet", greet))
 }`)
 }

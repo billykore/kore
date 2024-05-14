@@ -1,4 +1,4 @@
-package service
+package handler
 
 import (
 	"github.com/billykore/kore/backend/pkg/websocket"
@@ -6,19 +6,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type ChatService struct {
+type ChatHandler struct {
 	uc   *usecase.ChatUsecase
 	pool *websocket.Pool
 }
 
-func NewChatService(uc *usecase.ChatUsecase, pool *websocket.Pool) *ChatService {
-	return &ChatService{
+func NewChatHandler(uc *usecase.ChatUsecase, pool *websocket.Pool) *ChatHandler {
+	return &ChatHandler{
 		uc:   uc,
 		pool: pool,
 	}
 }
 
-func (s *ChatService) Chat(ctx echo.Context) error {
+func (s *ChatHandler) Chat(ctx echo.Context) error {
 	conn, err := websocket.Upgrade(ctx.Response(), ctx.Request())
 	if err != nil {
 		return err

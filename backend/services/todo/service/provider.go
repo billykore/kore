@@ -4,4 +4,4 @@ import (
 	"github.com/google/wire"
 )
 
-var ProviderSet = wire.NewSet(NewTodoService)
+var ProviderSet = wire.NewSet(NewTodoHandler)

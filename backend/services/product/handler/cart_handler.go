@@ -1,4 +1,4 @@
-package service
+package handler
 
 import (
 	"github.com/billykore/kore/backend/pkg/entity"
@@ -6,17 +6,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type CartService struct {
+type CartHandler struct {
 	uc *usecase.CartUsecase
 }
 
-func NewCartService(uc *usecase.CartUsecase) *CartService {
-	return &CartService{
+func NewCartHandler(uc *usecase.CartUsecase) *CartHandler {
+	return &CartHandler{
 		uc: uc,
 	}
 }
 
-func (s *CartService) GetCartItemList(ctx echo.Context) error {
+func (s *CartHandler) GetCartItemList(ctx echo.Context) error {
 	var req entity.CartRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
@@ -28,7 +28,7 @@ func (s *CartService) GetCartItemList(ctx echo.Context) error {
 	return ctx.JSON(entity.ResponseSuccess("carts", items))
 }
 
-func (s *CartService) AddCartItem(ctx echo.Context) error {
+func (s *CartHandler) AddCartItem(ctx echo.Context) error {
 	var req entity.AddCartItemRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
@@ -40,7 +40,7 @@ func (s *CartService) AddCartItem(ctx echo.Context) error {
 	return ctx.JSON(entity.ResponseSuccessNilData())
 }
 
-func (s *CartService) UpdateCartItemQuantity(ctx echo.Context) error {
+func (s *CartHandler) UpdateCartItemQuantity(ctx echo.Context) error {
 	var req entity.UpdateCartItemRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
@@ -52,7 +52,7 @@ func (s *CartService) UpdateCartItemQuantity(ctx echo.Context) error {
 	return ctx.JSON(entity.ResponseSuccessNilData())
 }
 
-func (s *CartService) DeleteCartItem(ctx echo.Context) error {
+func (s *CartHandler) DeleteCartItem(ctx echo.Context) error {
 	var req entity.DeleteCartItemRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))

@@ -4,7 +4,7 @@ go_library(
     name = "service",
     srcs = [
         "provider.go",
-        "todo_service.go",
+        "todo_handler.go",
     ],
     importpath = "github.com/billykore/kore/backend/services/todo/service",
     visibility = ["//visibility:public"],

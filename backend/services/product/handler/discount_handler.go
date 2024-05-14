@@ -1,4 +1,4 @@
-package service
+package handler
 
 import (
 	"github.com/billykore/kore/backend/pkg/entity"
@@ -6,17 +6,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type DiscountService struct {
+type DiscountHandler struct {
 	uc *usecase.DiscountUsecase
 }
 
-func NewDiscountService(uc *usecase.DiscountUsecase) *DiscountService {
-	return &DiscountService{
+func NewDiscountHandler(uc *usecase.DiscountUsecase) *DiscountHandler {
+	return &DiscountHandler{
 		uc: uc,
 	}
 }
 
-func (s *DiscountService) GetDiscountList(ctx echo.Context) error {
+func (s *DiscountHandler) GetDiscountList(ctx echo.Context) error {
 	var req entity.DiscountRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseError(err))

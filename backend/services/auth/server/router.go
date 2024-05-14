@@ -3,7 +3,7 @@ package server
 import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/services/auth/service"
+	"github.com/billykore/kore/backend/services/auth/handler"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -12,10 +12,10 @@ type Router struct {
 	cfg     *config.Config
 	log     *log.Logger
 	router  *echo.Echo
-	authSvc *service.AuthService
+	authSvc *handler.AuthHandler
 }
 
-func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, authSvc *service.AuthService) *Router {
+func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, authSvc *handler.AuthHandler) *Router {
 	return &Router{cfg: cfg, log: log, router: router, authSvc: authSvc}
 }
 
@@ -37,9 +37,6 @@ func (r *Router) useMiddlewares() {
 
 func (r *Router) run() {
 	port := r.cfg.HTTPPort
-	if port == "" {
-		port = "8080"
-	}
 	r.log.Infof("running on port ::[:%v]", port)
 	if err := r.router.Start(":" + port); err != nil {
 		r.log.Fatalf("failed to run on port [::%v]", port)

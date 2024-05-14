@@ -9,6 +9,7 @@ go_library(
         "chat.go",
         "default.go",
         "discount.go",
+        "order.go",
         "product.go",
         "product_category.go",
         "product_inventory.go",
@@ -19,6 +20,8 @@ go_library(
     visibility = ["//visibility:public"],
     deps = [
         "//pkg/model",
+        "//pkg/shipping",
         "//pkg/status",
+        "//pkg/transaction",
     ],
 )

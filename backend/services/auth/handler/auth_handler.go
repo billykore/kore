@@ -1,4 +1,4 @@
-package service
+package handler
 
 import (
 	"github.com/billykore/kore/backend/pkg/entity"
@@ -6,15 +6,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type AuthService struct {
+type AuthHandler struct {
 	uc *usecase.AuthUsecase
 }
 
-func NewAuthService(uc *usecase.AuthUsecase) *AuthService {
-	return &AuthService{uc: uc}
+func NewAuthHandler(uc *usecase.AuthUsecase) *AuthHandler {
+	return &AuthHandler{uc: uc}
 }
 
-func (s *AuthService) Login(ctx echo.Context) error {
+func (s *AuthHandler) Login(ctx echo.Context) error {
 	in := new(entity.LoginRequest)
 	err := ctx.Bind(in)
 	if err != nil {
@@ -24,10 +24,10 @@ func (s *AuthService) Login(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess(token))
+	return ctx.JSON(entity.ResponseSuccess("token", token))
 }
 
-func (s *AuthService) Logout(ctx echo.Context) error {
+func (s *AuthHandler) Logout(ctx echo.Context) error {
 	in := new(entity.LogoutRequest)
 	err := ctx.Bind(in)
 	if err != nil {
@@ -37,5 +37,5 @@ func (s *AuthService) Logout(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess(logout))
+	return ctx.JSON(entity.ResponseSuccess("logout", logout))
 }

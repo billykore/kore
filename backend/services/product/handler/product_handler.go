@@ -1,4 +1,4 @@
-package service
+package handler
 
 import (
 	"github.com/billykore/kore/backend/pkg/entity"
@@ -6,15 +6,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type ProductService struct {
+type ProductHandler struct {
 	uc *usecase.ProductUsecase
 }
 
-func NewProductService(uc *usecase.ProductUsecase) *ProductService {
-	return &ProductService{uc: uc}
+func NewProductHandler(uc *usecase.ProductUsecase) *ProductHandler {
+	return &ProductHandler{uc: uc}
 }
 
-func (s *ProductService) GetProductList(ctx echo.Context) error {
+func (s *ProductHandler) GetProductList(ctx echo.Context) error {
 	var req entity.ProductRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
@@ -26,7 +26,7 @@ func (s *ProductService) GetProductList(ctx echo.Context) error {
 	return ctx.JSON(entity.ResponseSuccess("products", products))
 }
 
-func (s *ProductService) GetProductById(ctx echo.Context) error {
+func (s *ProductHandler) GetProductById(ctx echo.Context) error {
 	var req entity.ProductRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))

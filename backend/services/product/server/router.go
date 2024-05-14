@@ -3,7 +3,7 @@ package server
 import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/services/product/service"
+	"github.com/billykore/kore/backend/services/product/handler"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -12,20 +12,20 @@ type Router struct {
 	cfg                *config.Config
 	log                *log.Logger
 	router             *echo.Echo
-	productSvc         *service.ProductService
-	productCategorySvc *service.ProductCategoryService
-	discountSvc        *service.DiscountService
-	cartSvc            *service.CartService
+	productSvc         *handler.ProductHandler
+	productCategorySvc *handler.ProductCategoryHandler
+	discountSvc        *handler.DiscountHandler
+	cartSvc            *handler.CartHandler
 }
 
 func NewRouter(
 	cfg *config.Config,
 	log *log.Logger,
 	router *echo.Echo,
-	productSvc *service.ProductService,
-	productCategorySvc *service.ProductCategoryService,
-	discountSvc *service.DiscountService,
-	cartSvc *service.CartService,
+	productSvc *handler.ProductHandler,
+	productCategorySvc *handler.ProductCategoryHandler,
+	discountSvc *handler.DiscountHandler,
+	cartSvc *handler.CartHandler,
 ) *Router {
 	return &Router{
 		cfg:                cfg,
@@ -62,9 +62,6 @@ func (r *Router) useMiddlewares() {
 
 func (r *Router) run() {
 	port := r.cfg.HTTPPort
-	if port == "" {
-		port = "8080"
-	}
 	r.log.Infof("running on port [::%v]", port)
 	if err := r.router.Start(":" + port); err != nil {
 		r.log.Fatalf("failed to run on port [::%v]", port)

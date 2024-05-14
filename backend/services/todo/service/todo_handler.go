@@ -6,15 +6,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type TodoService struct {
+type TodoHandler struct {
 	uc *usecase.TodoUsecase
 }
 
-func NewTodoService(uc *usecase.TodoUsecase) *TodoService {
-	return &TodoService{uc: uc}
+func NewTodoHandler(uc *usecase.TodoUsecase) *TodoHandler {
+	return &TodoHandler{uc: uc}
 }
 
-func (s *TodoService) GetTodos(ctx echo.Context) error {
+func (s *TodoHandler) GetTodos(ctx echo.Context) error {
 	req := new(entity.GetTodosRequest)
 	if err := ctx.Bind(req); err != nil {
 		return ctx.JSON(entity.ResponseError(err))
@@ -23,10 +23,10 @@ func (s *TodoService) GetTodos(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess(todos))
+	return ctx.JSON(entity.ResponseSuccess("todos", todos))
 }
 
-func (s *TodoService) GetTodo(ctx echo.Context) error {
+func (s *TodoHandler) GetTodo(ctx echo.Context) error {
 	req := new(entity.ParamId)
 	if err := ctx.Bind(req); err != nil {
 		return ctx.JSON(entity.ResponseError(err))
@@ -35,10 +35,10 @@ func (s *TodoService) GetTodo(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess(todo))
+	return ctx.JSON(entity.ResponseSuccess("todo", todo))
 }
 
-func (s *TodoService) AddTodo(ctx echo.Context) error {
+func (s *TodoHandler) AddTodo(ctx echo.Context) error {
 	req := new(entity.AddTodoRequest)
 	if err := ctx.Bind(req); err != nil {
 		return ctx.JSON(entity.ResponseError(err))
@@ -47,10 +47,10 @@ func (s *TodoService) AddTodo(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess(save))
+	return ctx.JSON(entity.ResponseSuccess("save", save))
 }
 
-func (s *TodoService) SetDoneTodo(ctx echo.Context) error {
+func (s *TodoHandler) SetDoneTodo(ctx echo.Context) error {
 	req := new(entity.ParamId)
 	if err := ctx.Bind(req); err != nil {
 		return ctx.JSON(entity.ResponseError(err))
@@ -59,10 +59,10 @@ func (s *TodoService) SetDoneTodo(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess(setDone))
+	return ctx.JSON(entity.ResponseSuccess("done", setDone))
 }
 
-func (s *TodoService) DeleteTodo(ctx echo.Context) error {
+func (s *TodoHandler) DeleteTodo(ctx echo.Context) error {
 	req := new(entity.ParamId)
 	if err := ctx.Bind(req); err != nil {
 		return ctx.JSON(entity.ResponseError(err))
@@ -71,5 +71,5 @@ func (s *TodoService) DeleteTodo(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	return ctx.JSON(entity.ResponseSuccess(del))
+	return ctx.JSON(entity.ResponseSuccess("delete", del))
 }

@@ -12,10 +12,10 @@ type Router struct {
 	cfg     *config.Config
 	log     *log.Logger
 	router  *echo.Echo
-	todoSvc *service.TodoService
+	todoSvc *service.TodoHandler
 }
 
-func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, todoSvc *service.TodoService) *Router {
+func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, todoSvc *service.TodoHandler) *Router {
 	return &Router{cfg: cfg, log: log, router: router, todoSvc: todoSvc}
 }
 
@@ -42,9 +42,6 @@ func (r *Router) useMiddlewares() {
 
 func (r *Router) run() {
 	port := r.cfg.HTTPPort
-	if port == "" {
-		port = "8080"
-	}
 	r.log.Infof("running on port [::%v]", port)
 	if err := r.router.Start(":" + port); err != nil {
 		r.log.Fatalf("failed to run on port [::%v]", port)

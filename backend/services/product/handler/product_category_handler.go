@@ -1,4 +1,4 @@
-package service
+package handler
 
 import (
 	"github.com/billykore/kore/backend/pkg/entity"
@@ -6,17 +6,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type ProductCategoryService struct {
+type ProductCategoryHandler struct {
 	uc *usecase.ProductCategoryUsecase
 }
 
-func NewProductCategoryService(uc *usecase.ProductCategoryUsecase) *ProductCategoryService {
-	return &ProductCategoryService{
+func NewProductCategoryHandler(uc *usecase.ProductCategoryUsecase) *ProductCategoryHandler {
+	return &ProductCategoryHandler{
 		uc: uc,
 	}
 }
 
-func (s *ProductCategoryService) GetCategoryList(ctx echo.Context) error {
+func (s *ProductCategoryHandler) GetCategoryList(ctx echo.Context) error {
 	categories, err := s.uc.GetCategoryList(ctx.Request().Context())
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
