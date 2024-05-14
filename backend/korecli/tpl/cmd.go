@@ -34,7 +34,7 @@ func WireTemplate() []byte {
 package main
 
 import (
-	"{{ .GoMod }}/libs/config"
+	"{{ .GoMod }}/libs/pkg/config"
 	"{{ .GoMod }}/libs/pkg"
 	"{{ .GoMod }}/services/{{ .ServiceName }}/repo"
 	"{{ .GoMod }}/services/{{ .ServiceName }}/server"
@@ -49,7 +49,7 @@ func {{ .ServiceName }}App(cfg *config.Config) *app {
 		pkg.ProviderSet,
 		repo.ProviderSet,
 		usecase.ProviderSet,
-		service.ProviderSet,
+		handler.ProviderSet,
 		server.ProviderSet,
 		echo.New,
 		newApp,

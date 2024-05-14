@@ -12,7 +12,7 @@ go_library(
     deps = [
         "//pkg/config",
         "//pkg/log",
-        "//services/auth/service",
+        "//services/auth/handler",
         "@com_github_google_wire//:wire",
         "@com_github_labstack_echo_v4//:echo",
         "@com_github_labstack_echo_v4//middleware",

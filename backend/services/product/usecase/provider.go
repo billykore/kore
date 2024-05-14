@@ -1,0 +1,12 @@
+package usecase
+
+import (
+	"github.com/google/wire"
+)
+
+var ProviderSet = wire.NewSet(
+	NewProductUsecase,
+	NewProductCategoryUsecase,
+	NewDiscountUsecase,
+	NewCartUsecase,
+)

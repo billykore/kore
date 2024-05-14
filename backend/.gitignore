@@ -1,15 +1,25 @@
-.DS_Store
-../.idea
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
 
-# Firebase credentials.
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Go workspace file
+go.work
+
+# Firebase credentials
 firebase-sdk.json
 
-# env files.
+# Env files
 .env
 .env.sh
 
-# Bazel generated dirs.
-bazel-backend
-bazel-bin
-bazel-out
-bazel-testlogs
+# Bazel generated dirs
+bazel-*

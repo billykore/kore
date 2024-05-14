@@ -12,7 +12,7 @@ import (
 	"github.com/billykore/kore/backend/pkg/websocket"
 	"github.com/billykore/kore/backend/services/chat/repo"
 	"github.com/billykore/kore/backend/services/chat/server"
-	"github.com/billykore/kore/backend/services/chat/service"
+	"github.com/billykore/kore/backend/services/chat/handler"
 	"github.com/billykore/kore/backend/services/chat/usecase"
 	"github.com/labstack/echo/v4"
 )
@@ -29,7 +29,7 @@ func chatApp(cfg *config.Config) *app {
 	pool := websocket.NewPool()
 	greeterRepository := repo.NewChatRepository()
 	chatUsecase := usecase.NewChatUsecase(logger, greeterRepository)
-	chatService := service.NewChatService(chatUsecase, pool)
+	chatService := handler.NewChatHandler(chatUsecase, pool)
 	router := server.NewRouter(cfg, logger, echoEcho, pool, chatService)
 	httpServer := server.NewHTTPServer(router)
 	mainApp := newApp(httpServer)

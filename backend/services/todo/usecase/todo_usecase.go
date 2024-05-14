@@ -25,7 +25,7 @@ func NewTodoUsecase(log *log.Logger, todoRepo repo.TodoRepository) *TodoUsecase 
 }
 
 func (uc *TodoUsecase) GetTodos(ctx context.Context, req *entity.GetTodosRequest) (entity.GetTodosResponse, error) {
-	todos, err := uc.todoRepo.Get(ctx, req.IsDone)
+	todos, err := uc.todoRepo.List(ctx, req.IsDone)
 	if err != nil {
 		uc.log.Usecase("GetTodos").Error(err)
 		return nil, status.Error(codes.NotFound, messages.TodosNotFound)

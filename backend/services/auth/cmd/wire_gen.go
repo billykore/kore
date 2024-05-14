@@ -12,7 +12,7 @@ import (
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/services/auth/repo"
 	"github.com/billykore/kore/backend/services/auth/server"
-	"github.com/billykore/kore/backend/services/auth/service"
+	"github.com/billykore/kore/backend/services/auth/handler"
 	"github.com/billykore/kore/backend/services/auth/usecase"
 	"github.com/labstack/echo/v4"
 )
@@ -30,7 +30,7 @@ func authApp(cfg *config.Config) *app {
 	userRepository := repo.NewUserRepository(gormDB)
 	authRepository := repo.NewAuthRepository(gormDB)
 	authUsecase := usecase.NewAuthUsecase(logger, userRepository, authRepository)
-	authService := service.NewAuthService(authUsecase)
+	authService := handler.NewAuthHandler(authUsecase)
 	router := server.NewRouter(cfg, logger, echoEcho, authService)
 	httpServer := server.NewHTTPServer(router)
 	mainApp := newApp(httpServer)

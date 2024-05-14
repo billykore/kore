@@ -31,7 +31,7 @@ and a protobuf inside the  file that look something like this:
     │       ├── deployment/  # Kubernetes deployment configs.
     │       ├── repo/        # Service repositories.
     │       ├── server/      # Service http and gRPC servers.
-    │       ├── service/     # Service API handlers.
+    │       ├── handler/     # Service API handlers.
     │       ├── usecase/     # Service usecases.
     │       └── Dockerfile
     └──...
@@ -106,7 +106,7 @@ func (d *createData) create() error {
 	if err := d.createUsecase(svcPath); err != nil {
 		return err
 	}
-	if err := d.createService(svcPath); err != nil {
+	if err := d.createHandler(svcPath); err != nil {
 		return err
 	}
 	if err := d.createServer(svcPath); err != nil {
@@ -196,8 +196,8 @@ func (d *createData) createUsecase(path string) error {
 	return nil
 }
 
-func (d *createData) createService(path string) error {
-	servicePath := fmt.Sprintf("%s/service", path)
+func (d *createData) createHandler(path string) error {
+	servicePath := fmt.Sprintf("%s/handler", path)
 
 	if err := os.Mkdir(servicePath, 0754); err != nil {
 		return err
@@ -212,11 +212,11 @@ func (d *createData) createService(path string) error {
 		return err
 	}
 
-	serviceFile, err := os.Create(fmt.Sprintf("%s/%s_service.go", servicePath, d.ServiceName))
+	serviceFile, err := os.Create(fmt.Sprintf("%s/%s_handler.go", servicePath, d.ServiceName))
 	if err != nil {
 		return err
 	}
-	serviceTpl := template.Must(template.New("service").Parse(string(tpl.ServiceTemplate())))
+	serviceTpl := template.Must(template.New("handler").Parse(string(tpl.HandlerTemplate())))
 	if err := serviceTpl.Execute(serviceFile, d); err != nil {
 		return err
 	}

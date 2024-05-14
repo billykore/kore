@@ -1,0 +1,39 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "service",
+    srcs = [
+        "cart_service.go",
+        "discount_service.go",
+        "product_category_service.go",
+        "product_service.go",
+        "provider.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/services/product/service",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/entity",
+        "//services/product/usecase",
+        "@com_github_google_wire//:wire",
+        "@com_github_labstack_echo_v4//:echo",
+    ],
+)
+
+go_library(
+    name = "handler",
+    srcs = [
+        "cart_handler.go",
+        "discount_handler.go",
+        "product_category_handler.go",
+        "product_handler.go",
+        "provider.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/services/product/handler",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/entity",
+        "//services/product/usecase",
+        "@com_github_google_wire//:wire",
+        "@com_github_labstack_echo_v4//:echo",
+    ],
+)

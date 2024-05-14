@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+SERVICE=$1
+
 # run wire dependency injection
 echo "Run wire dependency injection..."
-wire ./services/...
+wire ./services/$SERVICE/cmd
