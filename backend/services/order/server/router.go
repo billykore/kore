@@ -9,14 +9,14 @@ import (
 )
 
 type Router struct {
-	cfg      *config.Config
-	log      *log.Logger
-	router   *echo.Echo
-	orderSvc *handler.OrderHandler
+	cfg          *config.Config
+	log          *log.Logger
+	router       *echo.Echo
+	orderHandler *handler.OrderHandler
 }
 
-func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, orderSvc *handler.OrderHandler) *Router {
-	return &Router{cfg: cfg, log: log, router: router, orderSvc: orderSvc}
+func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, orderHandler *handler.OrderHandler) *Router {
+	return &Router{cfg: cfg, log: log, router: router, orderHandler: orderHandler}
 }
 
 func (r *Router) Run() {
@@ -26,10 +26,10 @@ func (r *Router) Run() {
 }
 
 func (r *Router) setRoutes() {
-	r.router.POST("/orders/checkout", r.orderSvc.Checkout)
-	r.router.GET("/orders/:orderId", r.orderSvc.GetOrderById)
-	r.router.POST("/orders/:orderId/payment", r.orderSvc.PayOrder)
-	r.router.POST("/orders/:orderId/shipping", r.orderSvc.ShipOrder)
+	r.router.POST("/orders/checkout", r.orderHandler.Checkout)
+	r.router.GET("/orders/:orderId", r.orderHandler.GetOrderById)
+	r.router.POST("/orders/:orderId/payment", r.orderHandler.PayOrder)
+	r.router.POST("/orders/:orderId/shipping", r.orderHandler.ShipOrder)
 }
 
 func (r *Router) useMiddlewares() {

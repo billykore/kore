@@ -20,7 +20,7 @@ func RouterTemplate() []byte {
 import (
 	"{{ .GoMod }}/pkg/config"
 	"{{ .GoMod }}/pkg/log"
-	"{{ .GoMod }}/services/{{ .ServiceName }}/service"
+	"{{ .GoMod }}/services/{{ .ServiceName }}/handler"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -29,11 +29,11 @@ type Router struct {
 	cfg     *config.Config
 	log     *log.Logger
 	router  *echo.Echo
-	{{ .ServiceName }}Svc *service.{{ .StructName }}Service
+	{{ .ServiceName }}Handler *handler.{{ .StructName }}Handler
 }
 
-func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, {{ .ServiceName }}Svc *service.{{ .StructName }}Service) *Router {
-	return &Router{cfg: cfg, log: log, router: router, {{ .ServiceName }}Svc: {{ .ServiceName }}Svc}
+func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, {{ .ServiceName }}Handler *handler.{{ .StructName }}Handler) *Router {
+	return &Router{cfg: cfg, log: log, router: router, {{ .ServiceName }}Handler: {{ .ServiceName }}Handler}
 }
 
 func (r *Router) Run() {
@@ -43,7 +43,7 @@ func (r *Router) Run() {
 }
 
 func (r *Router) setRoutes() {
-	r.router.GET("/greet", r.{{ .ServiceName }}Svc.Greet)
+	r.router.GET("/greet", r.{{ .ServiceName }}Handler.Greet)
 }
 
 func (r *Router) useMiddlewares() {

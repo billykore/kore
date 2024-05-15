@@ -1,7 +1,7 @@
 package tpl
 
 func ServiceProviderTemplate() []byte {
-	return []byte(`package service
+	return []byte(`package handler
 
 import (
 	"github.com/google/wire"
@@ -24,7 +24,7 @@ type {{ .StructName }}Handler struct {
 	uc *usecase.{{ .StructName }}Usecase
 }
 
-func New{{ .StructName }}Handler(uc *usecase.{{ .StructName }}Usecase) *{{ .StructName }}Service {
+func New{{ .StructName }}Handler(uc *usecase.{{ .StructName }}Usecase) *{{ .StructName }}Handler {
 	return &{{ .StructName }}Handler{uc: uc}
 }
 
