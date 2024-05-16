@@ -1,7 +1,9 @@
 package transaction
 
+import "github.com/billykore/kore/backend/pkg/types"
+
 type PaymentMethod interface {
-	Pay(amount uint64) (*PaymentResponse, error)
+	Pay(amount types.Money) (*PaymentResponse, error)
 }
 
 const (
@@ -23,6 +25,6 @@ func NewPayment(method, name, account string) PaymentMethod {
 
 type PaymentResponse struct {
 	Method    string
-	Amount    uint64
+	Amount    types.Money
 	PaymentId int
 }

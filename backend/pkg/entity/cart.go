@@ -1,6 +1,9 @@
 package entity
 
-import "github.com/billykore/kore/backend/pkg/model"
+import (
+	"github.com/billykore/kore/backend/pkg/model"
+	"github.com/billykore/kore/backend/pkg/types"
+)
 
 type CartRequest struct {
 	UserId  int `query:"userId"`
@@ -12,9 +15,9 @@ type CartResponse struct {
 	Id       uint `json:"id"`
 	Quantity int  `json:"quantity"`
 	Product  struct {
-		Id    uint   `json:"id"`
-		Name  string `json:"name"`
-		Price uint64 `json:"price"`
+		Id    uint        `json:"id"`
+		Name  string      `json:"name"`
+		Price types.Money `json:"price"`
 	} `json:"product"`
 }
 
@@ -23,9 +26,9 @@ func MakeCartResponse(m *model.Cart) *CartResponse {
 		Id:       m.ID,
 		Quantity: m.Quantity,
 		Product: struct {
-			Id    uint   `json:"id"`
-			Name  string `json:"name"`
-			Price uint64 `json:"price"`
+			Id    uint        `json:"id"`
+			Name  string      `json:"name"`
+			Price types.Money `json:"price"`
 		}{
 			Id:    m.Product.ID,
 			Name:  m.Product.Name,

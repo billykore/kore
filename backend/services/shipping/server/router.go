@@ -26,7 +26,7 @@ func (r *Router) Run() {
 }
 
 func (r *Router) setRoutes() {
-	r.router.GET("/greet", r.shippingHandler.Greet)
+	r.router.POST("/shipping", r.shippingHandler.CreateShipping)
 }
 
 func (r *Router) useMiddlewares() {

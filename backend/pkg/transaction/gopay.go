@@ -1,5 +1,7 @@
 package transaction
 
+import "github.com/billykore/kore/backend/pkg/types"
+
 type GoPay struct {
 	Name        string
 	PhoneNumber string
@@ -12,7 +14,7 @@ func NewGoPay(name, phoneNumber string) *GoPay {
 	}
 }
 
-func (p *GoPay) Pay(amount uint64) (*PaymentResponse, error) {
+func (p *GoPay) Pay(amount types.Money) (*PaymentResponse, error) {
 	return &PaymentResponse{
 		Method:    gopay,
 		Amount:    amount,

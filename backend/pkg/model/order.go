@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/billykore/kore/backend/pkg/types"
 	"gorm.io/gorm"
 )
 
@@ -32,8 +33,8 @@ type Order struct {
 }
 
 // TotalPrice calculate total price of the items in one order.
-func (o *Order) TotalPrice() uint64 {
-	var total uint64
+func (o *Order) TotalPrice() types.Money {
+	var total types.Money
 	for _, c := range o.Carts {
 		total += c.Product.Price
 	}

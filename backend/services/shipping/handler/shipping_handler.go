@@ -14,15 +14,14 @@ func NewShippingHandler(uc *usecase.ShippingUsecase) *ShippingHandler {
 	return &ShippingHandler{uc: uc}
 }
 
-func (s *ShippingHandler) Greet(ctx echo.Context) error {
-	in := new(entity.ShippingRequest)
-	err := ctx.Bind(in)
+func (s *ShippingHandler) CreateShipping(ctx echo.Context) error {
+	var req entity.CreateShippingRequest
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(entity.ResponseBadRequest(err))
+	}
+	resp, err := s.uc.CreateShipping(ctx.Request().Context(), req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	greet, err := s.uc.Greet(ctx.Request().Context(), in)
-	if err != nil {
-		return ctx.JSON(entity.ResponseError(err))
-	}
-	return ctx.JSON(entity.ResponseSuccess("greet", greet))
+	return ctx.JSON(entity.ResponseSuccess("shipping", resp))
 }

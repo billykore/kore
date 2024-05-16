@@ -4,11 +4,11 @@
 package main
 
 import (
-	"github.com/billykore/kore/backend/libs/pkg/config"
-	"github.com/billykore/kore/backend/libs/pkg"
+	"github.com/billykore/kore/backend/pkg"
+	"github.com/billykore/kore/backend/pkg/config"
+	"github.com/billykore/kore/backend/services/shipping/handler"
 	"github.com/billykore/kore/backend/services/shipping/repo"
 	"github.com/billykore/kore/backend/services/shipping/server"
-	"github.com/billykore/kore/backend/services/shipping/service"
 	"github.com/billykore/kore/backend/services/shipping/usecase"
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"

@@ -1,5 +1,7 @@
 package shipping
 
+import "github.com/billykore/kore/backend/pkg/types"
+
 type Shipping interface {
 	Create(data *Data) (*Response, error)
 }
@@ -26,7 +28,7 @@ type Data struct {
 
 type Response struct {
 	Id           int
-	Fee          uint64
+	Fee          types.Money
 	Status       string
 	ShipperName  string
 	Address      string

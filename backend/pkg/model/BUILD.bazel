@@ -11,13 +11,14 @@ go_library(
         "product.go",
         "product_category.go",
         "product_inventory.go",
+        "shipping.go",
         "todo.go",
         "user.go",
     ],
     importpath = "github.com/billykore/kore/backend/pkg/model",
     visibility = ["//visibility:public"],
     deps = [
-        "@com_github_lib_pq//:pq",
+        "//pkg/types",
         "@io_gorm_gorm//:gorm",
     ],
 )
