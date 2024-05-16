@@ -28,8 +28,9 @@ func (r *Router) Run() {
 func (r *Router) setRoutes() {
 	r.router.POST("/orders/checkout", r.orderHandler.Checkout)
 	r.router.GET("/orders/:orderId", r.orderHandler.GetOrderById)
-	r.router.POST("/orders/:orderId/payment", r.orderHandler.PayOrder)
-	r.router.POST("/orders/:orderId/shipping", r.orderHandler.ShipOrder)
+	r.router.POST("/orders/:orderId/pay", r.orderHandler.PayOrder)
+	r.router.POST("/orders/:orderId/ship", r.orderHandler.ShipOrder)
+	r.router.DELETE("/orders/:orderId", r.orderHandler.CancelOrder)
 }
 
 func (r *Router) useMiddlewares() {

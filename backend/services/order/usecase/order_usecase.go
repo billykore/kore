@@ -61,7 +61,7 @@ func (uc *OrderUsecase) PayOrder(ctx context.Context, req entity.OrderPaymentReq
 		uc.log.Usecase("OrderPayment").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	err = uc.orderRepo.UpdateStatus(ctx, req.Id, model.OrderStatusWaitingForPayment, model.OrderStatusPaymentSucceed)
+	err = uc.orderRepo.UpdateStatus(ctx, req.Id, model.OrderStatusPaymentSucceed, model.OrderStatusWaitingForPayment)
 	if err != nil {
 		uc.log.Usecase("UpdateOrderStatus").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
@@ -93,4 +93,13 @@ func (uc *OrderUsecase) ShipOrder(ctx context.Context, req entity.ShippingReques
 	}
 	resp := entity.MakeShippingResponse(shippingResp)
 	return resp, nil
+}
+
+func (uc *OrderUsecase) CancelOrder(ctx context.Context, req entity.CancelOrderRequest) error {
+	err := uc.orderRepo.UpdateStatus(ctx, req.OrderId, model.OrderStatusCancelled, model.OrderStatusCanCancel...)
+	if err != nil {
+		uc.log.Usecase("CancelOrder").Error(err)
+		return status.Error(codes.Internal, err.Error())
+	}
+	return nil
 }

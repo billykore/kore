@@ -61,3 +61,15 @@ func (h *OrderHandler) ShipOrder(ctx echo.Context) error {
 	}
 	return ctx.JSON(entity.ResponseSuccess("shipping", shipping))
 }
+
+func (h *OrderHandler) CancelOrder(ctx echo.Context) error {
+	var req entity.CancelOrderRequest
+	if err := ctx.Bind(&req); err != nil {
+		return ctx.JSON(entity.ResponseBadRequest(err))
+	}
+	err := h.uc.CancelOrder(ctx.Request().Context(), req)
+	if err != nil {
+		return ctx.JSON(entity.ResponseError(err))
+	}
+	return ctx.JSON(entity.ResponseSuccessNilData())
+}
