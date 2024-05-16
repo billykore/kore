@@ -9,32 +9,32 @@ import (
 )
 
 type Router struct {
-	cfg                *config.Config
-	log                *log.Logger
-	router             *echo.Echo
-	productSvc         *handler.ProductHandler
-	productCategorySvc *handler.ProductCategoryHandler
-	discountSvc        *handler.DiscountHandler
-	cartSvc            *handler.CartHandler
+	cfg                    *config.Config
+	log                    *log.Logger
+	router                 *echo.Echo
+	productHandler         *handler.ProductHandler
+	productCategoryHandler *handler.ProductCategoryHandler
+	discountHandler        *handler.DiscountHandler
+	cartHandler            *handler.CartHandler
 }
 
 func NewRouter(
 	cfg *config.Config,
 	log *log.Logger,
 	router *echo.Echo,
-	productSvc *handler.ProductHandler,
-	productCategorySvc *handler.ProductCategoryHandler,
-	discountSvc *handler.DiscountHandler,
-	cartSvc *handler.CartHandler,
+	productHandler *handler.ProductHandler,
+	productCategoryHandler *handler.ProductCategoryHandler,
+	discountHandler *handler.DiscountHandler,
+	cartHandler *handler.CartHandler,
 ) *Router {
 	return &Router{
-		cfg:                cfg,
-		log:                log,
-		router:             router,
-		productSvc:         productSvc,
-		productCategorySvc: productCategorySvc,
-		discountSvc:        discountSvc,
-		cartSvc:            cartSvc,
+		cfg:                    cfg,
+		log:                    log,
+		router:                 router,
+		productHandler:         productHandler,
+		productCategoryHandler: productCategoryHandler,
+		discountHandler:        discountHandler,
+		cartHandler:            cartHandler,
 	}
 }
 
@@ -45,14 +45,14 @@ func (r *Router) Run() {
 }
 
 func (r *Router) setRoutes() {
-	r.router.GET("/products", r.productSvc.GetProductList)
-	r.router.GET("/products/:productId", r.productSvc.GetProductById)
-	r.router.GET("/categories", r.productCategorySvc.GetCategoryList)
-	r.router.GET("/discounts", r.discountSvc.GetDiscountList)
-	r.router.GET("/carts", r.cartSvc.GetCartItemList)
-	r.router.POST("/carts", r.cartSvc.AddCartItem)
-	r.router.PUT("/carts/:cartId", r.cartSvc.UpdateCartItemQuantity)
-	r.router.DELETE("/carts/:cartId", r.cartSvc.DeleteCartItem)
+	r.router.GET("/products", r.productHandler.GetProductList)
+	r.router.GET("/products/:productId", r.productHandler.GetProductById)
+	r.router.GET("/categories", r.productCategoryHandler.GetCategoryList)
+	r.router.GET("/discounts", r.discountHandler.GetDiscountList)
+	r.router.GET("/carts", r.cartHandler.GetCartItemList)
+	r.router.POST("/carts", r.cartHandler.AddCartItem)
+	r.router.PUT("/carts/:cartId", r.cartHandler.UpdateCartItemQuantity)
+	r.router.DELETE("/carts/:cartId", r.cartHandler.DeleteCartItem)
 }
 
 func (r *Router) useMiddlewares() {

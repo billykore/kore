@@ -1,13 +1,16 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"github.com/billykore/kore/backend/pkg/types"
+	"gorm.io/gorm"
+)
 
 type Product struct {
 	gorm.Model
 	Name             string
 	Description      string
 	SKU              string
-	Price            uint64
+	Price            types.Money
 	CategoryId       int
 	InventoryId      int
 	DiscountId       int

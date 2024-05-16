@@ -1,5 +1,7 @@
 package transaction
 
+import "github.com/billykore/kore/backend/pkg/types"
+
 type CreditCard struct {
 	Name       string
 	CardNumber string
@@ -12,7 +14,7 @@ func NewCreditCard(name, number string) *CreditCard {
 	}
 }
 
-func (cc *CreditCard) Pay(amount uint64) (*PaymentResponse, error) {
+func (cc *CreditCard) Pay(amount types.Money) (*PaymentResponse, error) {
 	return &PaymentResponse{
 		Method:    creditCard,
 		Amount:    amount,

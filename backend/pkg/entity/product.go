@@ -1,6 +1,9 @@
 package entity
 
-import "github.com/billykore/kore/backend/pkg/model"
+import (
+	"github.com/billykore/kore/backend/pkg/model"
+	"github.com/billykore/kore/backend/pkg/types"
+)
 
 type ProductRequest struct {
 	ProductId  int `param:"productId"`
@@ -14,7 +17,7 @@ type ProductResponse struct {
 	Name             string                    `json:"name"`
 	Description      string                    `json:"description"`
 	SKU              string                    `json:"sku"`
-	Price            uint64                    `json:"price"`
+	Price            types.Money               `json:"price"`
 	CategoryId       int                       `json:"categoryId"`
 	InventoryId      int                       `json:"inventoryId"`
 	DiscountId       int                       `json:"discountId"`

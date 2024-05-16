@@ -10,6 +10,7 @@ go_library(
         "order.go",
         "product.go",
         "product_category.go",
+        "shipping.go",
         "todo.go",
         "user.go",
     ],

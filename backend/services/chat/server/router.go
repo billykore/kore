@@ -10,20 +10,20 @@ import (
 )
 
 type Router struct {
-	cfg     *config.Config
-	log     *log.Logger
-	router  *echo.Echo
-	pool    *websocket.Pool
-	chatSvc *handler.ChatHandler
+	cfg         *config.Config
+	log         *log.Logger
+	router      *echo.Echo
+	pool        *websocket.Pool
+	chatHandler *handler.ChatHandler
 }
 
-func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, pool *websocket.Pool, chatSvc *handler.ChatHandler) *Router {
+func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, pool *websocket.Pool, chatHandler *handler.ChatHandler) *Router {
 	return &Router{
-		cfg:     cfg,
-		log:     log,
-		router:  router,
-		pool:    pool,
-		chatSvc: chatSvc,
+		cfg:         cfg,
+		log:         log,
+		router:      router,
+		pool:        pool,
+		chatHandler: chatHandler,
 	}
 }
 
@@ -36,7 +36,7 @@ func (r *Router) Run() {
 }
 
 func (r *Router) setRoutes() {
-	r.router.GET("/chat", r.chatSvc.Chat)
+	r.router.GET("/chat", r.chatHandler.Chat)
 }
 
 func (r *Router) useMiddlewares() {

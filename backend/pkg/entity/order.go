@@ -4,6 +4,7 @@ import (
 	"github.com/billykore/kore/backend/pkg/model"
 	"github.com/billykore/kore/backend/pkg/shipping"
 	"github.com/billykore/kore/backend/pkg/transaction"
+	"github.com/billykore/kore/backend/pkg/types"
 )
 
 type OrderRequest struct {
@@ -55,9 +56,9 @@ type OrderPaymentRequest struct {
 }
 
 type OrderPaymentResponse struct {
-	Method    string `json:"method"`
-	Amount    uint64 `json:"amount"`
-	PaymentId int    `json:"paymentId"`
+	Method    string      `json:"method"`
+	Amount    types.Money `json:"amount"`
+	PaymentId int         `json:"paymentId"`
 }
 
 func MakeOrderPaymentResponse(paymentResp *transaction.PaymentResponse) *OrderPaymentResponse {
@@ -77,10 +78,10 @@ type ShippingRequest struct {
 }
 
 type ShippingResponse struct {
-	Id          int    `json:"id"`
-	Fee         uint64 `json:"fee"`
-	Status      string `json:"status"`
-	ShipperName string `json:"shipperName"`
+	Id          int         `json:"id"`
+	Fee         types.Money `json:"fee"`
+	Status      string      `json:"status"`
+	ShipperName string      `json:"shipperName"`
 }
 
 func MakeShippingResponse(shippingResp *shipping.Response) *ShippingResponse {
