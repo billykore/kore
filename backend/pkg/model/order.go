@@ -12,11 +12,13 @@ type OrderStatus string
 
 const (
 	OrderStatusCreated            OrderStatus = "created"
-	OrderStatusCancelled          OrderStatus = "cancelled"
 	OrderStatusWaitingForPayment  OrderStatus = "waiting_for_payment"
 	OrderStatusPaymentSucceed     OrderStatus = "payment_succeed"
 	OrderStatusWaitingForShipment OrderStatus = "waiting_for_shipment"
+	OrderStatusCancelled          OrderStatus = "cancelled"
 )
+
+var OrderStatusCanCancel = []OrderStatus{OrderStatusCreated, OrderStatusWaitingForPayment}
 
 func (status OrderStatus) String() string {
 	return string(status)

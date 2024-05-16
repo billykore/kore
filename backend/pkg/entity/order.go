@@ -92,3 +92,7 @@ func MakeShippingResponse(shippingResp *shipping.Response) *ShippingResponse {
 		ShipperName: shippingResp.ShipperName,
 	}
 }
+
+type CancelOrderRequest struct {
+	OrderId int `param:"orderId"`
+}
