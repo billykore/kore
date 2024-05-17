@@ -6,6 +6,7 @@ go_library(
     importpath = "github.com/billykore/kore/backend/pkg",
     visibility = ["//visibility:public"],
     deps = [
+        "//pkg/broker/rabbit",
         "//pkg/db",
         "//pkg/log",
         "//pkg/websocket",

@@ -16,12 +16,12 @@ type Rabbit struct {
 	queue string
 }
 
-func New(cfg *config.Config, log *log.Logger, queue string) *Rabbit {
+func New(cfg *config.Config, log *log.Logger) *Rabbit {
 	conn, err := amqp.Dial(cfg.Rabbit.URL)
 	if err != nil {
 		log.Fatalf("Failed to connect to RabbitMQ: %v", err)
 	}
-	return &Rabbit{log: log, conn: conn, queue: queue}
+	return &Rabbit{log: log, conn: conn, queue: cfg.Rabbit.QueueName}
 }
 
 func (r *Rabbit) Publish(ctx context.Context, body []byte) error {

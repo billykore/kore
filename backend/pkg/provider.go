@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"github.com/billykore/kore/backend/pkg/broker/rabbit"
 	"github.com/billykore/kore/backend/pkg/db"
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/websocket"
@@ -11,4 +12,5 @@ var ProviderSet = wire.NewSet(
 	db.NewPostgres,
 	log.NewLogger,
 	websocket.NewPool,
+	rabbit.New,
 )

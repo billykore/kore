@@ -17,7 +17,7 @@ func TestRabbitPublish(t *testing.T) {
 	cfg := config.Get()
 	logg := log.NewLogger()
 
-	rabbit := New(cfg, logg, "test")
+	rabbit := New(cfg, logg)
 	assert.NotNil(t, rabbit)
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -36,7 +36,7 @@ func TestRabbitConsume(t *testing.T) {
 	cfg := config.Get()
 	logg := log.NewLogger()
 
-	rabbit := New(cfg, logg, "test")
+	rabbit := New(cfg, logg)
 	assert.NotNil(t, rabbit)
 
 	ctx, cancel := context.WithCancel(context.Background())

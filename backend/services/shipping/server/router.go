@@ -27,6 +27,7 @@ func (r *Router) Run() {
 
 func (r *Router) setRoutes() {
 	r.router.POST("/shipping", r.shippingHandler.CreateShipping)
+	r.router.PUT("/shipping/:shippingId/status", r.shippingHandler.UpdateShippingStatus)
 }
 
 func (r *Router) useMiddlewares() {
@@ -36,9 +37,6 @@ func (r *Router) useMiddlewares() {
 
 func (r *Router) run() {
 	port := r.cfg.HTTPPort
-	if port == "" {
-		port = "8080"
-	}
 	r.log.Infof("running on port [::%v]", port)
 	if err := r.router.Start(":" + port); err != nil {
 		r.log.Fatalf("failed to run on port [::%v]", port)
