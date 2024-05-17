@@ -11,6 +11,7 @@ type Config struct {
 	Postgres  Postgres
 	Firestore Firestore
 	Token     Token
+	Rabbit    Rabbit
 }
 
 var (
