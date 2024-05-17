@@ -5,9 +5,15 @@ import (
 	"gorm.io/gorm"
 )
 
+type ShippingStatus string
+
 const (
-	ShippingStatusCreated = "created"
+	ShippingStatusCreated ShippingStatus = "created"
 )
+
+func (s ShippingStatus) String() string {
+	return string(s)
+}
 
 type Shipping struct {
 	gorm.Model

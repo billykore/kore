@@ -9,6 +9,7 @@ go_library(
     importpath = "github.com/billykore/kore/backend/services/shipping/cmd",
     visibility = ["//visibility:private"],
     deps = [
+        "//pkg/broker/rabbit",
         "//pkg/config",
         "//pkg/db",
         "//pkg/log",

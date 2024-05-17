@@ -7,6 +7,7 @@
 package main
 
 import (
+	"github.com/billykore/kore/backend/pkg/broker/rabbit"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/db"
 	"github.com/billykore/kore/backend/pkg/log"
@@ -26,9 +27,10 @@ import (
 func shippingApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
 	echoEcho := echo.New()
+	rabbitRabbit := rabbit.New(cfg, logger)
 	gormDB := db.NewPostgres(cfg)
 	shippingRepository := repo.NewShippingRepository(gormDB)
-	shippingUsecase := usecase.NewShippingUsecase(logger, shippingRepository)
+	shippingUsecase := usecase.NewShippingUsecase(logger, rabbitRabbit, shippingRepository)
 	shippingHandler := handler.NewShippingHandler(shippingUsecase)
 	router := server.NewRouter(cfg, logger, echoEcho, shippingHandler)
 	httpServer := server.NewHTTPServer(router)
