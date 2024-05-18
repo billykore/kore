@@ -9,6 +9,7 @@ go_library(
     importpath = "github.com/billykore/kore/backend/services/order/usecase",
     visibility = ["//visibility:public"],
     deps = [
+        "//pkg/broker/rabbit",
         "//pkg/codes",
         "//pkg/entity",
         "//pkg/log",
@@ -18,5 +19,6 @@ go_library(
         "//pkg/status",
         "//pkg/transaction",
         "@com_github_google_wire//:wire",
+        "@com_github_rabbitmq_amqp091_go//:amqp091-go",
     ],
 )

@@ -2,18 +2,15 @@ package rabbit
 
 import "encoding/json"
 
-type Payload struct {
+type Payload[T any] struct {
 	Origin string `json:"origin"`
-	Data   any    `json:"data"`
+	Data   T      `json:"data"`
 }
 
-func NewPayload(origin string, data any) *Payload {
-	return &Payload{
-		Origin: origin,
-		Data:   data,
-	}
-}
-
-func (p *Payload) MarshalBinary() ([]byte, error) {
+func (p *Payload[T]) MarshalBinary() ([]byte, error) {
 	return json.Marshal(p)
+}
+
+func (p *Payload[T]) UnmarshalBinary(data []byte) error {
+	return json.Unmarshal(data, p)
 }

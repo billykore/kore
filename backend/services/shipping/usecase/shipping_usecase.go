@@ -50,16 +50,24 @@ func (uc *ShippingUsecase) CreateShipping(ctx context.Context, req entity.Create
 }
 
 func (uc *ShippingUsecase) UpdateShippingStatus(ctx context.Context, req entity.UpdateShippingStatusRequest) error {
-	err := uc.repo.UpdateStatus(ctx, req.Id, model.ShippingStatus(req.NewStatus), model.ShippingStatus(req.CurrentStatus))
+	shipping, err := uc.repo.GetById(ctx, req.Id)
+	if err != nil {
+		uc.log.Usecase("UpdateShippingStatus").Error(err)
+		return status.Error(codes.NotFound, err.Error())
+	}
+	err = uc.repo.UpdateStatus(ctx, shipping.ID, model.ShippingStatus(req.NewStatus), model.ShippingStatus(req.CurrentStatus))
 	if err != nil {
 		uc.log.Usecase("UpdateShippingStatus").Error(err)
 		return status.Error(codes.Internal, err.Error())
 	}
-	data := &entity.UpdateShippingPublishData{
+	data := &entity.UpdateShippingRabbitData{
 		ShippingId: req.Id,
 		Status:     req.NewStatus,
 	}
-	payload := rabbit.NewPayload("shipping-service", data)
+	payload := &rabbit.Payload[*entity.UpdateShippingRabbitData]{
+		Origin: "shipping-service",
+		Data:   data,
+	}
 	bytePayload, err := payload.MarshalBinary()
 	if err != nil {
 		uc.log.Usecase("UpdateShippingPublishData").Error(err)

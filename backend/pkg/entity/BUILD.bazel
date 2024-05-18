@@ -13,6 +13,7 @@ go_library(
         "product.go",
         "product_category.go",
         "product_inventory.go",
+        "rabbit.go",
         "response.go",
         "shipping.go",
         "todo.go",

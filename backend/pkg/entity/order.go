@@ -8,7 +8,7 @@ import (
 )
 
 type OrderRequest struct {
-	Id int `param:"orderId"`
+	Id uint `param:"orderId"`
 }
 
 type OrderResponse struct {
@@ -44,12 +44,12 @@ type CartItem struct {
 }
 
 type UpdateOrderRequest struct {
-	Id     int    `param:"orderId"`
+	Id     uint   `param:"orderId"`
 	Status string `param:"status"`
 }
 
 type OrderPaymentRequest struct {
-	Id            int `param:"orderId"`
+	Id            uint `param:"orderId"`
 	Method        string
 	AccountNumber string
 	AccountName   string
@@ -70,7 +70,7 @@ func MakeOrderPaymentResponse(paymentResp *transaction.PaymentResponse) *OrderPa
 }
 
 type ShippingRequest struct {
-	OrderId      int `param:"orderId"`
+	OrderId      uint `param:"orderId"`
 	ShipperName  string
 	ShippingType string
 	Address      string
@@ -94,5 +94,5 @@ func MakeShippingResponse(shippingResp *shipping.Response) *ShippingResponse {
 }
 
 type CancelOrderRequest struct {
-	OrderId int `param:"orderId"`
+	OrderId uint `param:"orderId"`
 }
