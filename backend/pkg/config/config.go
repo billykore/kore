@@ -7,10 +7,11 @@ import (
 )
 
 type Config struct {
-	HTTPPort  string `envconfig:"HTTP_PORT"`
+	HTTPPort  string `envconfig:"HTTP_PORT" default:"8000"`
 	Postgres  Postgres
 	Firestore Firestore
 	Token     Token
+	Rabbit    Rabbit
 }
 
 var (

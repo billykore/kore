@@ -29,7 +29,7 @@ func todoApp(cfg *config.Config) *app {
 	gormDB := db.NewPostgres(cfg)
 	todoRepository := repo.NewTodoRepository(gormDB)
 	todoUsecase := usecase.NewTodoUsecase(logger, todoRepository)
-	todoService := service.NewTodoService(todoUsecase)
+	todoService := service.NewTodoHandler(todoUsecase)
 	router := server.NewRouter(cfg, logger, echoEcho, todoService)
 	httpServer := server.NewHTTPServer(router)
 	mainApp := newApp(httpServer)

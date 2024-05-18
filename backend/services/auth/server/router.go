@@ -3,20 +3,20 @@ package server
 import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/services/auth/service"
+	"github.com/billykore/kore/backend/services/auth/handler"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 type Router struct {
-	cfg     *config.Config
-	log     *log.Logger
-	router  *echo.Echo
-	authSvc *service.AuthService
+	cfg         *config.Config
+	log         *log.Logger
+	router      *echo.Echo
+	authHandler *handler.AuthHandler
 }
 
-func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, authSvc *service.AuthService) *Router {
-	return &Router{cfg: cfg, log: log, router: router, authSvc: authSvc}
+func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, authHandler *handler.AuthHandler) *Router {
+	return &Router{cfg: cfg, log: log, router: router, authHandler: authHandler}
 }
 
 func (r *Router) Run() {
@@ -26,8 +26,8 @@ func (r *Router) Run() {
 }
 
 func (r *Router) setRoutes() {
-	r.router.POST("/login", r.authSvc.Login)
-	r.router.POST("/logout", r.authSvc.Logout)
+	r.router.POST("/login", r.authHandler.Login)
+	r.router.POST("/logout", r.authHandler.Logout)
 }
 
 func (r *Router) useMiddlewares() {
@@ -37,9 +37,6 @@ func (r *Router) useMiddlewares() {
 
 func (r *Router) run() {
 	port := r.cfg.HTTPPort
-	if port == "" {
-		port = "8080"
-	}
 	r.log.Infof("running on port ::[:%v]", port)
 	if err := r.router.Start(":" + port); err != nil {
 		r.log.Fatalf("failed to run on port [::%v]", port)

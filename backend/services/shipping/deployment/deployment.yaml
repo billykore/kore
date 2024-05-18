@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monorepo-shipping-app
+  labels:
+    name: monorepo-shipping-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: monorepo-shipping-service
+  template:
+    metadata:
+      name: monorepo-shipping-service
+      labels:
+        name: monorepo-shipping-service
+    spec:
+      containers:
+        - name: monorepo-shipping-app
+          image: billykore/monorepo-shipping:latest
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: monorepo-shipping-env
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 300m
+              memory: 300Mi
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: monorepo-shipping-service
+spec:
+  selector:
+    name: monorepo-shipping-service
+  ports:
+    - name: "http"
+      port: 8000
+      targetPort: 8000
+    - name: "grpc"
+      port: 9000
+      targetPort: 9000
+  type: ClusterIP

@@ -9,14 +9,14 @@ import (
 )
 
 type Router struct {
-	cfg     *config.Config
-	log     *log.Logger
-	router  *echo.Echo
-	todoSvc *service.TodoService
+	cfg         *config.Config
+	log         *log.Logger
+	router      *echo.Echo
+	todoHandler *service.TodoHandler
 }
 
-func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, todoSvc *service.TodoService) *Router {
-	return &Router{cfg: cfg, log: log, router: router, todoSvc: todoSvc}
+func NewRouter(cfg *config.Config, log *log.Logger, router *echo.Echo, todoHandler *service.TodoHandler) *Router {
+	return &Router{cfg: cfg, log: log, router: router, todoHandler: todoHandler}
 }
 
 func (r *Router) Run() {
@@ -27,11 +27,11 @@ func (r *Router) Run() {
 
 func (r *Router) setRoutes() {
 	tr := r.router.Group("/todos")
-	tr.GET("", r.todoSvc.GetTodos)
-	tr.GET("/:id", r.todoSvc.GetTodo)
-	tr.POST("", r.todoSvc.AddTodo)
-	tr.PUT("/:id", r.todoSvc.SetDoneTodo)
-	tr.DELETE("/:id", r.todoSvc.DeleteTodo)
+	tr.GET("", r.todoHandler.GetTodos)
+	tr.GET("/:id", r.todoHandler.GetTodo)
+	tr.POST("", r.todoHandler.AddTodo)
+	tr.PUT("/:id", r.todoHandler.SetDoneTodo)
+	tr.DELETE("/:id", r.todoHandler.DeleteTodo)
 }
 
 func (r *Router) useMiddlewares() {
@@ -42,9 +42,6 @@ func (r *Router) useMiddlewares() {
 
 func (r *Router) run() {
 	port := r.cfg.HTTPPort
-	if port == "" {
-		port = "8080"
-	}
 	r.log.Infof("running on port [::%v]", port)
 	if err := r.router.Start(":" + port); err != nil {
 		r.log.Fatalf("failed to run on port [::%v]", port)

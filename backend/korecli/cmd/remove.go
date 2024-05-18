@@ -53,7 +53,7 @@ func (d *removeData) remove() error {
 }
 
 func (d *removeData) removeEntity() error {
-	entityPath := d.AbsolutePath + "/libs/entity"
+	entityPath := d.AbsolutePath + "/pkg/entity"
 	if _, err := os.Stat(entityPath); err != nil {
 		return err
 	}

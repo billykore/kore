@@ -8,17 +8,32 @@ import (
 	"github.com/billykore/kore/backend/pkg/status"
 )
 
+type Data map[string]any
+
+func makeData(fieldName string, fieldValue any) Data {
+	data := make(Data)
+	data[fieldName] = fieldValue
+	return data
+}
+
 type Response struct {
 	Status     string `json:"status,omitempty"`
-	Data       any    `json:"data,omitempty"`
 	Message    string `json:"message,omitempty"`
+	Data       Data   `json:"data,omitempty"`
 	ServerTime int64  `json:"serverTime,omitempty"`
 }
 
-func ResponseSuccess(data any) (int, *Response) {
+func ResponseSuccess(fieldName string, fieldValue any) (int, *Response) {
 	return http.StatusOK, &Response{
 		Status:     "OK",
-		Data:       data,
+		Data:       makeData(fieldName, fieldValue),
+		ServerTime: time.Now().Unix(),
+	}
+}
+
+func ResponseSuccessNilData() (int, *Response) {
+	return http.StatusOK, &Response{
+		Status:     "OK",
 		ServerTime: time.Now().Unix(),
 	}
 }
@@ -33,9 +48,9 @@ func ResponseError(err error) (int, *Response) {
 	}
 }
 
-func ResponseInternalServerError(err error) (int, *Response) {
+func ResponseBadRequest(err error) (int, *Response) {
 	return http.StatusInternalServerError, &Response{
-		Status:     "INTERNAL_SERVER_ERROR",
+		Status:     "BAD_REQUEST",
 		Message:    err.Error(),
 		ServerTime: time.Now().Unix(),
 	}

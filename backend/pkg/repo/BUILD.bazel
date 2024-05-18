@@ -4,11 +4,20 @@ go_library(
     name = "repo",
     srcs = [
         "auth.go",
+        "cart.go",
+        "discount.go",
         "greet.go",
+        "order.go",
+        "product.go",
+        "product_category.go",
+        "shipping.go",
         "todo.go",
         "user.go",
     ],
     importpath = "github.com/billykore/kore/backend/pkg/repo",
     visibility = ["//visibility:public"],
-    deps = ["//pkg/model"],
+    deps = [
+        "//pkg/model",
+        "@org_golang_x_net//context",
+    ],
 )

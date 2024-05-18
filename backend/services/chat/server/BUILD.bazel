@@ -13,7 +13,7 @@ go_library(
         "//pkg/config",
         "//pkg/log",
         "//pkg/websocket",
-        "//services/chat/service",
+        "//services/chat/handler",
         "@com_github_google_wire//:wire",
         "@com_github_labstack_echo_v4//:echo",
         "@com_github_labstack_echo_v4//middleware",
