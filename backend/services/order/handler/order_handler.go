@@ -1,17 +1,24 @@
 package handler
 
 import (
+	"context"
+
+	"github.com/billykore/kore/backend/pkg/broker/rabbit"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/services/order/usecase"
 	"github.com/labstack/echo/v4"
 )
 
 type OrderHandler struct {
-	uc *usecase.OrderUsecase
+	uc     *usecase.OrderUsecase
+	rabbit *rabbit.Rabbit
 }
 
-func NewOrderHandler(uc *usecase.OrderUsecase) *OrderHandler {
-	return &OrderHandler{uc: uc}
+func NewOrderHandler(uc *usecase.OrderUsecase, rabbit *rabbit.Rabbit) *OrderHandler {
+	return &OrderHandler{
+		uc:     uc,
+		rabbit: rabbit,
+	}
 }
 
 func (h *OrderHandler) Checkout(ctx echo.Context) error {
@@ -72,4 +79,10 @@ func (h *OrderHandler) CancelOrder(ctx echo.Context) error {
 		return ctx.JSON(entity.ResponseError(err))
 	}
 	return ctx.JSON(entity.ResponseSuccessNilData())
+}
+
+func (h *OrderHandler) ListenOrderStatusChanges() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	h.rabbit.Consume(ctx, h.uc.ListenOrderStatusChanges)
 }

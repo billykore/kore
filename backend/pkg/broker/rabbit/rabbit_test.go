@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/billykore/kore/backend/pkg/config"
+	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/joho/godotenv"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -23,10 +24,16 @@ func TestRabbitPublish(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	err = rabbit.Publish(ctx, []byte("Hello"))
-	assert.NoError(t, err)
+	payload := &Payload[*entity.UpdateShippingRabbitData]{
+		Origin: "shipping-service",
+		Data: &entity.UpdateShippingRabbitData{
+			ShippingId: 999,
+			Status:     "shipped",
+		},
+	}
+	bytePayload, err := payload.MarshalBinary()
 
-	err = rabbit.Publish(ctx, []byte("World"))
+	err = rabbit.Publish(ctx, bytePayload)
 	assert.NoError(t, err)
 }
 

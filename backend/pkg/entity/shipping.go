@@ -33,12 +33,7 @@ type CreateShippingResponse struct {
 }
 
 type UpdateShippingStatusRequest struct {
-	Id            int `param:"shippingId"`
+	Id            uint `param:"shippingId"`
 	NewStatus     string
 	CurrentStatus string
-}
-
-type UpdateShippingPublishData struct {
-	ShippingId int    `json:"shippingId"`
-	Status     string `json:"status"`
 }

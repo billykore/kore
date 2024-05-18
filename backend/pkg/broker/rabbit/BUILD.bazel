@@ -17,10 +17,14 @@ go_library(
 
 go_test(
     name = "rabbit_test",
-    srcs = ["rabbit_test.go"],
+    srcs = [
+        "payload_test.go",
+        "rabbit_test.go",
+    ],
     embed = [":rabbit"],
     deps = [
         "//pkg/config",
+        "//pkg/entity",
         "//pkg/log",
         "@com_github_joho_godotenv//:godotenv",
         "@com_github_rabbitmq_amqp091_go//:amqp091-go",

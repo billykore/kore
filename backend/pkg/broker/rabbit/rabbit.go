@@ -45,8 +45,13 @@ func (r *Rabbit) Publish(ctx context.Context, body []byte) error {
 			ContentType: "text/plain",
 			Body:        body,
 		})
+	if err != nil {
+		r.log.Fatalf("Failed to publish a message: %v", err)
+		return err
+	}
 
-	return err
+	r.log.Infof("Published a message: %s", string(body))
+	return nil
 }
 
 func (r *Rabbit) Consume(ctx context.Context, handler HandlerFunc) {
@@ -82,6 +87,7 @@ func (r *Rabbit) Consume(ctx context.Context, handler HandlerFunc) {
 			if err != nil {
 				r.log.Errorf("Failed to handle message: %v", err)
 			}
+			r.log.Infof("Consumed message: %s", string(msg.Body))
 		}
 	}()
 

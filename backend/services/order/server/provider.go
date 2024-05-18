@@ -7,4 +7,5 @@ import (
 var ProviderSet = wire.NewSet(
 	NewRouter,
 	NewHTTPServer,
+	NewBrokerServer,
 )
