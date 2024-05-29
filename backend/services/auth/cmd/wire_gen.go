@@ -10,9 +10,9 @@ import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/db"
 	"github.com/billykore/kore/backend/pkg/log"
+	"github.com/billykore/kore/backend/services/auth/handler"
 	"github.com/billykore/kore/backend/services/auth/repo"
 	"github.com/billykore/kore/backend/services/auth/server"
-	"github.com/billykore/kore/backend/services/auth/handler"
 	"github.com/billykore/kore/backend/services/auth/usecase"
 	"github.com/labstack/echo/v4"
 )
@@ -27,11 +27,11 @@ func authApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
 	echoEcho := echo.New()
 	gormDB := db.NewPostgres(cfg)
-	userRepository := repo.NewUserRepository(gormDB)
-	authRepository := repo.NewAuthRepository(gormDB)
-	authUsecase := usecase.NewAuthUsecase(logger, userRepository, authRepository)
-	authService := handler.NewAuthHandler(authUsecase)
-	router := server.NewRouter(cfg, logger, echoEcho, authService)
+	userRepo := repo.NewUserRepository(gormDB)
+	authRepo := repo.NewAuthRepository(gormDB)
+	authUsecase := usecase.NewAuthUsecase(logger, userRepo, authRepo)
+	authHandler := handler.NewAuthHandler(authUsecase)
+	router := server.NewRouter(cfg, logger, echoEcho, authHandler)
 	httpServer := server.NewHTTPServer(router)
 	mainApp := newApp(httpServer)
 	return mainApp

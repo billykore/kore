@@ -70,7 +70,7 @@ func (uc *ShippingUsecase) UpdateShippingStatus(ctx context.Context, req entity.
 	}
 	bytePayload, err := payload.MarshalBinary()
 	if err != nil {
-		uc.log.Usecase("UpdateShippingPublishData").Error(err)
+		uc.log.Usecase("UpdateShippingStatus").Error(err)
 		return status.Error(codes.Internal, err.Error())
 	}
 	err = uc.rabbit.Publish(ctx, bytePayload)

@@ -4,33 +4,32 @@ import (
 	"context"
 
 	"github.com/billykore/kore/backend/pkg/model"
-	"github.com/billykore/kore/backend/pkg/repo"
 	"gorm.io/gorm"
 )
 
-type orderRepo struct {
+type OrderRepo struct {
 	db *gorm.DB
 }
 
-func NewPaymentRepository(db *gorm.DB) repo.OrderRepository {
-	return &orderRepo{
+func NewPaymentRepository(db *gorm.DB) *OrderRepo {
+	return &OrderRepo{
 		db: db,
 	}
 }
 
-func (r *orderRepo) GetById(ctx context.Context, id uint) (*model.Order, error) {
+func (r *OrderRepo) GetById(ctx context.Context, id uint) (*model.Order, error) {
 	q := "SELECT id, user_id, payment_method, cart_ids, status FROM orders WHERE id = $1"
 	tx := r.db.WithContext(ctx).Begin()
 	return getOrder(tx, q, id)
 }
 
-func (r *orderRepo) GetByIdAndStatus(ctx context.Context, id uint, status model.OrderStatus) (*model.Order, error) {
+func (r *OrderRepo) GetByIdAndStatus(ctx context.Context, id uint, status model.OrderStatus) (*model.Order, error) {
 	q := "SELECT id, user_id, payment_method, cart_ids, status FROM orders WHERE id = $1 AND status = $2"
 	tx := r.db.WithContext(ctx).Begin()
 	return getOrder(tx, q, id, status)
 }
 
-func (r *orderRepo) GetByShippingId(ctx context.Context, shippingId uint) (*model.Order, error) {
+func (r *OrderRepo) GetByShippingId(ctx context.Context, shippingId uint) (*model.Order, error) {
 	q := "SELECT id, user_id, payment_method, cart_ids, status FROM orders WHERE shipping_id = $1"
 	tx := r.db.WithContext(ctx).Begin()
 	return getOrder(tx, q, shippingId)
@@ -52,12 +51,12 @@ func getOrder(tx *gorm.DB, query string, args ...any) (*model.Order, error) {
 	return order, nil
 }
 
-func (r *orderRepo) Save(ctx context.Context, order model.Order) error {
+func (r *OrderRepo) Save(ctx context.Context, order model.Order) error {
 	tx := r.db.WithContext(ctx).Save(&order)
 	return tx.Error
 }
 
-func (r *orderRepo) UpdateStatus(ctx context.Context, id uint, newStatus model.OrderStatus, currentStatus ...model.OrderStatus) error {
+func (r *OrderRepo) UpdateStatus(ctx context.Context, id uint, newStatus model.OrderStatus, currentStatus ...model.OrderStatus) error {
 	q := "UPDATE orders SET status = ? WHERE id = ? AND status IN ?"
 	tx := r.db.WithContext(ctx).Begin()
 	err := updateOrder(tx, q, newStatus, id, currentStatus)
@@ -68,7 +67,7 @@ func (r *orderRepo) UpdateStatus(ctx context.Context, id uint, newStatus model.O
 	return tx.Commit().Error
 }
 
-func (r *orderRepo) UpdateShipping(ctx context.Context, id uint, shippingId int) error {
+func (r *OrderRepo) UpdateShipping(ctx context.Context, id uint, shippingId int) error {
 	tx := r.db.WithContext(ctx).Begin()
 	q1 := "UPDATE orders SET status = ? WHERE id = ?"
 	err := updateOrder(tx, q1, model.OrderStatusWaitingForShipment, id)
