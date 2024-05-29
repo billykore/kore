@@ -4,16 +4,15 @@ import (
 	"context"
 
 	"github.com/billykore/kore/backend/pkg/model"
-	"github.com/billykore/kore/backend/pkg/repo"
 )
 
-type chatRepo struct {
+type ChatRepo struct {
 }
 
-func NewChatRepository() repo.GreeterRepository {
-	return &chatRepo{}
+func NewChatRepository() *ChatRepo {
+	return &ChatRepo{}
 }
 
-func (r *chatRepo) Get(ctx context.Context) (*model.Greet, error) {
+func (r *ChatRepo) Get(ctx context.Context) (*model.Greet, error) {
 	return &model.Greet{}, nil
 }

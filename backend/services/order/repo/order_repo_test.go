@@ -16,7 +16,7 @@ func TestGetOrderById(t *testing.T) {
 
 	cfg := config.Get()
 	pg := db.NewPostgres(cfg)
-	repo := &orderRepo{db: pg}
+	repo := &OrderRepo{db: pg}
 
 	order, err := repo.GetById(context.Background(), 2)
 	assert.NoError(t, err)

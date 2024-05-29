@@ -6,19 +6,18 @@ import (
 
 	"github.com/billykore/kore/backend/pkg/model"
 	"github.com/billykore/kore/backend/pkg/perrors"
-	"github.com/billykore/kore/backend/pkg/repo"
 	"gorm.io/gorm"
 )
 
-type authRepo struct {
+type AuthRepo struct {
 	postgres *gorm.DB
 }
 
-func NewAuthRepository(postgres *gorm.DB) repo.AuthRepository {
-	return &authRepo{postgres: postgres}
+func NewAuthRepository(postgres *gorm.DB) *AuthRepo {
+	return &AuthRepo{postgres: postgres}
 }
 
-func (r *authRepo) Login(ctx context.Context, auth *model.AuthActivities) error {
+func (r *AuthRepo) Login(ctx context.Context, auth *model.AuthActivities) error {
 	tx := r.postgres.Begin()
 	if err := tx.Error; err != nil {
 		return err
@@ -62,7 +61,7 @@ func autoLogout(ctx context.Context, tx *gorm.DB, auth *model.AuthActivities) er
 	return nil
 }
 
-func (r *authRepo) Logout(ctx context.Context, auth *model.AuthActivities) error {
+func (r *AuthRepo) Logout(ctx context.Context, auth *model.AuthActivities) error {
 	tx := r.postgres.Begin()
 	if err := tx.Error; err != nil {
 		return err
