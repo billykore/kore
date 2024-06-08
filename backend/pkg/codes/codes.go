@@ -3,7 +3,7 @@ package codes
 type Code int
 
 const (
-	OK Code = iota
+	_ Code = iota // OK
 	BadRequest
 	Unauthenticated
 	NotFound

@@ -33,8 +33,8 @@ build_service() {
 
   # check Dockerfile.
   if [[ ! -f "$DOCKERFILE" ]]; then
-  echo >&2 "error: Dockerfile not found"
-  exit 1
+    echo >&2 "error: Dockerfile not found"
+    exit 1
   fi
 
   IMAGE_NAME=billykore/monorepo-$SERVICE:latest
