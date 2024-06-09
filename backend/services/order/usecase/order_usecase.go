@@ -116,7 +116,7 @@ func (uc *OrderUsecase) ListenOrderStatusChanges(ctx context.Context, delivery a
 	order, err := uc.repo.GetByShippingId(ctx, payload.Data.ShippingId)
 	if err != nil {
 		uc.log.Usecase("ListenOrderStatusChanges").Error(err)
-		return status.Error(codes.NotFound, err.Error())
+		return err
 	}
 	err = uc.repo.UpdateStatus(ctx, order.ID, model.OrderStatus(payload.Data.Status), model.OrderStatusWaitingForShipment)
 	if err != nil {
