@@ -4,6 +4,7 @@ import (
 	"github.com/billykore/kore/backend/pkg/log"
 )
 
+// Pool hold the websocket connection pool.
 type Pool struct {
 	log        *log.Logger
 	Register   chan *Client
@@ -12,6 +13,7 @@ type Pool struct {
 	Broadcast  chan Message
 }
 
+// NewPool return instance of Pool.
 func NewPool() *Pool {
 	return &Pool{
 		log:        log.NewLogger(),
@@ -22,6 +24,7 @@ func NewPool() *Pool {
 	}
 }
 
+// Start new connection to the Pool.
 func (pool *Pool) Start() {
 	for {
 		select {

@@ -2,6 +2,7 @@ package transaction
 
 import "github.com/billykore/kore/backend/pkg/types"
 
+// PaymentMethod is interface to represents payment service.
 type PaymentMethod interface {
 	Pay(amount types.Money) (*PaymentResponse, error)
 }
@@ -11,6 +12,7 @@ const (
 	creditCard = "Credit Card"
 )
 
+// NewPayment return instance or PaymentMethod.
 func NewPayment(method, name, account string) PaymentMethod {
 	switch method {
 	case gopay:

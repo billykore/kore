@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// NewPostgres returns postgres db connection instance.
 func NewPostgres(appCfg *config.Config) *gorm.DB {
 	dsn := appCfg.Postgres.DSN
 	logger := log.NewLogger()

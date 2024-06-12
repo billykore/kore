@@ -1,5 +1,6 @@
 package codes
 
+// Code is enum to represents success or error codes.
 type Code int
 
 const (

@@ -8,12 +8,14 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// Client to communicate with the websocket.
 type Client struct {
 	Id   string
 	Conn *websocket.Conn
 	Pool *Pool
 }
 
+// NewClient create new client connection to websocket.
 func NewClient(conn *websocket.Conn, pool *Pool) *Client {
 	client := &Client{
 		Conn: conn,
@@ -32,6 +34,7 @@ type Message struct {
 	Message string `json:"message"`
 }
 
+// Read the message from websocket.
 func (c *Client) Read() {
 	defer func() {
 		c.Pool.Unregister <- c

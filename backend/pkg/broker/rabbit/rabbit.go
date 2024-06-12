@@ -8,14 +8,14 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-type HandlerFunc func(context.Context, amqp.Delivery) error
-
+// Rabbit is the message broker to communicate data asynchronously.
 type Rabbit struct {
 	log   *log.Logger
 	conn  *amqp.Connection
 	queue string
 }
 
+// New initiate new Rabbit.
 func New(cfg *config.Config, log *log.Logger) *Rabbit {
 	conn, err := amqp.Dial(cfg.Rabbit.URL)
 	if err != nil {
@@ -24,6 +24,7 @@ func New(cfg *config.Config, log *log.Logger) *Rabbit {
 	return &Rabbit{log: log, conn: conn, queue: cfg.Rabbit.QueueName}
 }
 
+// Publish will publish the message to Rabbit.
 func (r *Rabbit) Publish(ctx context.Context, body []byte) error {
 	ch, err := r.conn.Channel()
 	if err != nil {
@@ -54,6 +55,10 @@ func (r *Rabbit) Publish(ctx context.Context, body []byte) error {
 	return nil
 }
 
+// HandlerFunc is function to handle operations when consume a message from Rabbit.
+type HandlerFunc func(context.Context, amqp.Delivery) error
+
+// Consume consumes the message from message broker and the message is handled by HandlerFunc.
 func (r *Rabbit) Consume(ctx context.Context, handler HandlerFunc) {
 	ch, err := r.conn.Channel()
 	if err != nil {
@@ -94,6 +99,7 @@ func (r *Rabbit) Consume(ctx context.Context, handler HandlerFunc) {
 	<-forever
 }
 
+// Close the Rabbit connection.
 func (r *Rabbit) Close() {
 	err := r.conn.Close()
 	if err != nil {

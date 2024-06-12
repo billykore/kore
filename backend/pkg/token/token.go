@@ -15,6 +15,7 @@ type Token struct {
 	ExpiredTime int64
 }
 
+// New return new generated token.
 func New(username string) (*Token, error) {
 	return generateToken(username)
 }
@@ -42,6 +43,7 @@ func generateToken(username string) (*Token, error) {
 	}, nil
 }
 
+// Verify if token is valid or not.
 func Verify(token string) (string, error) {
 	return verifyToken(token)
 }

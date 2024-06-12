@@ -6,6 +6,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
+// Config is app configurations use by services.
 type Config struct {
 	HTTPPort  string `envconfig:"HTTP_PORT" default:"8000"`
 	Postgres  Postgres
@@ -19,6 +20,7 @@ var (
 	_once sync.Once
 )
 
+// Get return the singleton instance of Config.
 func Get() *Config {
 	_once.Do(func() {
 		_cfg = new(Config)

@@ -2,14 +2,17 @@ package shipping
 
 const JNECompanyName = "JNE Shipping"
 
+// JNE shipping service.
 type JNE struct {
 	name string
 }
 
+// NewJNE return instance of JNE.
 func NewJNE() *JNE {
 	return &JNE{JNECompanyName}
 }
 
+// Create new shipping.
 func (jne *JNE) Create(data *Data) (*Response, error) {
 	return &Response{
 		Id:           699,

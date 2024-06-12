@@ -2,6 +2,7 @@ package shipping
 
 import "github.com/billykore/kore/backend/pkg/types"
 
+// Shipping interface define the shipping services behavior.
 type Shipping interface {
 	Create(data *Data) (*Response, error)
 }
@@ -10,6 +11,7 @@ const (
 	jne = "JNE"
 )
 
+// New returns instance of Shipping service.
 func New(shipperName string) Shipping {
 	switch shipperName {
 	case jne:
@@ -20,6 +22,7 @@ func New(shipperName string) Shipping {
 	}
 }
 
+// Data for the order.
 type Data struct {
 	Address      string
 	CustomerName string
