@@ -21,6 +21,7 @@ type CartResponse struct {
 	} `json:"product"`
 }
 
+// MakeCartResponse makes CartResponse from model.Cart model.
 func MakeCartResponse(m *model.Cart) *CartResponse {
 	return &CartResponse{
 		Id:       m.ID,

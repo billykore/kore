@@ -1,0 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "repo",
+    srcs = [
+        "auth_repo.go",
+        "provider.go",
+        "user_repo.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/services/auth/internal/repo",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/model",
+        "//pkg/perrors",
+        "//pkg/repo",
+        "@com_github_google_wire//:wire",
+        "@io_gorm_gorm//:gorm",
+    ],
+)

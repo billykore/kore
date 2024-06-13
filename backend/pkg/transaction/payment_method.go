@@ -4,9 +4,11 @@ import "github.com/billykore/kore/backend/pkg/types"
 
 // PaymentMethod is interface to represents payment service.
 type PaymentMethod interface {
+	// Pay some amount of types.Money.
 	Pay(amount types.Money) (*PaymentResponse, error)
 }
 
+// Payment methods.
 const (
 	gopay      = "GoPay"
 	creditCard = "Credit Card"

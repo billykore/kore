@@ -6,10 +6,10 @@ package main
 import (
 	"github.com/billykore/kore/backend/pkg"
 	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/services/chat/handler"
-	"github.com/billykore/kore/backend/services/chat/repo"
-	"github.com/billykore/kore/backend/services/chat/server"
-	"github.com/billykore/kore/backend/services/chat/usecase"
+	"github.com/billykore/kore/backend/services/chat/internal/handler"
+	"github.com/billykore/kore/backend/services/chat/internal/repo"
+	"github.com/billykore/kore/backend/services/chat/internal/server"
+	"github.com/billykore/kore/backend/services/chat/internal/usecase"
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 )

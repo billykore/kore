@@ -12,12 +12,11 @@ go_library(
         "//pkg/config",
         "//pkg/db",
         "//pkg/log",
-        "//services/todo/repo",
-        "//services/todo/server",
-        "//services/todo/service",
-        "//services/todo/usecase",
+        "//services/todo/internal/handler",
+        "//services/todo/internal/repo",
+        "//services/todo/internal/server",
+        "//services/todo/internal/usecase",
         "@com_github_joho_godotenv//autoload",
-        "@com_github_labstack_echo_v4//:echo",
     ],
 )
 

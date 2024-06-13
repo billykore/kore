@@ -1,0 +1,23 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "usecase",
+    srcs = [
+        "cart_usecase.go",
+        "discount_usecase.go",
+        "product_category_usecase.go",
+        "product_usecase.go",
+        "provider.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/services/product/internal/usecase",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/codes",
+        "//pkg/entity",
+        "//pkg/log",
+        "//pkg/model",
+        "//pkg/repo",
+        "//pkg/status",
+        "@com_github_google_wire//:wire",
+    ],
+)

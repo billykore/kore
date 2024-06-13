@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/services/order/server"
+	"github.com/billykore/kore/backend/services/order/internal/server"
 	_ "github.com/joho/godotenv/autoload"
 )
 

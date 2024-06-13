@@ -14,6 +14,7 @@ type DiscountResponse struct {
 	DiscountPercentage float64 `json:"discountPercentage"`
 }
 
+// MakeDiscountResponse makes DiscountResponse from model.Discount model.
 func MakeDiscountResponse(m *model.Discount) *DiscountResponse {
 	return &DiscountResponse{
 		Id:                 m.ID,

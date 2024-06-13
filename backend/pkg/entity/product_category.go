@@ -8,6 +8,7 @@ type ProductCategoryResponse struct {
 	Description string `json:"description"`
 }
 
+// MakeProductCategoryResponse makes ProductCategoryResponse from model.ProductCategory model.
 func MakeProductCategoryResponse(m *model.ProductCategory) *ProductCategoryResponse {
 	return &ProductCategoryResponse{
 		Id:          m.ID,

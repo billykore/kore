@@ -20,6 +20,7 @@ type OrderResponse struct {
 	ShippingId    int    `json:"shippingId"`
 }
 
+// MakeOrderResponse makes OrderResponse from model.Order model.
 func MakeOrderResponse(m *model.Order) *OrderResponse {
 	return &OrderResponse{
 		Id:            m.ID,

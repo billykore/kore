@@ -7,6 +7,7 @@ type ProductInventoryResponse struct {
 	Description string `json:"description"`
 }
 
+// MakeProductInventoryResponse makes ProductInventoryResponse from model.ProductInventory model.
 func MakeProductInventoryResponse(m *model.ProductInventory) *ProductInventoryResponse {
 	return &ProductInventoryResponse{
 		Quantity:    m.Quantity,

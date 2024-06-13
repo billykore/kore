@@ -1,0 +1,34 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "service",
+    srcs = [
+        "order_service.go",
+        "provider.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/services/order/service",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/entity",
+        "//services/order/usecase",
+        "@com_github_google_wire//:wire",
+        "@com_github_labstack_echo_v4//:echo",
+    ],
+)
+
+go_library(
+    name = "handler",
+    srcs = [
+        "order_handler.go",
+        "provider.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/services/order/internal/handler",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/entity",
+        "//pkg/net/rabbit",
+        "//services/order/internal/usecase",
+        "@com_github_google_wire//:wire",
+        "@com_github_labstack_echo_v4//:echo",
+    ],
+)

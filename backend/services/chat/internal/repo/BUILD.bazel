@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "repo",
+    srcs = [
+        "chat_repo.go",
+        "provider.go",
+    ],
+    importpath = "github.com/billykore/kore/backend/services/chat/internal/repo",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//pkg/model",
+        "//pkg/repo",
+        "@com_github_google_wire//:wire",
+    ],
+)

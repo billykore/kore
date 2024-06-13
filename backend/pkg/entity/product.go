@@ -26,6 +26,7 @@ type ProductResponse struct {
 	Discount         *DiscountResponse         `json:"discount"`
 }
 
+// MakeProductResponse makes ProductResponse from model.Order model.
 func MakeProductResponse(m *model.Product) *ProductResponse {
 	return &ProductResponse{
 		Id:               m.ID,

@@ -10,10 +10,10 @@ import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/db"
 	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/services/todo/repo"
-	"github.com/billykore/kore/backend/services/todo/server"
-	"github.com/billykore/kore/backend/services/todo/service"
-	"github.com/billykore/kore/backend/services/todo/usecase"
+	"github.com/billykore/kore/backend/services/todo/internal/handler"
+	"github.com/billykore/kore/backend/services/todo/internal/repo"
+	"github.com/billykore/kore/backend/services/todo/internal/server"
+	"github.com/billykore/kore/backend/services/todo/internal/usecase"
 	"github.com/labstack/echo/v4"
 )
 
@@ -29,7 +29,7 @@ func todoApp(cfg *config.Config) *app {
 	gormDB := db.NewPostgres(cfg)
 	todoRepo := repo.NewTodoRepository(gormDB)
 	todoUsecase := usecase.NewTodoUsecase(logger, todoRepo)
-	todoHandler := service.NewTodoHandler(todoUsecase)
+	todoHandler := handler.NewTodoHandler(todoUsecase)
 	router := server.NewRouter(cfg, logger, echoEcho, todoHandler)
 	httpServer := server.NewHTTPServer(router)
 	mainApp := newApp(httpServer)
