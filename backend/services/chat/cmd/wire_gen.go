@@ -9,11 +9,11 @@ package main
 import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/pkg/websocket"
-	"github.com/billykore/kore/backend/services/chat/handler"
-	"github.com/billykore/kore/backend/services/chat/repo"
-	"github.com/billykore/kore/backend/services/chat/server"
-	"github.com/billykore/kore/backend/services/chat/usecase"
+	server2 "github.com/billykore/kore/backend/pkg/net/websocket"
+	"github.com/billykore/kore/backend/services/chat/internal/handler"
+	"github.com/billykore/kore/backend/services/chat/internal/repo"
+	"github.com/billykore/kore/backend/services/chat/internal/server"
+	"github.com/billykore/kore/backend/services/chat/internal/usecase"
 	"github.com/labstack/echo/v4"
 )
 
@@ -26,7 +26,7 @@ import (
 func chatApp(cfg *config.Config) *app {
 	logger := log.NewLogger()
 	echoEcho := echo.New()
-	pool := websocket.NewPool()
+	pool := server2.NewPool()
 	chatRepo := repo.NewChatRepository()
 	chatUsecase := usecase.NewChatUsecase(logger, chatRepo)
 	chatHandler := handler.NewChatHandler(chatUsecase, pool)

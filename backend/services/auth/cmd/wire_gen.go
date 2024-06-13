@@ -10,10 +10,10 @@ import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/db"
 	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/services/auth/handler"
-	"github.com/billykore/kore/backend/services/auth/repo"
-	"github.com/billykore/kore/backend/services/auth/server"
-	"github.com/billykore/kore/backend/services/auth/usecase"
+	"github.com/billykore/kore/backend/services/auth/internal/handler"
+	"github.com/billykore/kore/backend/services/auth/internal/repo"
+	"github.com/billykore/kore/backend/services/auth/internal/server"
+	"github.com/billykore/kore/backend/services/auth/internal/usecase"
 	"github.com/labstack/echo/v4"
 )
 

@@ -6,10 +6,10 @@ package main
 import (
 	"github.com/billykore/kore/backend/pkg"
 	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/services/order/handler"
-	"github.com/billykore/kore/backend/services/order/repo"
-	"github.com/billykore/kore/backend/services/order/server"
-	"github.com/billykore/kore/backend/services/order/usecase"
+	"github.com/billykore/kore/backend/services/order/internal/handler"
+	"github.com/billykore/kore/backend/services/order/internal/repo"
+	"github.com/billykore/kore/backend/services/order/internal/server"
+	"github.com/billykore/kore/backend/services/order/internal/usecase"
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 )
