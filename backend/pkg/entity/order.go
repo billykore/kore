@@ -33,11 +33,11 @@ func MakeOrderResponse(m *model.Order) *OrderResponse {
 }
 
 type CheckoutRequest struct {
-	UserId        int
-	PaymentMethod string
-	AccountNumber string
-	AccountName   string
-	Items         []CartItem
+	UserId        int        `json:"userId"`
+	PaymentMethod string     `json:"paymentMethod"`
+	AccountNumber string     `json:"accountNumber"`
+	AccountName   string     `json:"accountName"`
+	Items         []CartItem `json:"items"`
 }
 
 type CartItem struct {
@@ -50,10 +50,10 @@ type UpdateOrderRequest struct {
 }
 
 type OrderPaymentRequest struct {
-	Id            uint `param:"orderId"`
-	Method        string
-	AccountNumber string
-	AccountName   string
+	Id            uint   `param:"orderId"`
+	Method        string `json:"method"`
+	AccountNumber string `json:"accountNumber"`
+	AccountName   string `json:"accountName"`
 }
 
 type OrderPaymentResponse struct {
@@ -71,11 +71,11 @@ func MakeOrderPaymentResponse(paymentResp *transaction.PaymentResponse) *OrderPa
 }
 
 type ShippingRequest struct {
-	OrderId      uint `param:"orderId"`
-	ShipperName  string
-	ShippingType string
-	Address      string
-	CustomerName string
+	OrderId      uint   `param:"orderId"`
+	ShipperName  string `json:"shipperName"`
+	ShippingType string `json:"shippingType"`
+	Address      string `json:"address"`
+	CustomerName string `json:"customerName"`
 }
 
 type ShippingResponse struct {
