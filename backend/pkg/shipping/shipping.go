@@ -12,8 +12,8 @@ const (
 )
 
 // New returns instance of Shipping service.
-func New(shipperName string) Shipping {
-	switch shipperName {
+func New(shipper string) Shipping {
+	switch shipper {
 	case jne:
 		return NewJNE()
 	default:
