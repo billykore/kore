@@ -10,7 +10,7 @@ var shippingFee = map[string]types.Money{
 	"sameDay": 50_000,
 }
 
-// GetShippingFee return fee base on the shipping type
+// GetShippingFee return fee base on the shipping type.
 func GetShippingFee(shippingType string) types.Money {
 	if v, ok := shippingFee[shippingType]; ok {
 		return v
@@ -19,12 +19,12 @@ func GetShippingFee(shippingType string) types.Money {
 }
 
 type CreateShippingRequest struct {
-	OrderId      int
-	ShipperName  string
-	ShippingType string
-	Address      string
-	CustomerName string
-	SenderName   string
+	OrderId      int    `json:"orderId"`
+	ShipperName  string `json:"shipperName"`
+	ShippingType string `json:"shippingType"`
+	Address      string `json:"address"`
+	CustomerName string `json:"customerName"`
+	SenderName   string `json:"senderName"`
 }
 
 type CreateShippingResponse struct {
@@ -35,7 +35,7 @@ type CreateShippingResponse struct {
 }
 
 type UpdateShippingStatusRequest struct {
-	Id            uint `param:"shippingId"`
-	NewStatus     string
-	CurrentStatus string
+	Id            uint   `param:"shippingId"`
+	NewStatus     string `json:"newStatus"`
+	CurrentStatus string `json:"currentStatus"`
 }

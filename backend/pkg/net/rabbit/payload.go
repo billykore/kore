@@ -10,12 +10,12 @@ type Payload[T any] struct {
 	Data T `json:"data"`
 }
 
-// MarshalBinary return JSON encoding of Payload.
-func (p *Payload[T]) MarshalBinary() ([]byte, error) {
+// MarshalJSON return JSON encoding of Payload.
+func (p *Payload[T]) MarshalJSON() ([]byte, error) {
 	return json.Marshal(p)
 }
 
-// UnmarshalBinary parses encoded data into Payload.
-func (p *Payload[T]) UnmarshalBinary(data []byte) error {
+// UnmarshalJSON parses encoded data into Payload.
+func (p *Payload[T]) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, p)
 }

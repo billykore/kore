@@ -108,7 +108,7 @@ func (uc *OrderUsecase) CancelOrder(ctx context.Context, req entity.CancelOrderR
 
 func (uc *OrderUsecase) ListenOrderStatusChanges(ctx context.Context, delivery amqp.Delivery) error {
 	payload := new(rabbit.Payload[*entity.UpdateShippingRabbitData])
-	err := payload.UnmarshalBinary(delivery.Body)
+	err := payload.UnmarshalJSON(delivery.Body)
 	if err != nil {
 		uc.log.Usecase("ListenOrderStatusChanges").Error(err)
 		return err

@@ -68,7 +68,7 @@ func (uc *ShippingUsecase) UpdateShippingStatus(ctx context.Context, req entity.
 		Origin: "shipping-service",
 		Data:   data,
 	}
-	bytePayload, err := payload.MarshalBinary()
+	bytePayload, err := payload.MarshalJSON()
 	if err != nil {
 		uc.log.Usecase("UpdateShippingStatus").Error(err)
 		return status.Error(codes.Internal, err.Error())
