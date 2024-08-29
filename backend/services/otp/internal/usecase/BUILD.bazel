@@ -9,7 +9,6 @@ go_library(
     importpath = "github.com/billykore/kore/backend/services/otp/internal/usecase",
     visibility = ["//services/otp:__subpackages__"],
     deps = [
-        "//pkg/auth/otp",
         "//pkg/codes",
         "//pkg/entity",
         "//pkg/log",
@@ -18,6 +17,7 @@ go_library(
         "//pkg/messages",
         "//pkg/model",
         "//pkg/repo",
+        "//pkg/security/otp",
         "//pkg/status",
         "@com_github_google_wire//:wire",
     ],

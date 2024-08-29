@@ -5,8 +5,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/billykore/kore/backend/pkg/auth/password"
-	"github.com/billykore/kore/backend/pkg/auth/token"
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
@@ -14,6 +12,8 @@ import (
 	"github.com/billykore/kore/backend/pkg/model"
 	"github.com/billykore/kore/backend/pkg/perrors"
 	"github.com/billykore/kore/backend/pkg/repo"
+	"github.com/billykore/kore/backend/pkg/security/password"
+	"github.com/billykore/kore/backend/pkg/security/token"
 	"github.com/billykore/kore/backend/pkg/status"
 	"github.com/billykore/kore/backend/pkg/uuid"
 )

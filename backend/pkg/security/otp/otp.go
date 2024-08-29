@@ -19,7 +19,7 @@ type Otp struct {
 func Generate(length int) Otp {
 	return Otp{
 		Value:     newValue(length),
-		ExpiredAt: newExpiresAt(),
+		ExpiredAt: newExpiredAt(),
 	}
 }
 
@@ -32,9 +32,9 @@ func newValue(length int) string {
 	return otp
 }
 
-// newExpiresAt create new expired time for OTP.
+// newExpiredAt create new expired time for OTP.
 // The expired time is 5 minute.
-func newExpiresAt() time.Time {
+func newExpiredAt() time.Time {
 	now := time.Now()
 	return now.Add(expTime)
 }

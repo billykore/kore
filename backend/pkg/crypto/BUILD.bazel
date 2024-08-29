@@ -1,8 +1,0 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
-
-go_library(
-    name = "crypto",
-    srcs = ["aes.go"],
-    importpath = "github.com/billykore/kore/backend/pkg/crypto",
-    visibility = ["//visibility:public"],
-)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/billykore/kore/backend/pkg/auth/otp"
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
@@ -13,6 +12,7 @@ import (
 	"github.com/billykore/kore/backend/pkg/messages"
 	"github.com/billykore/kore/backend/pkg/model"
 	"github.com/billykore/kore/backend/pkg/repo"
+	"github.com/billykore/kore/backend/pkg/security/otp"
 	"github.com/billykore/kore/backend/pkg/status"
 )
 
