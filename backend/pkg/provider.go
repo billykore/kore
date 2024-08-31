@@ -6,6 +6,7 @@ import (
 	"github.com/billykore/kore/backend/pkg/mail"
 	"github.com/billykore/kore/backend/pkg/net/rabbit"
 	"github.com/billykore/kore/backend/pkg/net/websocket"
+	"github.com/billykore/kore/backend/pkg/validation"
 	"github.com/google/wire"
 )
 
@@ -15,4 +16,5 @@ var ProviderSet = wire.NewSet(
 	websocket.NewPool,
 	rabbit.New,
 	mail.NewSender,
+	validation.New,
 )

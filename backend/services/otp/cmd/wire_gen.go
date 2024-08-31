@@ -11,6 +11,7 @@ import (
 	"github.com/billykore/kore/backend/pkg/db"
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/mail"
+	"github.com/billykore/kore/backend/pkg/validation"
 	"github.com/billykore/kore/backend/services/otp/internal/handler"
 	"github.com/billykore/kore/backend/services/otp/internal/repo"
 	"github.com/billykore/kore/backend/services/otp/internal/server"
@@ -29,9 +30,10 @@ func otpApp(cfg *config.Config) *app {
 	echoEcho := echo.New()
 	gormDB := db.NewPostgres(cfg)
 	otpRepo := repo.NewOtpRepository(gormDB)
-	sender := mail.NewSender(cfg)
-	otpUsecase := usecase.NewOtpUsecase(logger, otpRepo, sender)
-	otpHandler := handler.NewOtpHandler(otpUsecase)
+	mailer := mail.NewSender(cfg)
+	otpUsecase := usecase.NewOtpUsecase(logger, otpRepo, mailer)
+	validatorValidator := validation.New()
+	otpHandler := handler.NewOtpHandler(otpUsecase, validatorValidator)
 	router := server.NewRouter(cfg, logger, echoEcho, otpHandler)
 	httpServer := server.NewHTTPServer(router)
 	mainApp := newApp(httpServer)
