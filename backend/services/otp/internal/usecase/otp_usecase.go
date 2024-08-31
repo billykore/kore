@@ -95,7 +95,7 @@ func (uc *OtpUsecase) VerifyOtp(ctx context.Context, req entity.VerifyOtpRequest
 		Email: req.Email,
 		Otp:   req.Otp,
 	})
-	if err != nil {
+	if err != nil || currentOtp == nil {
 		uc.log.Usecase("VerifyOtp").Error(err)
 		return status.Error(codes.NotFound, messages.InvalidOTP)
 	}

@@ -29,7 +29,7 @@ func validationErr(err error) error {
 			return errors.New(errMessage(fe))
 		}
 	}
-	return errors.New("invalid request")
+	return nil
 }
 
 func errMessage(fe validator.FieldError) string {

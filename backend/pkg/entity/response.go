@@ -41,10 +41,10 @@ func ResponseError(err error) (int, *Response) {
 }
 
 func ResponseBadRequest(err error) (int, *Response) {
-	return http.StatusInternalServerError, &Response{
+	return http.StatusBadRequest, &Response{
 		Status:     "BAD_REQUEST",
 		Message:    err.Error(),
-		ServerTime: time.Now().Unix(),
+		ServerTime: time.Now().UnixNano(),
 	}
 }
 
