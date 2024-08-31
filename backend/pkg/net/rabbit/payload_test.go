@@ -26,5 +26,4 @@ func TestUnmarshalBinary(t *testing.T) {
 	err := payload.UnmarshalBinary([]byte(s))
 	assert.NoError(t, err)
 	assert.Equal(t, "test-origin", payload.Origin)
-	t.Logf("%+v", payload)
 }
