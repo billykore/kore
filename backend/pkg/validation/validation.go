@@ -24,12 +24,13 @@ func (v *Validator) Validate(in any) error {
 
 func validationErr(err error) error {
 	var ve validator.ValidationErrors
+	var errs error
 	if errors.As(err, &ve) {
 		for _, fe := range ve {
-			return errors.New(errMessage(fe))
+			errs = errors.Join(errors.New(errMessage(fe)))
 		}
 	}
-	return nil
+	return errs
 }
 
 func errMessage(fe validator.FieldError) string {
