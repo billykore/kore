@@ -6,7 +6,6 @@ import (
 )
 
 type CartRequest struct {
-	UserId  int `query:"userId"`
 	Limit   int `query:"limit"`
 	StartId int `query:"startId"`
 }
@@ -39,7 +38,6 @@ func MakeCartResponse(m *model.Cart) *CartResponse {
 }
 
 type AddCartItemRequest struct {
-	UserId    int
 	ProductId int
 	Quantity  int
 }

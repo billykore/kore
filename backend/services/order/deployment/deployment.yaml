@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: monorepo-payment-app
+  name: monorepo-order-app
   labels:
-    name: monorepo-payment-app
+    name: monorepo-order-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: monorepo-payment-service
+      name: monorepo-order-service
   template:
     metadata:
-      name: monorepo-payment-service
+      name: monorepo-order-service
       labels:
-        name: monorepo-payment-service
+        name: monorepo-order-service
     spec:
       containers:
-        - name: monorepo-payment-app
-          image: billykore/monorepo-payment:latest
+        - name: monorepo-order-app
+          image: billykore/monorepo-order:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: monorepo-payment-env
+                name: monorepo-order-env
           resources:
             requests:
               cpu: 100m
@@ -36,15 +36,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: monorepo-payment-service
+  name: monorepo-order-service
 spec:
   selector:
-    name: monorepo-payment-service
+    name: monorepo-order-service
   ports:
     - name: "http"
       port: 8000
       targetPort: 8000
-    - name: "grpc"
-      port: 9000
-      targetPort: 9000
   type: ClusterIP

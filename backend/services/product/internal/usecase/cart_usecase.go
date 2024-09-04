@@ -2,8 +2,10 @@ package usecase
 
 import (
 	"context"
+	"errors"
 
 	"github.com/billykore/kore/backend/pkg/codes"
+	"github.com/billykore/kore/backend/pkg/ctxt"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/model"
@@ -24,7 +26,12 @@ func NewCartUsecase(log *log.Logger, cartRepo repo.CartRepository) *CartUsecase 
 }
 
 func (uc *CartUsecase) GetCartItemList(ctx context.Context, req entity.CartRequest) ([]*entity.CartResponse, error) {
-	carts, err := uc.cartRepo.List(ctx, req.UserId, req.Limit, req.StartId)
+	user, ok := ctxt.UserFromContext(ctx)
+	if !ok {
+		uc.log.Usecase("GetCartItemList").Error(errors.New("failed to get user from context"))
+		return nil, status.Error(codes.Internal, "Failed to get cart item list")
+	}
+	carts, err := uc.cartRepo.List(ctx, user.Username, req.Limit, req.StartId)
 	if err != nil {
 		uc.log.Usecase("GetCartList").Error(err)
 		return nil, status.Error(codes.BadRequest, err.Error())
@@ -37,13 +44,18 @@ func (uc *CartUsecase) GetCartItemList(ctx context.Context, req entity.CartReque
 }
 
 func (uc *CartUsecase) AddCartItem(ctx context.Context, req entity.AddCartItemRequest) error {
+	user, ok := ctxt.UserFromContext(ctx)
+	if !ok {
+		uc.log.Usecase("AddCartItem").Error(errors.New("failed to get user from context"))
+		return status.Error(codes.Internal, "Failed to add cart item to list")
+	}
 	err := uc.cartRepo.Save(ctx, model.Cart{
-		UserId:    req.UserId,
+		Username:  user.Username,
 		ProductId: req.ProductId,
 		Quantity:  req.Quantity,
 	})
 	if err != nil {
-		uc.log.Usecase("AddCart").Error(err)
+		uc.log.Usecase("AddCartItem").Error(err)
 		return status.Error(codes.Internal, err.Error())
 	}
 	return nil

@@ -17,11 +17,11 @@ func NewCartRepository(db *gorm.DB) *CartRepo {
 	}
 }
 
-func (r *CartRepo) List(ctx context.Context, userId, limit, startId int) ([]*model.Cart, error) {
+func (r *CartRepo) List(ctx context.Context, username string, limit, startId int) ([]*model.Cart, error) {
 	carts := make([]*model.Cart, 0)
 	tx := r.db.WithContext(ctx).
 		Preload("Product").
-		Where("user_id = ?", userId).
+		Where("username = ?", username).
 		Order("created_at DESC")
 	if startId != 0 {
 		tx = tx.Where("id > ?", startId)

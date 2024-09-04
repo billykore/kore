@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Cart struct {
 	gorm.Model
-	UserId    int
+	Username  string
 	ProductId int
 	Quantity  int
 	Product   Product `gorm:"foreignKey:ProductId"`

@@ -49,7 +49,7 @@ func ResponseBadRequest(err error) (int, *Response) {
 }
 
 func ResponseUnauthorized(err error) (int, *Response) {
-	return http.StatusBadRequest, &Response{
+	return http.StatusUnauthorized, &Response{
 		Status:     "UNAUTHORIZED",
 		Message:    err.Error(),
 		ServerTime: time.Now().UnixNano(),
