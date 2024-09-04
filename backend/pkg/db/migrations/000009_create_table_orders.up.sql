@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS orders
 (
     id             SERIAL PRIMARY KEY,
-    user_id        INT          NOT NULL,
+    username       VARCHAR(255) NOT NULL,
     cart_ids       INTEGER[]    NOT NULL,
     payment_method VARCHAR(100) NOT NULL,
     status         VARCHAR(100) NOT NULL,

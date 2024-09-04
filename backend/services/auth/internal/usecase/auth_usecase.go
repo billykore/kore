@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/billykore/kore/backend/pkg/codes"
+	"github.com/billykore/kore/backend/pkg/ctxt"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/messages"
@@ -76,15 +77,15 @@ func (uc *AuthUsecase) Login(ctx context.Context, req entity.LoginRequest) (*ent
 }
 
 func (uc *AuthUsecase) Logout(ctx context.Context, req entity.LogoutRequest) (*entity.LogoutResponse, error) {
-	username, err := token.Verify(req.AccessToken)
-	if err != nil {
-		uc.log.Usecase("Logout").Errorf("failed to verify token: %v", err)
+	user, ok := ctxt.UserFromContext(ctx)
+	if !ok {
+		uc.log.Usecase("Logout").Error(errors.New("failed to get user from context"))
 		return nil, status.Error(codes.Unauthenticated, messages.LogoutFailed)
 	}
 
-	err = uc.authRepo.Logout(ctx, &model.AuthActivities{
+	err := uc.authRepo.Logout(ctx, &model.AuthActivities{
 		Id:       req.LoginId,
-		Username: username,
+		Username: user.Username,
 	})
 	if err != nil && errors.Is(err, perrors.ErrAlreadyLoggedOut) {
 		uc.log.Usecase("Logout").Errorf("failed to save logout activity: %v", err)

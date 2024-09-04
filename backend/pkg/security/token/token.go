@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/billykore/kore/backend/pkg/config"
+	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -43,21 +44,24 @@ func generateToken(username string) (*Token, error) {
 	}, nil
 }
 
-// Verify if token is valid or not.
-func Verify(token string) (string, error) {
+// Verify if token is valid or not and return extracted user data from token.
+func Verify(token string) (entity.User, error) {
 	return verifyToken(token)
 }
 
-func verifyToken(token string) (string, error) {
+func verifyToken(token string) (entity.User, error) {
 	cfg := config.Get()
 	t, err := jwt.Parse(token, func(t *jwt.Token) (any, error) {
 		return []byte(cfg.Token.Secret), nil
 	})
 	if err != nil {
-		return "", err
+		return entity.User{}, err
 	}
-	if claims, ok := t.Claims.(jwt.MapClaims); ok || t.Valid {
-		return claims["username"].(string), nil
+	claims, ok := t.Claims.(jwt.MapClaims)
+	if !ok && !t.Valid {
+		return entity.User{}, errors.New("invalid token")
 	}
-	return "", errors.New("invalid token")
+	return entity.User{
+		Username: claims["username"].(string),
+	}, nil
 }

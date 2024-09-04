@@ -13,7 +13,7 @@ type OrderRequest struct {
 
 type OrderResponse struct {
 	Id            uint   `json:"id"`
-	UserId        int    `json:"userId"`
+	Username      string `json:"userId"`
 	CartIds       []int  `json:"cartIds"`
 	PaymentMethod string `json:"paymentMethod"`
 	Status        string `json:"status"`
@@ -24,7 +24,7 @@ type OrderResponse struct {
 func MakeOrderResponse(m *model.Order) *OrderResponse {
 	return &OrderResponse{
 		Id:            m.ID,
-		UserId:        m.UserId,
+		Username:      m.Username,
 		CartIds:       m.IntCartIds(),
 		PaymentMethod: m.PaymentMethod,
 		Status:        m.Status.String(),
@@ -33,11 +33,19 @@ func MakeOrderResponse(m *model.Order) *OrderResponse {
 }
 
 type CheckoutRequest struct {
-	UserId        int        `json:"userId"`
 	PaymentMethod string     `json:"paymentMethod"`
 	AccountNumber string     `json:"accountNumber"`
 	AccountName   string     `json:"accountName"`
 	Items         []CartItem `json:"items"`
+}
+
+// CartIds gets id from all item in the order.
+func (r *CheckoutRequest) CartIds() []uint {
+	var ids []uint
+	for _, item := range r.Items {
+		ids = append(ids, item.Id)
+	}
+	return ids
 }
 
 type CartItem struct {

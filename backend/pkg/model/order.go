@@ -26,12 +26,27 @@ func (status OrderStatus) String() string {
 
 type Order struct {
 	gorm.Model
-	UserId        int
+	Username      string
 	PaymentMethod string
 	CartIds       string
 	Carts         []Cart
 	Status        OrderStatus
 	ShippingId    int
+}
+
+func (o *Order) SetCartIds(ids []uint) {
+	// this is stupid hack.
+	if ids != nil {
+		s := "{"
+		for i, id := range ids {
+			s += strconv.Itoa(int(id))
+			if i != len(ids)-1 {
+				s += ","
+			}
+		}
+		s += "}"
+		o.CartIds = s
+	}
 }
 
 // TotalPrice calculate total price of the items in one order.
@@ -44,7 +59,7 @@ func (o *Order) TotalPrice() types.Money {
 }
 
 func (o *Order) IntCartIds() []int {
-	// this is stupid hack.
+	// again, this is stupid hack.
 	var ids []int
 	s := strings.ReplaceAll(o.CartIds, "{", "")
 	s = strings.ReplaceAll(s, "}", "")

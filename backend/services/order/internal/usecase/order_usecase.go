@@ -2,8 +2,10 @@ package usecase
 
 import (
 	"context"
+	"errors"
 
 	"github.com/billykore/kore/backend/pkg/codes"
+	"github.com/billykore/kore/backend/pkg/ctxt"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/model"
@@ -28,16 +30,25 @@ func NewOrderUsecase(log *log.Logger, repo repo.OrderRepository) *OrderUsecase {
 }
 
 func (uc *OrderUsecase) Checkout(ctx context.Context, req entity.CheckoutRequest) error {
+	user, ok := ctxt.UserFromContext(ctx)
+	if !ok {
+		uc.log.Usecase("Checkout").Error(errors.New("failed to get user from context"))
+		return status.Error(codes.Internal, "Failed checkout order")
+	}
+
 	newOrder := model.Order{
-		UserId:        req.UserId,
+		Username:      user.Username,
 		PaymentMethod: req.PaymentMethod,
 		Status:        model.OrderStatusCreated,
 	}
+	newOrder.SetCartIds(req.CartIds())
+
 	err := uc.repo.Save(ctx, newOrder)
 	if err != nil {
 		uc.log.Usecase("Checkout").Error(err)
 		return status.Error(codes.Internal, err.Error())
 	}
+
 	return nil
 }
 

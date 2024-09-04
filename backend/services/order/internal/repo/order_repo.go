@@ -18,19 +18,19 @@ func NewPaymentRepository(db *gorm.DB) *OrderRepo {
 }
 
 func (r *OrderRepo) GetById(ctx context.Context, id uint) (*model.Order, error) {
-	q := "SELECT id, user_id, payment_method, cart_ids, status FROM orders WHERE id = $1"
+	q := "SELECT id, username, payment_method, cart_ids, status FROM orders WHERE id = $1"
 	tx := r.db.WithContext(ctx).Begin()
 	return getOrder(tx, q, id)
 }
 
 func (r *OrderRepo) GetByIdAndStatus(ctx context.Context, id uint, status model.OrderStatus) (*model.Order, error) {
-	q := "SELECT id, user_id, payment_method, cart_ids, status FROM orders WHERE id = $1 AND status = $2"
+	q := "SELECT id, username, payment_method, cart_ids, status FROM orders WHERE id = $1 AND status = $2"
 	tx := r.db.WithContext(ctx).Begin()
 	return getOrder(tx, q, id, status)
 }
 
 func (r *OrderRepo) GetByShippingId(ctx context.Context, shippingId uint) (*model.Order, error) {
-	q := "SELECT id, user_id, payment_method, cart_ids, status FROM orders WHERE shipping_id = $1"
+	q := "SELECT id, username, payment_method, cart_ids, status FROM orders WHERE shipping_id = $1"
 	tx := r.db.WithContext(ctx).Begin()
 	return getOrder(tx, q, shippingId)
 }
@@ -38,7 +38,7 @@ func (r *OrderRepo) GetByShippingId(ctx context.Context, shippingId uint) (*mode
 func getOrder(tx *gorm.DB, query string, args ...any) (*model.Order, error) {
 	order := new(model.Order)
 	row := tx.Raw(query, args...).Row()
-	err := row.Scan(&order.ID, &order.UserId, &order.PaymentMethod, &order.CartIds, &order.Status)
+	err := row.Scan(&order.ID, &order.Username, &order.PaymentMethod, &order.CartIds, &order.Status)
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +52,15 @@ func getOrder(tx *gorm.DB, query string, args ...any) (*model.Order, error) {
 }
 
 func (r *OrderRepo) Save(ctx context.Context, order model.Order) error {
-	tx := r.db.WithContext(ctx).Save(&order)
-	return tx.Error
+	q := "INSERT INTO orders (username, payment_method, cart_ids, status) VALUES ($1, $2, $3, $4)"
+	tx := r.db.WithContext(ctx).Begin()
+	tx = tx.Exec(q, order.Username, order.PaymentMethod, order.CartIds, order.Status)
+	if err := tx.Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
 }
 
 func (r *OrderRepo) UpdateStatus(ctx context.Context, id uint, newStatus model.OrderStatus, currentStatus ...model.OrderStatus) error {

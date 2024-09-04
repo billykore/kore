@@ -3,9 +3,10 @@ package server
 import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/log"
+	"github.com/billykore/kore/backend/pkg/middleware"
 	"github.com/billykore/kore/backend/services/order/internal/handler"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	echomiddleware "github.com/labstack/echo/v4/middleware"
 )
 
 type Router struct {
@@ -34,8 +35,9 @@ func (r *Router) setRoutes() {
 }
 
 func (r *Router) useMiddlewares() {
-	r.router.Use(middleware.Logger())
-	r.router.Use(middleware.Recover())
+	r.router.Use(echomiddleware.Logger())
+	r.router.Use(echomiddleware.Recover())
+	r.router.Use(echo.WrapMiddleware(middleware.Auth))
 }
 
 func (r *Router) run() {
