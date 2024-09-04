@@ -12,7 +12,7 @@ func NewJNE() *JNE {
 	return &JNE{JNECompanyName}
 }
 
-// Create new shipping.
+// Create new JNE shipping.
 func (jne *JNE) Create(data *Data) (*Response, error) {
 	return &Response{
 		Id:           699,

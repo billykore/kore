@@ -11,17 +11,20 @@ type Validator struct {
 	v *validator.Validate
 }
 
+// New returns new Validator.
 func New() *Validator {
 	return &Validator{
 		v: validator.New(),
 	}
 }
 
-func (v *Validator) Validate(in any) error {
-	err := v.v.Struct(in)
+// Validate any request. The request is expected to be a struct.
+func (v *Validator) Validate(req any) error {
+	err := v.v.Struct(req)
 	return validationErr(err)
 }
 
+// validationErr returns new validation error with custom message.
 func validationErr(err error) error {
 	var ve validator.ValidationErrors
 	var errs error
@@ -33,6 +36,7 @@ func validationErr(err error) error {
 	return errs
 }
 
+// errMessage return custom error message base on the validation tag.
 func errMessage(fe validator.FieldError) string {
 	switch fe.Tag() {
 	case "required":

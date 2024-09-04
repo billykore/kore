@@ -11,6 +11,8 @@ import (
 	"github.com/billykore/kore/backend/pkg/security/token"
 )
 
+// extractToken extract token from the request header.
+// The token is expected to be a Bearer token.
 func extractToken(req *http.Request) (string, error) {
 	headerToken := req.Header.Get("Authorization")
 	if headerToken == "" {
@@ -23,6 +25,10 @@ func extractToken(req *http.Request) (string, error) {
 	return tokenString[1], nil
 }
 
+// Auth middleware extract token from request header,
+// then parse user information from the token.
+// The user information then passed to the context
+// to be used in the services.
 func Auth(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		authToken, err := extractToken(req)

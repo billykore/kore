@@ -15,142 +15,6 @@
   },
   "endpoints": [
     {
-      "endpoint": "/api/v1/todos",
-      "method": "GET",
-      "output_encoding": "json",
-      "backend": [
-        {
-          "url_pattern": "/todos",
-          "encoding": "json",
-          "sd": "static",
-          "method": "GET",
-          "disable_host_sanitize": false,
-          "host": [
-            "http://monorepo-todo-service.default.svc.cluster.local:8000"
-          ]
-        }
-      ],
-      "input_query_strings": [
-        "isDone"
-      ],
-      "input_headers": [
-        "Authorization"
-      ],
-      "extra_config": {
-        "auth/validator": {
-          "alg": "HS256",
-          "jwk_local_path": "symmetric.json",
-          "disable_jwk_security": true,
-          "cache": false,
-          "operation_debug": true
-        }
-      }
-    },
-    {
-      "endpoint": "/api/v1/todos",
-      "method": "POST",
-      "output_encoding": "json",
-      "backend": [
-        {
-          "url_pattern": "/todos",
-          "encoding": "json",
-          "sd": "static",
-          "method": "POST",
-          "disable_host_sanitize": false,
-          "host": [
-            "http://monorepo-todo-service.default.svc.cluster.local:8000"
-          ]
-        }
-      ],
-      "extra_config": {
-        "auth/validator": {
-          "alg": "HS256",
-          "jwk_local_path": "symmetric.json",
-          "disable_jwk_security": true,
-          "cache": false,
-          "operation_debug": true
-        }
-      }
-    },
-    {
-      "endpoint": "/api/v1/todos/{id}",
-      "method": "GET",
-      "output_encoding": "json",
-      "backend": [
-        {
-          "url_pattern": "/todos/{id}",
-          "encoding": "json",
-          "sd": "static",
-          "method": "GET",
-          "disable_host_sanitize": false,
-          "host": [
-            "http://monorepo-todo-service.default.svc.cluster.local:8000"
-          ]
-        }
-      ],
-      "extra_config": {
-        "auth/validator": {
-          "alg": "HS256",
-          "jwk_local_path": "symmetric.json",
-          "disable_jwk_security": true,
-          "cache": false,
-          "operation_debug": true
-        }
-      }
-    },
-    {
-      "endpoint": "/api/v1/todos/{id}",
-      "method": "PUT",
-      "output_encoding": "json",
-      "backend": [
-        {
-          "url_pattern": "/todos/{id}",
-          "encoding": "json",
-          "sd": "static",
-          "method": "PUT",
-          "disable_host_sanitize": false,
-          "host": [
-            "http://monorepo-todo-service.default.svc.cluster.local:8000"
-          ]
-        }
-      ],
-      "extra_config": {
-        "auth/validator": {
-          "alg": "HS256",
-          "jwk_local_path": "symmetric.json",
-          "disable_jwk_security": true,
-          "cache": false,
-          "operation_debug": true
-        }
-      }
-    },
-    {
-      "endpoint": "/api/v1/todos/{id}",
-      "method": "DELETE",
-      "output_encoding": "json",
-      "backend": [
-        {
-          "url_pattern": "/todos/{id}",
-          "encoding": "json",
-          "sd": "static",
-          "method": "DELETE",
-          "disable_host_sanitize": false,
-          "host": [
-            "http://monorepo-todo-service.default.svc.cluster.local:8000"
-          ]
-        }
-      ],
-      "extra_config": {
-        "auth/validator": {
-          "alg": "HS256",
-          "jwk_local_path": "symmetric.json",
-          "disable_jwk_security": true,
-          "cache": false,
-          "operation_debug": true
-        }
-      }
-    },
-    {
       "endpoint": "/api/v1/login",
       "method": "POST",
       "output_encoding": "json",
@@ -180,38 +44,138 @@
       }
     },
     {
-      "endpoint": "/api/v1/otp/send",
-      "method": "POST",
+      "endpoint": "/api/v1/products",
+      "method": "GET",
       "output_encoding": "json",
       "backend": [
         {
-          "url_pattern": "/otp/send",
+          "url_pattern": "/products",
           "encoding": "json",
           "sd": "static",
-          "method": "POST",
+          "method": "GET",
+          "disable_host_sanitize": false,
           "host": [
-            "http://monorepo-otp-service.default.svc.cluster.local:8000"
-          ],
-          "disable_host_sanitize": false
+            "http://monorepo-product-service.default.svc.cluster.local:8000"
+          ]
+        }
+      ],
+      "input_query_strings": [
+        "limit",
+        "start"
+      ]
+    },
+    {
+      "endpoint": "/api/v1/products/{id}",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/products/{id}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://monorepo-product-service.default.svc.cluster.local:8000"
+          ]
         }
       ]
     },
     {
-      "endpoint": "/api/v1/otp/verify",
+      "endpoint": "/api/v1/categories",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/categories",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://monorepo-product-service.default.svc.cluster.local:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/discounts",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/discounts",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://monorepo-product-service.default.svc.cluster.local:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/carts",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/carts",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://monorepo-product-service.default.svc.cluster.local:8000"
+          ]
+        }
+      ],
+      "input_query_strings": [
+        "limit",
+        "start"
+      ],
+      "input_headers": [
+        "Authorization"
+      ],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "HS256",
+          "jwk_local_path": "symmetric.json",
+          "disable_jwk_security": true,
+          "cache": false,
+          "operation_debug": true
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/carts",
       "method": "POST",
       "output_encoding": "json",
       "backend": [
         {
-          "url_pattern": "/otp/verify",
+          "url_pattern": "/carts",
           "encoding": "json",
           "sd": "static",
           "method": "POST",
+          "disable_host_sanitize": false,
           "host": [
-            "http://monorepo-otp-service.default.svc.cluster.local:8000"
-          ],
-          "disable_host_sanitize": false
+            "http://monorepo-product-service.default.svc.cluster.local:8000"
+          ]
         }
-      ]
+      ],
+      "input_headers": [
+        "Authorization"
+      ],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "HS256",
+          "jwk_local_path": "symmetric.json",
+          "disable_jwk_security": true,
+          "cache": false,
+          "operation_debug": true
+        }
+      }
     }
   ]
 }
