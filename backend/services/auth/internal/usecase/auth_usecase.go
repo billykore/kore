@@ -11,11 +11,11 @@ import (
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/messages"
 	"github.com/billykore/kore/backend/pkg/model"
-	"github.com/billykore/kore/backend/pkg/perrors"
 	"github.com/billykore/kore/backend/pkg/repo"
 	"github.com/billykore/kore/backend/pkg/security/password"
 	"github.com/billykore/kore/backend/pkg/security/token"
 	"github.com/billykore/kore/backend/pkg/status"
+	"github.com/billykore/kore/backend/pkg/svcerr"
 	"github.com/billykore/kore/backend/pkg/uuid"
 )
 
@@ -79,7 +79,7 @@ func (uc *AuthUsecase) Login(ctx context.Context, req entity.LoginRequest) (*ent
 func (uc *AuthUsecase) Logout(ctx context.Context, req entity.LogoutRequest) (*entity.LogoutResponse, error) {
 	user, ok := ctxt.UserFromContext(ctx)
 	if !ok {
-		uc.log.Usecase("Logout").Error(errors.New("failed to get user from context"))
+		uc.log.Usecase("Logout").Error(ctxt.ErrGetUserFromContext)
 		return nil, status.Error(codes.Unauthenticated, messages.LogoutFailed)
 	}
 
@@ -87,7 +87,7 @@ func (uc *AuthUsecase) Logout(ctx context.Context, req entity.LogoutRequest) (*e
 		Id:       req.LoginId,
 		Username: user.Username,
 	})
-	if err != nil && errors.Is(err, perrors.ErrAlreadyLoggedOut) {
+	if err != nil && errors.Is(err, svcerr.ErrAlreadyLoggedOut) {
 		uc.log.Usecase("Logout").Errorf("failed to save logout activity: %v", err)
 		return nil, status.Error(codes.Unauthenticated, messages.UserAlreadyLoggedOut)
 	}

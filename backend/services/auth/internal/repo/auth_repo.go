@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/billykore/kore/backend/pkg/model"
-	"github.com/billykore/kore/backend/pkg/perrors"
+	"github.com/billykore/kore/backend/pkg/svcerr"
 	"gorm.io/gorm"
 )
 
@@ -88,7 +88,7 @@ func saveLogoutActivity(ctx context.Context, tx *gorm.DB, auth *model.AuthActivi
 		return err
 	}
 	if auth.IsLoggedOut {
-		return perrors.ErrAlreadyLoggedOut
+		return svcerr.ErrAlreadyLoggedOut
 	}
 	return nil
 }

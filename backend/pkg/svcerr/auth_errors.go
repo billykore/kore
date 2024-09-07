@@ -1,4 +1,4 @@
-package perrors
+package svcerr
 
 import "errors"
 

@@ -30,22 +30,24 @@ func (r *CartRepo) List(ctx context.Context, username string, limit, startId int
 	return carts, tx.Error
 }
 
-func (r *CartRepo) Save(ctx context.Context, item model.Cart) error {
-	tx := r.db.WithContext(ctx).Save(&item)
+func (r *CartRepo) Save(ctx context.Context, cart model.Cart) error {
+	tx := r.db.WithContext(ctx).Save(&cart)
 	return tx.Error
 }
 
-func (r *CartRepo) Update(ctx context.Context, id, quantity int) error {
+func (r *CartRepo) Update(ctx context.Context, id int, cart model.Cart) error {
 	tx := r.db.WithContext(ctx).
-		Model(&model.Cart{}).
+		Model(&cart).
 		Where("id = ?", id).
-		Update("quantity", quantity)
+		Where("username = ?", cart.Username).
+		Update("quantity", cart.Quantity)
 	return tx.Error
 }
 
-func (r *CartRepo) Delete(ctx context.Context, id int) error {
+func (r *CartRepo) Delete(ctx context.Context, id int, cart model.Cart) error {
 	tx := r.db.WithContext(ctx).
 		Where("id = ?", id).
-		Delete(&model.Cart{})
+		Where("username = ?", cart.Username).
+		Delete(&cart)
 	return tx.Error
 }

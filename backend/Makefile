@@ -63,14 +63,14 @@ create-migration:
 	@echo "Create migration..."
 	@migrate create -ext sql -dir pkg/db/migrations -seq $(name)
 
-# make migrate-up step=1
+# make migrate-up dsn=postgres://user:password@localhost:5432/db?sslmode=disable step=1
 .PHONY: migrate-up
 migrate-up:
 	@echo "Migrate up..."
-	@migrate -path pkg/db/migrations -database 'postgres://postgres:postgres@localhost:5432/kore?sslmode=disable' -verbose up $(step)
+	@migrate -path pkg/db/migrations -database $(dsn) -verbose up $(step)
 
-# make migrate-down step=1
+# make migrate-down dsn=postgres://user:password@localhost:5432/db?sslmode=disable step=1
 .PHONY: migrate-down
 migrate-down:
 	@echo "Migrate down..."
-	@migrate -path pkg/db/migrations -database 'postgres://postgres:postgres@localhost:5432/kore?sslmode=disable' -verbose down $(step)
+	@migrate -path pkg/db/migrations -database $(dsn) -verbose down $(step)

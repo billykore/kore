@@ -2,9 +2,12 @@ package ctxt
 
 import (
 	"context"
+	"errors"
 
 	"github.com/billykore/kore/backend/pkg/entity"
 )
+
+var ErrGetUserFromContext = errors.New("failed to get user from context")
 
 const UserKey = "user"
 

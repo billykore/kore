@@ -14,7 +14,7 @@ const (
 	creditCard = "Credit Card"
 )
 
-// NewPayment return instance or PaymentMethod.
+// NewPayment return new instance of PaymentMethod.
 func NewPayment(method, name, account string) PaymentMethod {
 	switch method {
 	case gopay:
