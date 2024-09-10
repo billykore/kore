@@ -45,7 +45,7 @@
           "sd": "static",
           "method": "POST",
           "host": [
-            "http://monorepo-auth-service.default.svc.cluster.local:8000"
+            "http://auth-service.default.svc.cluster.local:8000"
           ],
           "disable_host_sanitize": false
         }
@@ -75,7 +75,7 @@
           "method": "GET",
           "disable_host_sanitize": false,
           "host": [
-            "http://monorepo-product-service.default.svc.cluster.local:8000"
+            "http://product-service.default.svc.cluster.local:8000"
           ]
         }
       ],
@@ -96,7 +96,7 @@
           "method": "GET",
           "disable_host_sanitize": false,
           "host": [
-            "http://monorepo-product-service.default.svc.cluster.local:8000"
+            "http://product-service.default.svc.cluster.local:8000"
           ]
         }
       ]
@@ -113,7 +113,7 @@
           "method": "GET",
           "disable_host_sanitize": false,
           "host": [
-            "http://monorepo-product-service.default.svc.cluster.local:8000"
+            "http://product-service.default.svc.cluster.local:8000"
           ]
         }
       ]
@@ -130,7 +130,7 @@
           "method": "GET",
           "disable_host_sanitize": false,
           "host": [
-            "http://monorepo-product-service.default.svc.cluster.local:8000"
+            "http://product-service.default.svc.cluster.local:8000"
           ]
         }
       ]
@@ -147,7 +147,7 @@
           "method": "GET",
           "disable_host_sanitize": false,
           "host": [
-            "http://monorepo-product-service.default.svc.cluster.local:8000"
+            "http://product-service.default.svc.cluster.local:8000"
           ]
         }
       ],
@@ -180,7 +180,7 @@
           "method": "POST",
           "disable_host_sanitize": false,
           "host": [
-            "http://monorepo-product-service.default.svc.cluster.local:8000"
+            "http://product-service.default.svc.cluster.local:8000"
           ]
         }
       ],

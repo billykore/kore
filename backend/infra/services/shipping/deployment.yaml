@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: monorepo-todo-app
+  name: shipping-app
   labels:
-    name: monorepo-todo-app
+    name: shipping-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: monorepo-todo-service
+      name: shipping-service
   template:
     metadata:
-      name: monorepo-todo-service
+      name: shipping-service
       labels:
-        name: monorepo-todo-service
+        name: shipping-service
     spec:
       containers:
-        - name: monorepo-todo-app
-          image: billykore/monorepo-todo:latest
+        - name: shipping-app
+          image: billykore/shipping-service:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: monorepo-todo-env
+                name: shipping-service-env
           resources:
             requests:
               cpu: 100m
@@ -30,19 +30,21 @@ spec:
               cpu: 300m
               memory: 300Mi
       restartPolicy: Always
-      automountServiceAccountToken: false
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: monorepo-todo-service
+  name: shipping-service
 spec:
   selector:
-    name: monorepo-todo-service
+    name: shipping-service
   ports:
     - name: "http"
       port: 8000
       targetPort: 8000
+    - name: "grpc"
+      port: 9000
+      targetPort: 9000
   type: ClusterIP

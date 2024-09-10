@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: monorepo-gateway
+  name: gateway
 spec:
   selector:
     matchLabels:
-      app: monorepo-gateway-service
+      app: gateway-service
   replicas: 1
   template:
     metadata:
       labels:
-        app: monorepo-gateway-service
+        app: gateway-service
     spec:
       automountServiceAccountToken: false
       containers:
-        - name: monorepo-gateway
-          image: billykore/monorepo-gateway:latest
+        - name: gateway
+          image: billykore/gateway:latest
           ports:
             - containerPort: 3000
           imagePullPolicy: Always
@@ -47,7 +47,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: monorepo-gateway-service
+  name: gateway-service
 spec:
   type: NodePort
   ports:
@@ -56,4 +56,4 @@ spec:
       targetPort: 3000
       protocol: TCP
   selector:
-    app: monorepo-gateway-service
+    app: gateway-service

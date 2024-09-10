@@ -13,7 +13,7 @@ build_gateway() {
     exit 1
   fi
 
-  IMAGE_NAME=billykore/monorepo-gateway:latest
+  IMAGE_NAME=billykore/gateway:latest
 
   # build Docker image.
   echo "Build image..."
@@ -37,7 +37,7 @@ build_service() {
     exit 1
   fi
 
-  IMAGE_NAME=billykore/monorepo-$SERVICE:latest
+  IMAGE_NAME=billykore/$SERVICE-service:latest
 
   # build Docker image.
   echo "Build image..."

@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: monorepo-product-app
+  name: chat-app
   labels:
-    name: monorepo-product-app
+    name: chat-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: monorepo-product-service
+      name: chat-service
   template:
     metadata:
-      name: monorepo-product-service
+      name: chat-service
       labels:
-        name: monorepo-product-service
+        name: chat-service
     spec:
       containers:
-        - name: monorepo-product-app
-          image: billykore/monorepo-product:latest
+        - name: chat-app
+          image: billykore/chat-service:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: monorepo-product-env
+                name: chat-service-env
           resources:
             requests:
               cpu: 100m
@@ -36,10 +36,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: monorepo-product-service
+  name: chat-service
 spec:
   selector:
-    name: monorepo-product-service
+    name: chat-service
   ports:
     - name: "http"
       port: 8000

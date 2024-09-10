@@ -16,12 +16,12 @@ func NewDiscountHandler(uc *usecase.DiscountUsecase) *DiscountHandler {
 	}
 }
 
-func (s *DiscountHandler) GetDiscountList(ctx echo.Context) error {
+func (h *DiscountHandler) GetDiscountList(ctx echo.Context) error {
 	var req entity.DiscountRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
-	discounts, err := s.uc.GetDiscountList(ctx.Request().Context(), req)
+	discounts, err := h.uc.GetDiscountList(ctx.Request().Context(), req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}

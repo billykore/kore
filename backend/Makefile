@@ -1,76 +1,81 @@
-# make build-gateway-image
-.PHONY: build-gateway-image
-build-gateway-image:
-	@./scripts/build.sh "gateway"
-
-# make build-image service=todo
+# Examples:
+# make build-image kind=gateway
+# make build-image kind=service name=auth
 .PHONY: build-image
 build-image:
-	@./scripts/build.sh "service" $(service)
+	@./scripts/build.sh $(kind) $(name)
 
-# make deploy-gateway
-.PHONY: deploy-gateway
-deploy-gateway:
-	@./scripts/deployment.sh "gateway"
-
-# make deploy service=todo
+# Examples:
+# make deploy kind=gateway
+# make deploy kind=service name=auth
+# make deploy kind=database name=postgres
 .PHONY: deploy
 deploy:
-	@./scripts/deployment.sh "service" $(service)
+	@./scripts/deployment.sh $(kind) $(name)
 
+# Examples:
 # make generate-wire service=product
 .PHONY: generate-wire
 generate-wire:
 	@./scripts/wire.sh $(service)
 
-# make generate-proto proto=todo.proto
+# Examples:
+# make generate-proto proto=auth.proto
 .PHONY: generate-proto
 generate-proto:
 	@./scripts/grpc.sh $(proto)
 
+# Examples:
 # make generate
 .PHONY: generate
 generate: \
 	generate-proto \
 	generate-wire
 
-# make run service=todo
+# Examples:
+# make run service=auth
 .PHONY: run
 run:
 	@echo "Run app..."
 	@go run ./services/$(service)/cmd
 
+# Examples:
 # make install-cli
 .PHONY: install-cli
 install-cli:
 	@echo "Install monorepo CLI..."
 	@go install ./korecli
 
+# Examples:
 # make gazelle-update-repos
 .PHONY: gazelle-update-repos
 gazelle-update-repos:
 	@bazel run //:gazelle
 
-# make bazel-run service=todo
+# Examples:
+# make bazel-run service=auth
 .PHONY: bazel-run
 bazel-run:
 	@echo "Run $(service) service with bazel..."
 	@bazel run //services/$(service)/cmd
 
+# Examples:
 # make create-migration name=create_table_products
 .PHONY: create-migration
 create-migration:
 	@echo "Create migration..."
 	@migrate create -ext sql -dir pkg/db/migrations -seq $(name)
 
-# make migrate-up dsn=postgres://user:password@localhost:5432/db?sslmode=disable step=1
+# Examples:
+# make migrate-up db=auth user=db_user password=db_password step=1
 .PHONY: migrate-up
 migrate-up:
 	@echo "Migrate up..."
-	@migrate -path pkg/db/migrations -database $(dsn) -verbose up $(step)
+	@migrate -path pkg/db/migrations/$(db) -database 'postgres://$(user):$(password)@localhost:5432/$(db)?sslmode=disable' -verbose up $(step)
 
-# make migrate-down dsn=postgres://user:password@localhost:5432/db?sslmode=disable step=1
+# Examples:
+# make migrate-down db=auth user=db_user password=db_password step=1
 .PHONY: migrate-down
 migrate-down:
 	@echo "Migrate down..."
-	@migrate -path pkg/db/migrations -database $(dsn) -verbose down $(step)
+	@migrate -path pkg/db/migrations/$(db) -database 'postgres://$(user):$(password)@localhost:5432/$(db)?sslmode=disable' -verbose down $(step)

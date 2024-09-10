@@ -14,24 +14,24 @@ func NewProductHandler(uc *usecase.ProductUsecase) *ProductHandler {
 	return &ProductHandler{uc: uc}
 }
 
-func (s *ProductHandler) GetProductList(ctx echo.Context) error {
+func (h *ProductHandler) GetProductList(ctx echo.Context) error {
 	var req entity.ProductRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
-	products, err := s.uc.GetProductList(ctx.Request().Context(), req)
+	products, err := h.uc.GetProductList(ctx.Request().Context(), req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
 	return ctx.JSON(entity.ResponseSuccess(products))
 }
 
-func (s *ProductHandler) GetProductById(ctx echo.Context) error {
+func (h *ProductHandler) GetProductById(ctx echo.Context) error {
 	var req entity.ProductRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
-	product, err := s.uc.GetProductById(ctx.Request().Context(), req)
+	product, err := h.uc.GetProductById(ctx.Request().Context(), req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}

@@ -16,8 +16,8 @@ func NewProductCategoryHandler(uc *usecase.ProductCategoryUsecase) *ProductCateg
 	}
 }
 
-func (s *ProductCategoryHandler) GetCategoryList(ctx echo.Context) error {
-	categories, err := s.uc.GetCategoryList(ctx.Request().Context())
+func (h *ProductCategoryHandler) GetCategoryList(ctx echo.Context) error {
+	categories, err := h.uc.GetCategoryList(ctx.Request().Context())
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}

@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: monorepo-otp-app
+  name: otp-app
   labels:
-    name: monorepo-otp-app
+    name: otp-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: monorepo-otp-service
+      name: otp-service
   template:
     metadata:
-      name: monorepo-otp-service
+      name: otp-service
       labels:
-        name: monorepo-otp-service
+        name: otp-service
     spec:
       containers:
-        - name: monorepo-otp-app
-          image: billykore/monorepo-otp:latest
+        - name: otp-app
+          image: billykore/otp-service:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: monorepo-otp-env
+                name: otp-service-env
           resources:
             requests:
               cpu: 100m
@@ -36,10 +36,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: monorepo-otp-service
+  name: otp-service
 spec:
   selector:
-    name: monorepo-otp-service
+    name: otp-service
   ports:
     - name: "http"
       port: 8000

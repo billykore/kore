@@ -28,7 +28,6 @@ and a protobuf inside the  file that look something like this:
     ├── services/
     │   └── todo/
     │       ├── cmd/         # Contains main.go and wire.go injector files.
-    │       ├── deployment/  # Kubernetes deployment configs.
     │       ├── internal/    # Application internal.
     │       │   ├── repo/    # Service repositories.
     │       │   ├── server/  # Service http and gRPC servers.
@@ -117,9 +116,6 @@ func (d *createData) create() error {
 		return err
 	}
 	if err := d.createCmd(svcPath); err != nil {
-		return err
-	}
-	if err := d.createDeployment(svcPath); err != nil {
 		return err
 	}
 	if err := d.createDockerfile(svcPath); err != nil {
@@ -287,34 +283,6 @@ func (d *createData) createCmd(path string) error {
 	}
 	wireTpl := template.Must(template.New("wire").Parse(string(tpl.WireTemplate())))
 	if err := wireTpl.Execute(wireFile, d); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (d *createData) createDeployment(path string) error {
-	deploymentPath := fmt.Sprintf("%s/deployment", path)
-
-	if err := os.Mkdir(deploymentPath, 0754); err != nil {
-		return err
-	}
-
-	deploymentFile, err := os.Create(fmt.Sprintf("%s/deployment.yaml", deploymentPath))
-	if err != nil {
-		return err
-	}
-	deploymentTpl := template.Must(template.New("main").Parse(string(tpl.DeploymentTemplate())))
-	if err := deploymentTpl.Execute(deploymentFile, d); err != nil {
-		return err
-	}
-
-	envFile, err := os.Create(fmt.Sprintf("%s/env.yaml", deploymentPath))
-	if err != nil {
-		return err
-	}
-	envTpl := template.Must(template.New("main").Parse(string(tpl.EnvTemplate())))
-	if err := envTpl.Execute(envFile, d); err != nil {
 		return err
 	}
 

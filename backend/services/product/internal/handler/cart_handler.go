@@ -16,48 +16,48 @@ func NewCartHandler(uc *usecase.CartUsecase) *CartHandler {
 	}
 }
 
-func (s *CartHandler) GetCartItemList(ctx echo.Context) error {
+func (h *CartHandler) GetCartItemList(ctx echo.Context) error {
 	var req entity.CartRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
-	items, err := s.uc.GetCartItemList(ctx.Request().Context(), req)
+	items, err := h.uc.GetCartItemList(ctx.Request().Context(), req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
 	return ctx.JSON(entity.ResponseSuccess(items))
 }
 
-func (s *CartHandler) AddCartItem(ctx echo.Context) error {
+func (h *CartHandler) AddCartItem(ctx echo.Context) error {
 	var req entity.AddCartItemRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
-	err := s.uc.AddCartItem(ctx.Request().Context(), req)
+	err := h.uc.AddCartItem(ctx.Request().Context(), req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
 	return ctx.JSON(entity.ResponseSuccessNilData())
 }
 
-func (s *CartHandler) UpdateCartItemQuantity(ctx echo.Context) error {
+func (h *CartHandler) UpdateCartItemQuantity(ctx echo.Context) error {
 	var req entity.UpdateCartItemRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
-	err := s.uc.UpdateCartItemQuantity(ctx.Request().Context(), req)
+	err := h.uc.UpdateCartItemQuantity(ctx.Request().Context(), req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
 	return ctx.JSON(entity.ResponseSuccessNilData())
 }
 
-func (s *CartHandler) DeleteCartItem(ctx echo.Context) error {
+func (h *CartHandler) DeleteCartItem(ctx echo.Context) error {
 	var req entity.DeleteCartItemRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
-	err := s.uc.DeleteCartItem(ctx.Request().Context(), req)
+	err := h.uc.DeleteCartItem(ctx.Request().Context(), req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}

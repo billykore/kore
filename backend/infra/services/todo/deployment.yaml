@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: monorepo-chat-app
+  name: todo-app
   labels:
-    name: monorepo-chat-app
+    name: todo-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: monorepo-chat-service
+      name: todo-service
   template:
     metadata:
-      name: monorepo-chat-service
+      name: todo-service
       labels:
-        name: monorepo-chat-service
+        name: todo-service
     spec:
       containers:
-        - name: monorepo-chat-app
-          image: billykore/monorepo-chat:latest
+        - name: todo-app
+          image: billykore/todo-service:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: monorepo-chat-env
+                name: todo-service-env
           resources:
             requests:
               cpu: 100m
@@ -30,16 +30,17 @@ spec:
               cpu: 300m
               memory: 300Mi
       restartPolicy: Always
+      automountServiceAccountToken: false
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: monorepo-chat-service
+  name: todo-service
 spec:
   selector:
-    name: monorepo-chat-service
+    name: todo-service
   ports:
     - name: "http"
       port: 8000

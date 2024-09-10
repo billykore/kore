@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: monorepo-auth-app
+  name: order-app
   labels:
-    name: monorepo-auth-app
+    name: order-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: monorepo-auth-service
+      name: order-service
   template:
     metadata:
-      name: monorepo-auth-service
+      name: order-service
       labels:
-        name: monorepo-auth-service
+        name: order-service
     spec:
       containers:
-        - name: monorepo-auth-app
-          image: billykore/monorepo-auth:latest
+        - name: order-app
+          image: billykore/order-service:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: monorepo-auth-env
+                name: order-service-env
           resources:
             requests:
               cpu: 100m
@@ -36,10 +36,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: monorepo-auth-service
+  name: order-service
 spec:
   selector:
-    name: monorepo-auth-service
+    name: order-service
   ports:
     - name: "http"
       port: 8000
