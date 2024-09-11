@@ -4,7 +4,7 @@
   "name": "Monorepo Gateway",
   "timeout": "10000ms",
   "cache_ttl": "300s",
-  "output_encoding": "json",
+  "output_encoding": "no-op",
   "port": 3000,
   "extra_config": {
     "telemetry/logging": {
@@ -27,7 +27,7 @@
         "Content-Type"
       ],
       "allow_headers": [
-        "Accept-Language"
+        "Authorization"
       ],
       "max_age": "12h",
       "allow_credentials": false
@@ -37,7 +37,6 @@
     {
       "endpoint": "/api/v1/login",
       "method": "POST",
-      "output_encoding": "json",
       "backend": [
         {
           "url_pattern": "/login",
@@ -49,24 +48,11 @@
           ],
           "disable_host_sanitize": false
         }
-      ],
-      "extra_config": {
-        "auth/signer": {
-          "alg": "HS256",
-          "jwk_local_path": "symmetric.json",
-          "keys_to_sign": [
-            "accessToken",
-            "expiredTime"
-          ],
-          "kid": "drPB_Wlr8gCYSaNp4GxJi6w61b8N1oosZQ8sxD9R1Is",
-          "disable_jwk_security": true
-        }
-      }
+      ]
     },
     {
       "endpoint": "/api/v1/products",
       "method": "GET",
-      "output_encoding": "json",
       "backend": [
         {
           "url_pattern": "/products",
@@ -87,7 +73,6 @@
     {
       "endpoint": "/api/v1/products/{id}",
       "method": "GET",
-      "output_encoding": "json",
       "backend": [
         {
           "url_pattern": "/products/{id}",
@@ -104,7 +89,6 @@
     {
       "endpoint": "/api/v1/categories",
       "method": "GET",
-      "output_encoding": "json",
       "backend": [
         {
           "url_pattern": "/categories",
@@ -121,7 +105,6 @@
     {
       "endpoint": "/api/v1/discounts",
       "method": "GET",
-      "output_encoding": "json",
       "backend": [
         {
           "url_pattern": "/discounts",
@@ -138,7 +121,6 @@
     {
       "endpoint": "/api/v1/carts",
       "method": "GET",
-      "output_encoding": "json",
       "backend": [
         {
           "url_pattern": "/carts",
@@ -171,7 +153,6 @@
     {
       "endpoint": "/api/v1/carts",
       "method": "POST",
-      "output_encoding": "json",
       "backend": [
         {
           "url_pattern": "/carts",
@@ -196,6 +177,38 @@
           "operation_debug": true
         }
       }
+    },
+    {
+      "endpoint": "/api/v1/otp/send",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/otp/send",
+          "encoding": "json",
+          "sd": "static",
+          "method": "POST",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://otp-service.default.svc.cluster.local:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/otp/verify",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/otp/verify",
+          "encoding": "json",
+          "sd": "static",
+          "method": "POST",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://otp-service.default.svc.cluster.local:8000"
+          ]
+        }
+      ]
     }
   ]
 }
