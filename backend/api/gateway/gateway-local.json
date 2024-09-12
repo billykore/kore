@@ -1,0 +1,214 @@
+{
+  "$schema": "https://www.krakend.io/schema/krakend.json",
+  "version": 3,
+  "name": "Monorepo Gateway",
+  "timeout": "10000ms",
+  "cache_ttl": "300s",
+  "output_encoding": "no-op",
+  "port": 3000,
+  "extra_config": {
+    "telemetry/logging": {
+      "level": "ERROR",
+      "syslog": false,
+      "stdout": true
+    },
+    "security/cors": {
+      "allow_origins": [
+        "*"
+      ],
+      "allow_methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "expose_headers": [
+        "Content-Length",
+        "Content-Type"
+      ],
+      "allow_headers": [
+        "Authorization"
+      ],
+      "max_age": "12h",
+      "allow_credentials": false
+    }
+  },
+  "endpoints": [
+    {
+      "endpoint": "/api/v1/login",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/login",
+          "encoding": "json",
+          "sd": "static",
+          "method": "POST",
+          "host": [
+            "http://localhost:8000"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/products",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/products",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://localhost:8000"
+          ]
+        }
+      ],
+      "input_query_strings": [
+        "limit",
+        "start"
+      ]
+    },
+    {
+      "endpoint": "/api/v1/products/{id}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/products/{id}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://localhost:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/categories",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/categories",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://localhost:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/discounts",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/discounts",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://localhost:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/carts",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/carts",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://localhost:8000"
+          ]
+        }
+      ],
+      "input_query_strings": [
+        "limit",
+        "start"
+      ],
+      "input_headers": [
+        "Authorization"
+      ],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "HS256",
+          "jwk_local_path": "symmetric.json",
+          "disable_jwk_security": true,
+          "cache": false,
+          "operation_debug": true
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/carts",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/carts",
+          "encoding": "json",
+          "sd": "static",
+          "method": "POST",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://localhost:8000"
+          ]
+        }
+      ],
+      "input_headers": [
+        "Authorization"
+      ],
+      "extra_config": {
+        "auth/validator": {
+          "alg": "HS256",
+          "jwk_local_path": "symmetric.json",
+          "disable_jwk_security": true,
+          "cache": false,
+          "operation_debug": true
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/otp/send",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/otp/send",
+          "encoding": "json",
+          "sd": "static",
+          "method": "POST",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://localhost:8000"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/otp/verify",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/otp/verify",
+          "encoding": "json",
+          "sd": "static",
+          "method": "POST",
+          "disable_host_sanitize": false,
+          "host": [
+            "http://localhost:8000"
+          ]
+        }
+      ]
+    }
+  ]
+}

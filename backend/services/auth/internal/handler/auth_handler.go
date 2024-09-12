@@ -18,7 +18,7 @@ func (s *AuthHandler) Login(ctx echo.Context) error {
 	var req entity.LoginRequest
 	err := ctx.Bind(&req)
 	if err != nil {
-		return ctx.JSON(entity.ResponseError(err))
+		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
 	token, err := s.uc.Login(ctx.Request().Context(), req)
 	if err != nil {
@@ -31,7 +31,7 @@ func (s *AuthHandler) Logout(ctx echo.Context) error {
 	var req entity.LogoutRequest
 	err := ctx.Bind(&req)
 	if err != nil {
-		return ctx.JSON(entity.ResponseError(err))
+		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
 	logout, err := s.uc.Logout(ctx.Request().Context(), req)
 	if err != nil {

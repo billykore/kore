@@ -81,7 +81,7 @@ func (r *AuthRepo) Logout(ctx context.Context, auth *model.AuthActivities) error
 
 func saveLogoutActivity(ctx context.Context, tx *gorm.DB, auth *model.AuthActivities) error {
 	res := tx.WithContext(ctx).
-		Where("id = ?", auth.Id).
+		Where("uuid = ?", auth.UUID).
 		Where("username = ?", auth.Username).
 		First(auth)
 	if err := res.Error; err != nil {
@@ -96,7 +96,7 @@ func saveLogoutActivity(ctx context.Context, tx *gorm.DB, auth *model.AuthActivi
 func updateLogoutData(ctx context.Context, tx *gorm.DB, auth *model.AuthActivities) error {
 	res := tx.WithContext(ctx).
 		Model(auth).
-		Where("id = ?", auth.Id).
+		Where("uuid = ?", auth.UUID).
 		UpdateColumn("logout_time", time.Now()).
 		UpdateColumn("is_logged_out", true)
 	err := res.Error

@@ -1,11 +1,15 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type AuthActivities struct {
-	Id          string
+	gorm.Model
+	UUID        string
 	Username    string
-	Token       string
 	LoginTime   time.Time
 	LogoutTime  time.Time
 	IsLoggedOut bool

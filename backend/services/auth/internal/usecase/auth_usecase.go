@@ -59,9 +59,8 @@ func (uc *AuthUsecase) Login(ctx context.Context, req entity.LoginRequest) (*ent
 	}
 
 	err = uc.authRepo.Login(ctx, &model.AuthActivities{
-		Id:        id,
+		UUID:      id,
 		Username:  req.Username,
-		Token:     t.AccessToken,
 		LoginTime: time.Now(),
 	})
 	if err != nil {
@@ -84,7 +83,7 @@ func (uc *AuthUsecase) Logout(ctx context.Context, req entity.LogoutRequest) (*e
 	}
 
 	err := uc.authRepo.Logout(ctx, &model.AuthActivities{
-		Id:       req.LoginId,
+		UUID:     req.LoginId,
 		Username: user.Username,
 	})
 	if err != nil && errors.Is(err, svcerr.ErrAlreadyLoggedOut) {
