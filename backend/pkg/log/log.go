@@ -2,8 +2,10 @@ package log
 
 import (
 	"fmt"
+	"os"
 	"sync"
 
+	"go.elastic.co/ecszap"
 	"go.uber.org/zap"
 )
 
@@ -28,9 +30,10 @@ func NewLogger() *Logger {
 }
 
 func newLogger() *zap.Logger {
-	zapLogger, _ := zap.NewProduction()
-	_ = zapLogger.Sync()
-	return zapLogger
+	encoderConfig := ecszap.NewDefaultEncoderConfig()
+	core := ecszap.NewCore(encoderConfig, os.Stdout, zap.InfoLevel)
+	logger := zap.New(core, zap.AddStacktrace(zap.ErrorLevel))
+	return logger
 }
 
 // Usecase set the usecase that throw the log.

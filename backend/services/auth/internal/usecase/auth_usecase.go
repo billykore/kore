@@ -36,13 +36,13 @@ func NewAuthUsecase(log *log.Logger, userRepo repo.UserRepository, authRepo repo
 func (uc *AuthUsecase) Login(ctx context.Context, req entity.LoginRequest) (*entity.Token, error) {
 	user, err := uc.userRepo.GetByUsername(ctx, req.Username)
 	if err != nil {
-		uc.log.Usecase("Login").Errorf("failed to get user by username %s: %v", req.Username, err)
+		uc.log.Usecase("Login").Errorf("failed to get user by username (%s): %v", req.Username, err)
 		return nil, status.Error(codes.BadRequest, messages.InvalidUsernameOrPassword)
 	}
 
 	err = password.Verify(user.Password, req.Password)
 	if err != nil {
-		uc.log.Usecase("Login").Errorf("failed to verify user %s password: %v", user.Username, err)
+		uc.log.Usecase("Login").Errorf("failed to verify user (%s) password: %v", user.Username, err)
 		return nil, status.Error(codes.BadRequest, messages.InvalidUsernameOrPassword)
 	}
 
