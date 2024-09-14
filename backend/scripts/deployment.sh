@@ -4,19 +4,19 @@ KIND=$1
 SERVICE=$2
 
 function deploy_gateway() {
-  GATEWAY_DIR="$(pwd)/infra/gateway"
+  GATEWAY_DIR="$(pwd)/infra/k8s/gateway"
   # apply deployment to kubernetes.
   kubectl apply -f "$GATEWAY_DIR/deployment.yaml"
 }
 
 function deploy_service() {
-  K8S_DIR="$(pwd)/infra/services/$SERVICE"
+  K8S_DIR="$(pwd)/infra/k8s/services/$SERVICE"
   # apply to kubernetes.
   kubectl apply -f "$K8S_DIR"
 }
 
 function deploy_database() {
-  K8S_DIR="$(pwd)/infra/database/$SERVICE"
+  K8S_DIR="$(pwd)/infra/k8s/database/$SERVICE"
   # apply to kubernetes.
   kubectl apply -f "$K8S_DIR"
 }
