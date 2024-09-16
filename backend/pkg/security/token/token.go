@@ -1,13 +1,12 @@
 package token
 
 import (
-	"errors"
 	"time"
 
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/uuid"
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 const tokenExpiredTime = 15 * time.Minute
@@ -19,10 +18,11 @@ type Token struct {
 
 // New return new generated token.
 func New(username string) (Token, error) {
-	return generateToken(username)
+	cfg := config.Get()
+	return generateToken(cfg, username)
 }
 
-func generateToken(username string) (Token, error) {
+func generateToken(cfg *config.Config, username string) (Token, error) {
 	id, err := uuid.New()
 	if err != nil {
 		return Token{}, err
@@ -30,17 +30,14 @@ func generateToken(username string) (Token, error) {
 	now := time.Now()
 	exp := now.Add(tokenExpiredTime)
 
-	claims := jwt.StandardClaims{
-		Id:        id,
-		Issuer:    "https://gateway.kore.co.id",
-		Subject:   username,
-		IssuedAt:  now.Unix(),
-		ExpiresAt: exp.Unix(),
-		NotBefore: exp.Unix(),
-	}
-
-	cfg := config.Get()
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"jti": id,
+		"sub": username,
+		"iss": "todo-app",
+		"aud": username,
+		"exp": time.Now().Add(time.Hour).Unix(),
+		"iat": time.Now().Unix(),
+	})
 	token.Header["kid"] = cfg.Token.HeaderKid
 
 	t, err := token.SignedString([]byte(cfg.Token.Secret))
@@ -54,25 +51,11 @@ func generateToken(username string) (Token, error) {
 	}, nil
 }
 
-// Verify if token is valid or not and return extracted user data from token.
-func Verify(token string) (entity.User, error) {
-	return verifyToken(token)
-}
-
-func verifyToken(token string) (entity.User, error) {
-	cfg := config.Get()
-	claims := jwt.StandardClaims{}
-	t, err := jwt.ParseWithClaims(token, &claims, func(t *jwt.Token) (any, error) {
-		return []byte(cfg.Token.Secret), nil
-	})
-	if err != nil {
-		return entity.User{}, err
-	}
-	if !t.Valid {
-		return entity.User{}, errors.New("invalid token")
-	}
+// UserFromToken return user information from JWT token.
+func UserFromToken(token *jwt.Token) entity.User {
+	claims := token.Claims.(jwt.MapClaims)
 	return entity.User{
-		LoginId:  claims.Id,
-		Username: claims.Subject,
-	}, nil
+		LoginId:  claims["jti"].(string),
+		Username: claims["sub"].(string),
+	}
 }

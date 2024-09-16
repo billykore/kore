@@ -46,16 +46,18 @@ func (r *Router) Run() {
 }
 
 func (r *Router) setRoutes() {
+	r.setCartRoutes()
+
 	r.router.GET("/products", r.productHandler.GetProductList)
 	r.router.GET("/products/:productId", r.productHandler.GetProductById)
 	r.router.GET("/categories", r.productCategoryHandler.GetCategoryList)
 	r.router.GET("/discounts", r.discountHandler.GetDiscountList)
-	r.setCartRoutes()
 }
 
 func (r *Router) setCartRoutes() {
 	cr := r.router.Group("/carts")
-	cr.Use(echo.WrapMiddleware(middleware.Auth))
+	cr.Use(middleware.Auth())
+
 	cr.GET("", r.cartHandler.GetCartItemList)
 	cr.POST("", r.cartHandler.AddCartItem)
 	cr.PUT("/:cartId", r.cartHandler.UpdateCartItemQuantity)

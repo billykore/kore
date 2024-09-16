@@ -37,7 +37,7 @@ func (r *Router) setRoutes() {
 func (r *Router) useMiddlewares() {
 	r.router.Use(echomiddleware.Logger())
 	r.router.Use(echomiddleware.Recover())
-	r.router.Use(echo.WrapMiddleware(middleware.Auth))
+	r.router.Use(middleware.Auth())
 }
 
 func (r *Router) run() {

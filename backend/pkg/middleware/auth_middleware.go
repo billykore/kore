@@ -1,64 +1,43 @@
 package middleware
 
 import (
-	"encoding/json"
-	"errors"
-	"net/http"
-	"strings"
-
+	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/ctxt"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/security/token"
+	"github.com/golang-jwt/jwt/v5"
+	echojwt "github.com/labstack/echo-jwt/v4"
+	"github.com/labstack/echo/v4"
 )
 
-// extractToken extract token from the request header.
-// The token is expected to be a Bearer token.
-func extractToken(req *http.Request) (string, error) {
-	headerToken := req.Header.Get("Authorization")
-	if headerToken == "" {
-		return "", errors.New("no authorization header")
-	}
-	tokenString := strings.Split(headerToken, "Bearer ")
-	if len(tokenString) != 2 {
-		return "", errors.New("invalid authorization header")
-	}
-	return tokenString[1], nil
+// Auth returns middleware function that validate token from headers
+// and extract user information.
+func Auth() echo.MiddlewareFunc {
+	cfg := config.Get()
+	return echojwt.WithConfig(jwtConfig(cfg))
 }
 
-// Auth middleware extract token from request header,
-// then parse user information from the token.
-// The user information then passed to the request context
-// to be used in the services.
-func Auth(h http.Handler) http.Handler {
-	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		authToken, err := extractToken(req)
-		if err != nil {
-			code, res := entity.ResponseUnauthorized(err)
-			rw.Header().Set("Content-Type", "application/json")
-			rw.WriteHeader(code)
-			err := json.NewEncoder(rw).Encode(res)
-			if err != nil {
-				return
-			}
-			return
-		}
+// jwtConfig contains configuration for auth middleware.
+func jwtConfig(cfg *config.Config) echojwt.Config {
+	return echojwt.Config{
+		ContextKey:     ctxt.UserContextKey,
+		SigningKey:     []byte(cfg.Token.Secret),
+		SuccessHandler: successHandler,
+		ErrorHandler:   errorHandler,
+	}
+}
 
-		user, err := token.Verify(authToken)
-		if err != nil {
-			code, res := entity.ResponseUnauthorized(err)
-			rw.Header().Set("Content-Type", "application/json")
-			rw.WriteHeader(code)
-			err := json.NewEncoder(rw).Encode(res)
-			if err != nil {
-				return
-			}
-			return
-		}
+// successHandler extract user information from token
+// and save the information in the request context.
+func successHandler(ctx echo.Context) {
+	t := ctx.Get(ctxt.UserContextKey).(*jwt.Token)
+	user := token.UserFromToken(t)
+	c := ctx.Request().Context()
+	c = ctxt.ContextWithUser(c, user)
+	ctx.SetRequest(ctx.Request().WithContext(c))
+}
 
-		ctx := req.Context()
-		ctx = ctxt.ContextWithUser(ctx, user)
-		req = req.WithContext(ctx)
-
-		h.ServeHTTP(rw, req)
-	})
+// errorHandler returns unauthorized response if there is authentication error.
+func errorHandler(ctx echo.Context, err error) error {
+	return ctx.JSON(entity.ResponseUnauthorized(err))
 }
