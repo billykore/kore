@@ -9,7 +9,7 @@ services:
     volumes:
       - product-db-postgres-volume:/var/lib/postgresql/data
     networks:
-      - backend
+      - backend-net
 
   product-service:
     container_name: product-service
@@ -21,7 +21,7 @@ services:
     depends_on:
       - product-db-postgres
     networks:
-      - backend
+      - backend-net
 
 volumes:
   product-db-postgres-volume:
@@ -29,6 +29,6 @@ volumes:
     external: true
 
 networks:
-  backend:
+  backend-net:
     name: backend-net
     external: true

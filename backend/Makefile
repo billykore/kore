@@ -67,15 +67,21 @@ create-migration:
 	@migrate create -ext sql -dir pkg/db/migrations -seq $(name)
 
 # Examples:
-# make migrate-up db=auth user=db_user password=db_password step=1
+# make migrate-up db=auth dsn='postgres://user:password@localhost:5432/db?sslmode=disable' step=1
 .PHONY: migrate-up
 migrate-up:
 	@echo "Migrate up..."
-	@migrate -path pkg/db/migrations/$(db) -database 'postgres://$(user):$(password)@localhost:5432/$(db)?sslmode=disable' -verbose up $(step)
+	@migrate -path pkg/db/migrations/$(db) -database $(dsn) -verbose up $(step)
 
 # Examples:
-# make migrate-down db=auth user=db_user password=db_password step=1
+# make migrate-down db=auth dsn='postgres://user:password@localhost:5432/db?sslmode=disable' step=1
 .PHONY: migrate-down
 migrate-down:
 	@echo "Migrate down..."
-	@migrate -path pkg/db/migrations/$(db) -database 'postgres://$(user):$(password)@localhost:5432/$(db)?sslmode=disable' -verbose down $(step)
+	@migrate -path pkg/db/migrations/$(db) -database $(dsn) -verbose down $(step)
+
+# Examples:
+# make generate-swagger
+.PHONY: generate-swagger
+generate-swagger:
+	@./scripts/doc.sh

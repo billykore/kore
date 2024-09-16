@@ -19,6 +19,20 @@ func NewOtpHandler(uc *usecase.OtpUsecase, validator *validation.Validator) *Otp
 	}
 }
 
+// SendOtp swaggo annotation.
+//
+//	@Summary		Send OTP
+//	@Description	Send OTP to customer email
+//	@Tags			otp-service
+//	@Accept			json
+//	@Produce		json
+//	@Param			SendOtpRequest	body		entity.SendOtpRequest	true	"Send OTP request"
+//	@Success		200				{object}	entity.Response
+//	@Failure		400				{object}	entity.Response
+//	@Failure		401				{object}	entity.Response
+//	@Failure		404				{object}	entity.Response
+//	@Failure		500				{object}	entity.Response
+//	@Router			/otp/send [post]
 func (s *OtpHandler) SendOtp(ctx echo.Context) error {
 	var req entity.SendOtpRequest
 	err := ctx.Bind(&req)
@@ -36,6 +50,20 @@ func (s *OtpHandler) SendOtp(ctx echo.Context) error {
 	return ctx.JSON(entity.ResponseSuccess(otp))
 }
 
+// VerifyOtp swaggo annotation.
+//
+//	@Summary		Verify OTP
+//	@Description	Verify customer OTP
+//	@Tags			otp-service
+//	@Accept			json
+//	@Produce		json
+//	@Param			VerifyOtpRequest	body		entity.VerifyOtpRequest	true	"Verify OTP request"
+//	@Success		200					{object}	entity.Response
+//	@Failure		400					{object}	entity.Response
+//	@Failure		401					{object}	entity.Response
+//	@Failure		404					{object}	entity.Response
+//	@Failure		500					{object}	entity.Response
+//	@Router			/otp/verify [post]
 func (s *OtpHandler) VerifyOtp(ctx echo.Context) error {
 	var req entity.VerifyOtpRequest
 	err := ctx.Bind(&req)

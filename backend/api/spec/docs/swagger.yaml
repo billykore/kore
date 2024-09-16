@@ -1,0 +1,902 @@
+basePath: /api/v1
+definitions:
+  entity.AddCartItemRequest:
+    properties:
+      productId:
+        type: integer
+      quantity:
+        type: integer
+    type: object
+  entity.CancelOrderRequest:
+    properties:
+      orderId:
+        type: integer
+    type: object
+  entity.CartItem:
+    properties:
+      id:
+        type: integer
+    type: object
+  entity.CheckoutRequest:
+    properties:
+      accountName:
+        type: string
+      accountNumber:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/entity.CartItem'
+        type: array
+      paymentMethod:
+        type: string
+    type: object
+  entity.CreateShippingRequest:
+    properties:
+      address:
+        type: string
+      customerName:
+        type: string
+      orderId:
+        type: integer
+      senderName:
+        type: string
+      shipperName:
+        type: string
+      shippingType:
+        type: string
+    type: object
+  entity.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  entity.LogoutRequest:
+    properties:
+      accessToken:
+        type: string
+      loginId:
+        type: string
+    type: object
+  entity.OrderPaymentRequest:
+    properties:
+      accountName:
+        type: string
+      accountNumber:
+        type: string
+      id:
+        type: integer
+      method:
+        type: string
+    type: object
+  entity.OrderRequest:
+    properties:
+      id:
+        type: integer
+    type: object
+  entity.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+      serverTime:
+        type: string
+      status:
+        type: string
+    type: object
+  entity.SendOtpRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  entity.ShippingRequest:
+    properties:
+      address:
+        type: string
+      customerName:
+        type: string
+      orderId:
+        type: integer
+      shipperName:
+        type: string
+      shippingType:
+        type: string
+    type: object
+  entity.UpdateCartItemRequest:
+    properties:
+      id:
+        type: integer
+      quantity:
+        type: integer
+    type: object
+  entity.UpdateShippingStatusRequest:
+    properties:
+      currentStatus:
+        type: string
+      id:
+        type: integer
+      newStatus:
+        type: string
+    type: object
+  entity.VerifyOtpRequest:
+    properties:
+      email:
+        type: string
+      otp:
+        type: string
+    required:
+    - email
+    - otp
+    type: object
+host: https://gateway.kore.co.id
+info:
+  contact:
+    email: billyimmcul2010@gmail.com
+    name: Billy Kore
+    url: https://www.swagger.io/support
+  description: Gateway service API specification.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://swagger.io/terms/
+  title: Gateway API
+  version: "1.0"
+paths:
+  /carts:
+    get:
+      consumes:
+      - application/json
+      description: Get list of cart items
+      parameters:
+      - description: Number of cart to display
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: ID of cart for begin to display
+        in: query
+        name: startId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Cart item list
+      tags:
+      - product-service
+    post:
+      consumes:
+      - application/json
+      description: Add new item to cart
+      parameters:
+      - description: Add cart item request
+        in: body
+        name: AddCartItemRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.AddCartItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Add cart item
+      tags:
+      - product-service
+  /carts/{cartId}:
+    put:
+      consumes:
+      - application/json
+      description: Update existing cart item
+      parameters:
+      - description: Cart ID
+        in: path
+        name: cartId
+        required: true
+        type: integer
+      - description: Update cart item request
+        in: body
+        name: UpdateCartItemRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UpdateCartItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Update cart item
+      tags:
+      - product-service
+  /carts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a cart by ID
+      parameters:
+      - description: Cart ID
+        in: path
+        name: cartId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Delete specific cart
+      tags:
+      - product-service
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: Get list of product categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: List of product categories
+      tags:
+      - product-service
+  /discounts:
+    get:
+      consumes:
+      - application/json
+      description: Get list of discounts
+      parameters:
+      - description: Number of discounts to display
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: ID of discount for begin to display
+        in: query
+        name: startId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: List of discounts
+      tags:
+      - product-service
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: User login by username and password
+      parameters:
+      - description: Authorization header contains Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Login Request
+        in: body
+        name: LoginRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: User login
+      tags:
+      - auth-service
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: User logout by access token
+      parameters:
+      - description: Logout Request
+        in: body
+        name: LogoutRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.LogoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: User logout
+      tags:
+      - auth-service
+  /orders/{orderId}:
+    delete:
+      consumes:
+      - application/json
+      description: Cancel customer order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      - description: Cancel order request
+        in: body
+        name: CancelOrderRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CancelOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Cancel specific order
+      tags:
+      - order-service
+    get:
+      consumes:
+      - application/json
+      description: Get order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      - description: Get order request
+        in: body
+        name: OrderRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.OrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Get specific order
+      tags:
+      - order-service
+  /orders/{orderId}/pay:
+    post:
+      consumes:
+      - application/json
+      description: Pay customer order
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      - description: Pay order request
+        in: body
+        name: OrderPaymentRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.OrderPaymentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Pay order
+      tags:
+      - order-service
+  /orders/{orderId}/ship:
+    post:
+      consumes:
+      - application/json
+      description: Ship customer order
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      - description: Ship order request
+        in: body
+        name: ShippingRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.ShippingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Ship order
+      tags:
+      - order-service
+  /orders/checkout:
+    post:
+      consumes:
+      - application/json
+      description: Checkout customer cart items
+      parameters:
+      - description: Checkout request
+        in: body
+        name: CheckoutRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CheckoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Checkout items
+      tags:
+      - order-service
+  /otp/send:
+    post:
+      consumes:
+      - application/json
+      description: Send OTP to customer email
+      parameters:
+      - description: Send OTP request
+        in: body
+        name: SendOtpRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.SendOtpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Send OTP
+      tags:
+      - otp-service
+  /otp/verify:
+    post:
+      consumes:
+      - application/json
+      description: Verify customer OTP
+      parameters:
+      - description: Verify OTP request
+        in: body
+        name: VerifyOtpRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.VerifyOtpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Verify OTP
+      tags:
+      - otp-service
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Get list of products
+      parameters:
+      - description: Number of products to display
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: ID of products for begin to display
+        in: query
+        name: startId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: List of products
+      tags:
+      - product-service
+  /products/{productId}:
+    get:
+      consumes:
+      - application/json
+      description: Get product by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Get specific product
+      tags:
+      - product-service
+  /shipping:
+    post:
+      consumes:
+      - application/json
+      description: Create new customer order shipping
+      parameters:
+      - description: Create shipping request
+        in: body
+        name: CreateShippingRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CreateShippingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Create shipping
+      tags:
+      - shipping-service
+  /shipping/{shippingId}/status:
+    put:
+      consumes:
+      - application/json
+      description: Update customer order shipping status by ID
+      parameters:
+      - description: Shipping ID
+        in: path
+        name: shippingId
+        required: true
+        type: integer
+      - description: Update shipping request
+        in: body
+        name: UpdateShippingStatusRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.UpdateShippingStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: Update shipping
+      tags:
+      - shipping-service
+swagger: "2.0"

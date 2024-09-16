@@ -9,7 +9,7 @@ services:
     volumes:
       - auth-db-postgres-volume:/var/lib/postgresql/data
     networks:
-      - backend
+      - backend-net
 
   auth-service:
     container_name: auth-service
@@ -21,7 +21,7 @@ services:
     depends_on:
       - auth-db-postgres
     networks:
-      - backend
+      - backend-net
 
 volumes:
   auth-db-postgres-volume:
@@ -29,6 +29,6 @@ volumes:
     external: true
 
 networks:
-  backend:
+  backend-net:
     name: backend-net
     external: true
