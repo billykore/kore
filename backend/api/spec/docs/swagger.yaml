@@ -7,11 +7,6 @@ definitions:
       quantity:
         type: integer
     type: object
-  entity.CancelOrderRequest:
-    properties:
-      orderId:
-        type: integer
-    type: object
   entity.CartItem:
     properties:
       id:
@@ -65,15 +60,8 @@ definitions:
         type: string
       accountNumber:
         type: string
-      id:
-        type: integer
       method:
         type: string
-    type: object
-  entity.OrderRequest:
-    properties:
-      id:
-        type: integer
     type: object
   entity.Response:
     properties:
@@ -98,8 +86,6 @@ definitions:
         type: string
       customerName:
         type: string
-      orderId:
-        type: integer
       shipperName:
         type: string
       shippingType:
@@ -107,8 +93,6 @@ definitions:
     type: object
   entity.UpdateCartItemRequest:
     properties:
-      id:
-        type: integer
       quantity:
         type: integer
     type: object
@@ -116,8 +100,6 @@ definitions:
     properties:
       currentStatus:
         type: string
-      id:
-        type: integer
       newStatus:
         type: string
     type: object
@@ -131,7 +113,7 @@ definitions:
     - email
     - otp
     type: object
-host: https://gateway.kore.co.id
+host: api.kore.co.id
 info:
   contact:
     email: billyimmcul2010@gmail.com
@@ -465,12 +447,6 @@ paths:
         name: orderId
         required: true
         type: integer
-      - description: Cancel order request
-        in: body
-        name: CancelOrderRequest
-        required: true
-        schema:
-          $ref: '#/definitions/entity.CancelOrderRequest'
       produces:
       - application/json
       responses:
@@ -507,12 +483,6 @@ paths:
         name: orderId
         required: true
         type: integer
-      - description: Get order request
-        in: body
-        name: OrderRequest
-        required: true
-        schema:
-          $ref: '#/definitions/entity.OrderRequest'
       produces:
       - application/json
       responses:
@@ -899,4 +869,7 @@ paths:
       summary: Update shipping
       tags:
       - shipping-service
+schemes:
+- http
+- https
 swagger: "2.0"

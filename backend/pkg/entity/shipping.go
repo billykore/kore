@@ -35,7 +35,7 @@ type CreateShippingResponse struct {
 }
 
 type UpdateShippingStatusRequest struct {
-	Id            uint   `param:"shippingId"`
+	Id            uint   `param:"shippingId" swaggerignore:"true"`
 	NewStatus     string `json:"newStatus"`
 	CurrentStatus string `json:"currentStatus"`
 }

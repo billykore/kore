@@ -1,4 +1,8 @@
 {
+    "schemes": [
+        "http",
+        "https"
+    ],
     "swagger": "2.0",
     "info": {
         "description": "Gateway service API specification.",
@@ -15,7 +19,7 @@
         },
         "version": "1.0"
     },
-    "host": "https://gateway.kore.co.id",
+    "host": "api.kore.co.id",
     "basePath": "/api/v1",
     "paths": {
         "/carts": {
@@ -563,15 +567,6 @@
                         "name": "orderId",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "Get order request",
-                        "name": "OrderRequest",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entity.OrderRequest"
-                        }
                     }
                 ],
                 "responses": {
@@ -626,15 +621,6 @@
                         "name": "orderId",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "Cancel order request",
-                        "name": "CancelOrderRequest",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entity.CancelOrderRequest"
-                        }
                     }
                 ],
                 "responses": {
@@ -1172,14 +1158,6 @@
                 }
             }
         },
-        "entity.CancelOrderRequest": {
-            "type": "object",
-            "properties": {
-                "orderId": {
-                    "type": "integer"
-                }
-            }
-        },
         "entity.CartItem": {
             "type": "object",
             "properties": {
@@ -1262,19 +1240,8 @@
                 "accountNumber": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
-                },
                 "method": {
                     "type": "string"
-                }
-            }
-        },
-        "entity.OrderRequest": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
                 }
             }
         },
@@ -1313,9 +1280,6 @@
                 "customerName": {
                     "type": "string"
                 },
-                "orderId": {
-                    "type": "integer"
-                },
                 "shipperName": {
                     "type": "string"
                 },
@@ -1327,9 +1291,6 @@
         "entity.UpdateCartItemRequest": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
                 "quantity": {
                     "type": "integer"
                 }
@@ -1340,9 +1301,6 @@
             "properties": {
                 "currentStatus": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "newStatus": {
                     "type": "string"

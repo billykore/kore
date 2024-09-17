@@ -38,13 +38,13 @@ func MakeCartResponse(m *model.Cart) *CartResponse {
 }
 
 type AddCartItemRequest struct {
-	ProductId int
-	Quantity  int
+	ProductId int `json:"productId"`
+	Quantity  int `json:"quantity"`
 }
 
 type UpdateCartItemRequest struct {
-	Id       int `param:"cartId"`
-	Quantity int
+	Id       int `param:"cartId" swaggerignore:"true"`
+	Quantity int `json:"quantity"`
 }
 
 type DeleteCartItemRequest struct {

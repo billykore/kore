@@ -569,15 +569,6 @@ const docTemplate = `{
                         "name": "orderId",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "Get order request",
-                        "name": "OrderRequest",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entity.OrderRequest"
-                        }
                     }
                 ],
                 "responses": {
@@ -632,15 +623,6 @@ const docTemplate = `{
                         "name": "orderId",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "description": "Cancel order request",
-                        "name": "CancelOrderRequest",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/entity.CancelOrderRequest"
-                        }
                     }
                 ],
                 "responses": {
@@ -1178,14 +1160,6 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.CancelOrderRequest": {
-            "type": "object",
-            "properties": {
-                "orderId": {
-                    "type": "integer"
-                }
-            }
-        },
         "entity.CartItem": {
             "type": "object",
             "properties": {
@@ -1268,19 +1242,8 @@ const docTemplate = `{
                 "accountNumber": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
-                },
                 "method": {
                     "type": "string"
-                }
-            }
-        },
-        "entity.OrderRequest": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
                 }
             }
         },
@@ -1319,9 +1282,6 @@ const docTemplate = `{
                 "customerName": {
                     "type": "string"
                 },
-                "orderId": {
-                    "type": "integer"
-                },
                 "shipperName": {
                     "type": "string"
                 },
@@ -1333,9 +1293,6 @@ const docTemplate = `{
         "entity.UpdateCartItemRequest": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
                 "quantity": {
                     "type": "integer"
                 }
@@ -1346,9 +1303,6 @@ const docTemplate = `{
             "properties": {
                 "currentStatus": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "newStatus": {
                     "type": "string"
@@ -1376,9 +1330,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "https://gateway.kore.co.id",
+	Host:             "api.kore.co.id",
 	BasePath:         "/api/v1",
-	Schemes:          []string{},
+	Schemes:          []string{"http", "https"},
 	Title:            "Gateway API",
 	Description:      "Gateway service API specification.",
 	InfoInstanceName: "swagger",

@@ -58,7 +58,7 @@ type UpdateOrderRequest struct {
 }
 
 type OrderPaymentRequest struct {
-	Id            uint   `param:"orderId"`
+	Id            uint   `param:"orderId" swaggerignore:"true"`
 	Method        string `json:"method"`
 	AccountNumber string `json:"accountNumber"`
 	AccountName   string `json:"accountName"`
@@ -79,7 +79,7 @@ func MakeOrderPaymentResponse(paymentResp *transaction.PaymentResponse) *OrderPa
 }
 
 type ShippingRequest struct {
-	OrderId      uint   `param:"orderId"`
+	OrderId      uint   `param:"orderId" swaggerignore:"true"`
 	ShipperName  string `json:"shipperName"`
 	ShippingType string `json:"shippingType"`
 	Address      string `json:"address"`

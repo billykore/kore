@@ -54,13 +54,12 @@ func (h *OrderHandler) Checkout(ctx echo.Context) error {
 //	@Tags			order-service
 //	@Accept			json
 //	@Produce		json
-//	@Param			orderId			path		integer				true	"Order ID"
-//	@Param			OrderRequest	body		entity.OrderRequest	true	"Get order request"
-//	@Success		200				{object}	entity.Response
-//	@Failure		400				{object}	entity.Response
-//	@Failure		401				{object}	entity.Response
-//	@Failure		404				{object}	entity.Response
-//	@Failure		500				{object}	entity.Response
+//	@Param			orderId	path		integer	true	"Order ID"
+//	@Success		200		{object}	entity.Response
+//	@Failure		400		{object}	entity.Response
+//	@Failure		401		{object}	entity.Response
+//	@Failure		404		{object}	entity.Response
+//	@Failure		500		{object}	entity.Response
 //	@Router			/orders/{orderId} [get]
 func (h *OrderHandler) GetOrderById(ctx echo.Context) error {
 	var req entity.OrderRequest
@@ -135,13 +134,12 @@ func (h *OrderHandler) ShipOrder(ctx echo.Context) error {
 //	@Tags			order-service
 //	@Accept			json
 //	@Produce		json
-//	@Param			orderId				path		integer						true	"Order ID"
-//	@Param			CancelOrderRequest	body		entity.CancelOrderRequest	true	"Cancel order request"
-//	@Success		200					{object}	entity.Response
-//	@Failure		400					{object}	entity.Response
-//	@Failure		401					{object}	entity.Response
-//	@Failure		404					{object}	entity.Response
-//	@Failure		500					{object}	entity.Response
+//	@Param			orderId	path		integer	true	"Order ID"
+//	@Success		200		{object}	entity.Response
+//	@Failure		400		{object}	entity.Response
+//	@Failure		401		{object}	entity.Response
+//	@Failure		404		{object}	entity.Response
+//	@Failure		500		{object}	entity.Response
 //	@Router			/orders/{orderId} [delete]
 func (h *OrderHandler) CancelOrder(ctx echo.Context) error {
 	var req entity.CancelOrderRequest

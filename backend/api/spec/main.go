@@ -18,7 +18,8 @@ import (
 //	@contact.email	billyimmcul2010@gmail.com
 //	@license.name	Apache 2.0
 //	@license.url	https://www.apache.org/licenses/LICENSE-2.0.html
-//	@host			https://gateway.kore.co.id
+//	@host			api.kore.co.id
+//	@schemes		http https
 //	@BasePath		/api/v1
 func main() {
 	e := echo.New()
