@@ -10,21 +10,18 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// jwtConfig contains configuration for JWT auth middleware.
+var jwtConfig = echojwt.Config{
+	ContextKey:     ctxt.UserContextKey,
+	SigningKey:     []byte(config.Get().Token.Secret),
+	SuccessHandler: successHandler,
+	ErrorHandler:   errorHandler,
+}
+
 // Auth returns middleware function that validate token from headers
 // and extract user information.
 func Auth() echo.MiddlewareFunc {
-	cfg := config.Get()
-	return echojwt.WithConfig(jwtConfig(cfg))
-}
-
-// jwtConfig contains configuration for auth middleware.
-func jwtConfig(cfg *config.Config) echojwt.Config {
-	return echojwt.Config{
-		ContextKey:     ctxt.UserContextKey,
-		SigningKey:     []byte(cfg.Token.Secret),
-		SuccessHandler: successHandler,
-		ErrorHandler:   errorHandler,
-	}
+	return echojwt.WithConfig(jwtConfig)
 }
 
 // successHandler extract user information from token
