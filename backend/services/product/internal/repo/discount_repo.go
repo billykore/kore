@@ -7,17 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type DiscountRepo struct {
+type DiscountRepository struct {
 	db *gorm.DB
 }
 
-func NewDiscountRepository(db *gorm.DB) *DiscountRepo {
-	return &DiscountRepo{
+func NewDiscountRepository(db *gorm.DB) *DiscountRepository {
+	return &DiscountRepository{
 		db: db,
 	}
 }
 
-func (r *DiscountRepo) List(ctx context.Context, limit, startId int) ([]*model.Discount, error) {
+func (r *DiscountRepository) List(ctx context.Context, limit, startId int) ([]*model.Discount, error) {
 	discounts := make([]*model.Discount, 0)
 	tx := r.db.WithContext(ctx)
 	if startId > 0 {

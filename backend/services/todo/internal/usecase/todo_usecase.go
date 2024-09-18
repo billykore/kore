@@ -8,16 +8,16 @@ import (
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/messages"
 	"github.com/billykore/kore/backend/pkg/model"
-	"github.com/billykore/kore/backend/pkg/repo"
 	"github.com/billykore/kore/backend/pkg/status"
+	"github.com/billykore/kore/backend/services/todo/internal/repo"
 )
 
 type TodoUsecase struct {
 	log      *log.Logger
-	todoRepo repo.TodoRepository
+	todoRepo *repo.TodoRepository
 }
 
-func NewTodoUsecase(log *log.Logger, todoRepo repo.TodoRepository) *TodoUsecase {
+func NewTodoUsecase(log *log.Logger, todoRepo *repo.TodoRepository) *TodoUsecase {
 	return &TodoUsecase{
 		log:      log,
 		todoRepo: todoRepo,

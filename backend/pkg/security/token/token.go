@@ -16,7 +16,7 @@ type Token struct {
 	ExpiredTime int64  `json:"expiredTime"`
 }
 
-// New return new generated token.
+// New return new generated token for the given username.
 func New(username string) (Token, error) {
 	cfg := config.Get()
 	return generateToken(cfg, username)

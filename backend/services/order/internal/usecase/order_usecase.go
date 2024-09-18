@@ -10,19 +10,19 @@ import (
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/model"
 	"github.com/billykore/kore/backend/pkg/net/rabbit"
-	"github.com/billykore/kore/backend/pkg/repo"
 	"github.com/billykore/kore/backend/pkg/shipping"
 	"github.com/billykore/kore/backend/pkg/status"
 	"github.com/billykore/kore/backend/pkg/transaction"
+	"github.com/billykore/kore/backend/services/order/internal/repo"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type OrderUsecase struct {
 	log  *log.Logger
-	repo repo.OrderRepository
+	repo *repo.OrderRepository
 }
 
-func NewOrderUsecase(log *log.Logger, repo repo.OrderRepository) *OrderUsecase {
+func NewOrderUsecase(log *log.Logger, repo *repo.OrderRepository) *OrderUsecase {
 	return &OrderUsecase{
 		log:  log,
 		repo: repo,

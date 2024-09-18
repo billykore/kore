@@ -6,16 +6,16 @@ import (
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/pkg/repo"
 	"github.com/billykore/kore/backend/pkg/status"
+	"github.com/billykore/kore/backend/services/product/internal/repo"
 )
 
 type DiscountUsecase struct {
 	log          *log.Logger
-	discountRepo repo.DiscountRepository
+	discountRepo *repo.DiscountRepository
 }
 
-func NewDiscountUsecase(discountRepo repo.DiscountRepository) *DiscountUsecase {
+func NewDiscountUsecase(discountRepo *repo.DiscountRepository) *DiscountUsecase {
 	return &DiscountUsecase{
 		discountRepo: discountRepo,
 	}

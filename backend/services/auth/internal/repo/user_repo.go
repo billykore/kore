@@ -7,15 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserRepo struct {
+type UserRepository struct {
 	postgres *gorm.DB
 }
 
-func NewUserRepository(postgres *gorm.DB) *UserRepo {
-	return &UserRepo{postgres: postgres}
+func NewUserRepository(postgres *gorm.DB) *UserRepository {
+	return &UserRepository{postgres: postgres}
 }
 
-func (r *UserRepo) GetByUsername(ctx context.Context, username string) (*model.User, error) {
+func (r *UserRepository) GetByUsername(ctx context.Context, username string) (*model.User, error) {
 	user := new(model.User)
 	res := r.postgres.WithContext(ctx).
 		Where("username = ?", username).

@@ -7,16 +7,16 @@ import (
 	"gorm.io/gorm"
 )
 
-type ProductCategoryRepo struct {
+type ProductCategoryRepository struct {
 	db *gorm.DB
 }
 
-func NewProductCategoryRepository(db *gorm.DB) *ProductCategoryRepo {
-	return &ProductCategoryRepo{db: db}
+func NewProductCategoryRepository(db *gorm.DB) *ProductCategoryRepository {
+	return &ProductCategoryRepository{db: db}
 }
 
-func (p *ProductCategoryRepo) List(ctx context.Context) ([]*model.ProductCategory, error) {
+func (r *ProductCategoryRepository) List(ctx context.Context) ([]*model.ProductCategory, error) {
 	categories := make([]*model.ProductCategory, 0)
-	tx := p.db.WithContext(ctx).Find(&categories)
+	tx := r.db.WithContext(ctx).Find(&categories)
 	return categories, tx.Error
 }

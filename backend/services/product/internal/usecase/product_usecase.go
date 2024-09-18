@@ -6,16 +6,16 @@ import (
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/pkg/repo"
 	"github.com/billykore/kore/backend/pkg/status"
+	"github.com/billykore/kore/backend/services/product/internal/repo"
 )
 
 type ProductUsecase struct {
 	log         *log.Logger
-	productRepo repo.ProductRepository
+	productRepo *repo.ProductRepository
 }
 
-func NewProductUsecase(log *log.Logger, productRepo repo.ProductRepository) *ProductUsecase {
+func NewProductUsecase(log *log.Logger, productRepo *repo.ProductRepository) *ProductUsecase {
 	return &ProductUsecase{
 		log:         log,
 		productRepo: productRepo,

@@ -5,15 +5,15 @@ import (
 
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
-	"github.com/billykore/kore/backend/pkg/repo"
+	"github.com/billykore/kore/backend/services/product/internal/repo"
 )
 
 type ProductCategoryUsecase struct {
 	log                 *log.Logger
-	productCategoryRepo repo.ProductCategoryRepository
+	productCategoryRepo *repo.ProductCategoryRepository
 }
 
-func NewProductCategoryUsecase(log *log.Logger, productCategoryRepo repo.ProductCategoryRepository) *ProductCategoryUsecase {
+func NewProductCategoryUsecase(log *log.Logger, productCategoryRepo *repo.ProductCategoryRepository) *ProductCategoryUsecase {
 	return &ProductCategoryUsecase{
 		log:                 log,
 		productCategoryRepo: productCategoryRepo,

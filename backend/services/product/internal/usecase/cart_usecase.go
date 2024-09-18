@@ -8,16 +8,16 @@ import (
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/model"
-	"github.com/billykore/kore/backend/pkg/repo"
 	"github.com/billykore/kore/backend/pkg/status"
+	"github.com/billykore/kore/backend/services/product/internal/repo"
 )
 
 type CartUsecase struct {
 	log      *log.Logger
-	cartRepo repo.CartRepository
+	cartRepo *repo.CartRepository
 }
 
-func NewCartUsecase(log *log.Logger, cartRepo repo.CartRepository) *CartUsecase {
+func NewCartUsecase(log *log.Logger, cartRepo *repo.CartRepository) *CartUsecase {
 	return &CartUsecase{
 		log:      log,
 		cartRepo: cartRepo,

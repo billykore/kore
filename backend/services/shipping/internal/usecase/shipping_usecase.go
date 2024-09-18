@@ -8,17 +8,17 @@ import (
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/model"
 	"github.com/billykore/kore/backend/pkg/net/rabbit"
-	"github.com/billykore/kore/backend/pkg/repo"
 	"github.com/billykore/kore/backend/pkg/status"
+	"github.com/billykore/kore/backend/services/shipping/internal/repo"
 )
 
 type ShippingUsecase struct {
 	log    *log.Logger
 	rabbit *rabbit.Rabbit
-	repo   repo.ShippingRepository
+	repo   *repo.ShippingRepository
 }
 
-func NewShippingUsecase(log *log.Logger, rabbit *rabbit.Rabbit, repo repo.ShippingRepository) *ShippingUsecase {
+func NewShippingUsecase(log *log.Logger, rabbit *rabbit.Rabbit, repo *repo.ShippingRepository) *ShippingUsecase {
 	return &ShippingUsecase{
 		log:    log,
 		rabbit: rabbit,

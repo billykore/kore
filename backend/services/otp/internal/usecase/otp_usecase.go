@@ -5,24 +5,25 @@ import (
 	"fmt"
 
 	"github.com/billykore/kore/backend/pkg/codes"
+	"github.com/billykore/kore/backend/pkg/datetime"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/log"
 	"github.com/billykore/kore/backend/pkg/mail"
 	"github.com/billykore/kore/backend/pkg/mail/templates"
 	"github.com/billykore/kore/backend/pkg/messages"
 	"github.com/billykore/kore/backend/pkg/model"
-	"github.com/billykore/kore/backend/pkg/repo"
 	"github.com/billykore/kore/backend/pkg/security/otp"
 	"github.com/billykore/kore/backend/pkg/status"
+	"github.com/billykore/kore/backend/services/otp/internal/repo"
 )
 
 type OtpUsecase struct {
 	log     *log.Logger
-	otpRepo repo.OtpRepository
+	otpRepo *repo.OtpRepository
 	mailer  *mail.Mailer
 }
 
-func NewOtpUsecase(log *log.Logger, otpRepo repo.OtpRepository, mailer *mail.Mailer) *OtpUsecase {
+func NewOtpUsecase(log *log.Logger, otpRepo *repo.OtpRepository, mailer *mail.Mailer) *OtpUsecase {
 	return &OtpUsecase{
 		log:     log,
 		otpRepo: otpRepo,
@@ -65,7 +66,7 @@ func (uc *OtpUsecase) SendOtp(ctx context.Context, req entity.SendOtpRequest) (*
 
 	return &entity.OtpResponse{
 		Otp:       newOtp.Value,
-		ExpiresAt: newOtp.ExpiredAt,
+		ExpiresAt: newOtp.ExpiredAt.Format(datetime.DefaultTimeLayout),
 	}, nil
 }
 

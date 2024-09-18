@@ -5,10 +5,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/billykore/kore/backend/pkg/datetime"
 	"github.com/billykore/kore/backend/pkg/status"
 )
-
-const serverTimeFormat = "2006-01-02T15:04:05"
 
 type Response struct {
 	Status     string `json:"status,omitempty"`
@@ -22,7 +21,7 @@ func ResponseSuccess(data any) (int, *Response) {
 	return http.StatusOK, &Response{
 		Status:     "OK",
 		Data:       data,
-		ServerTime: time.Now().Format(serverTimeFormat),
+		ServerTime: time.Now().Format(datetime.DefaultTimeLayout),
 	}
 }
 
@@ -30,7 +29,7 @@ func ResponseSuccess(data any) (int, *Response) {
 func ResponseSuccessNilData() (int, *Response) {
 	return http.StatusOK, &Response{
 		Status:     "OK",
-		ServerTime: time.Now().Format(serverTimeFormat),
+		ServerTime: time.Now().Format(datetime.DefaultTimeLayout),
 	}
 }
 
@@ -41,7 +40,7 @@ func ResponseError(err error) (int, *Response) {
 	return responseCode[s.Code], &Response{
 		Status:     responseStatus[s.Code],
 		Message:    s.Message,
-		ServerTime: time.Now().Format(serverTimeFormat),
+		ServerTime: time.Now().Format(datetime.DefaultTimeLayout),
 	}
 }
 
@@ -50,7 +49,7 @@ func ResponseBadRequest(err error) (int, *Response) {
 	return http.StatusBadRequest, &Response{
 		Status:     "BAD_REQUEST",
 		Message:    err.Error(),
-		ServerTime: time.Now().Format(serverTimeFormat),
+		ServerTime: time.Now().Format(datetime.DefaultTimeLayout),
 	}
 }
 
@@ -59,7 +58,7 @@ func ResponseUnauthorized(err error) (int, *Response) {
 	return http.StatusUnauthorized, &Response{
 		Status:     "UNAUTHORIZED",
 		Message:    err.Error(),
-		ServerTime: time.Now().Format(serverTimeFormat),
+		ServerTime: time.Now().Format(datetime.DefaultTimeLayout),
 	}
 }
 

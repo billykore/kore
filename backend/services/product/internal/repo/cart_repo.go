@@ -7,17 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type CartRepo struct {
+type CartRepository struct {
 	db *gorm.DB
 }
 
-func NewCartRepository(db *gorm.DB) *CartRepo {
-	return &CartRepo{
+func NewCartRepository(db *gorm.DB) *CartRepository {
+	return &CartRepository{
 		db: db,
 	}
 }
 
-func (r *CartRepo) List(ctx context.Context, username string, limit, startId int) ([]*model.Cart, error) {
+func (r *CartRepository) List(ctx context.Context, username string, limit, startId int) ([]*model.Cart, error) {
 	carts := make([]*model.Cart, 0)
 	tx := r.db.WithContext(ctx).
 		Preload("Product").
@@ -30,12 +30,12 @@ func (r *CartRepo) List(ctx context.Context, username string, limit, startId int
 	return carts, tx.Error
 }
 
-func (r *CartRepo) Save(ctx context.Context, cart model.Cart) error {
+func (r *CartRepository) Save(ctx context.Context, cart model.Cart) error {
 	tx := r.db.WithContext(ctx).Save(&cart)
 	return tx.Error
 }
 
-func (r *CartRepo) Update(ctx context.Context, id int, cart model.Cart) error {
+func (r *CartRepository) Update(ctx context.Context, id int, cart model.Cart) error {
 	tx := r.db.WithContext(ctx).
 		Model(&cart).
 		Where("id = ?", id).
@@ -44,7 +44,7 @@ func (r *CartRepo) Update(ctx context.Context, id int, cart model.Cart) error {
 	return tx.Error
 }
 
-func (r *CartRepo) Delete(ctx context.Context, id int, cart model.Cart) error {
+func (r *CartRepository) Delete(ctx context.Context, id int, cart model.Cart) error {
 	tx := r.db.WithContext(ctx).
 		Where("id = ?", id).
 		Where("username = ?", cart.Username).

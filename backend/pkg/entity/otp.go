@@ -1,7 +1,5 @@
 package entity
 
-import "time"
-
 type SendOtpRequest struct {
 	Email string `json:"email" validate:"required,email"`
 }
@@ -12,6 +10,6 @@ type VerifyOtpRequest struct {
 }
 
 type OtpResponse struct {
-	Otp       string    `json:"otp"`
-	ExpiresAt time.Time `json:"expiresAt"`
+	Otp       string `json:"otp"`
+	ExpiresAt string `json:"expiresAt"`
 }

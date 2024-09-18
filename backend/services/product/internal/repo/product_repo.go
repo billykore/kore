@@ -7,15 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type ProductRepo struct {
+type ProductRepository struct {
 	db *gorm.DB
 }
 
-func NewProductRepository(db *gorm.DB) *ProductRepo {
-	return &ProductRepo{db: db}
+func NewProductRepository(db *gorm.DB) *ProductRepository {
+	return &ProductRepository{db: db}
 }
 
-func (r *ProductRepo) List(ctx context.Context, categoryId, limit, startId int) ([]*model.Product, error) {
+func (r *ProductRepository) List(ctx context.Context, categoryId, limit, startId int) ([]*model.Product, error) {
 	products := make([]*model.Product, 0)
 	tx := r.db.WithContext(ctx).
 		Preload("Discount").
@@ -34,7 +34,7 @@ func (r *ProductRepo) List(ctx context.Context, categoryId, limit, startId int) 
 	return products, nil
 }
 
-func (r *ProductRepo) GetById(ctx context.Context, id int) (*model.Product, error) {
+func (r *ProductRepository) GetById(ctx context.Context, id int) (*model.Product, error) {
 	product := new(model.Product)
 	tx := r.db.WithContext(ctx).
 		Preload("Discount").
