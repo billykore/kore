@@ -71,7 +71,8 @@ func (uc *AuthUsecase) Login(ctx context.Context, req entity.LoginRequest) (*ent
 		// max attempts is reached, reset attempts and return error.
 		userLoginAttempt[req.Username] = 0
 
-		uc.log.Usecase("Login").Error(fmt.Errorf("user (%s) already login 5 times", req.Username))
+		uc.log.Usecase("Login").Error(fmt.Errorf("user (%s) already login %d times",
+			req.Username, maxUserLoginAttempts))
 		return nil, status.Error(codes.BadRequest, messages.MaxLoginAttemptReached)
 	}
 

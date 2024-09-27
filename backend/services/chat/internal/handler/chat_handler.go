@@ -2,18 +2,15 @@ package handler
 
 import (
 	"github.com/billykore/kore/backend/pkg/net/websocket"
-	"github.com/billykore/kore/backend/services/chat/internal/usecase"
 	"github.com/labstack/echo/v4"
 )
 
 type ChatHandler struct {
-	uc   *usecase.ChatUsecase
 	pool *websocket.Pool
 }
 
-func NewChatHandler(uc *usecase.ChatUsecase, pool *websocket.Pool) *ChatHandler {
+func NewChatHandler(pool *websocket.Pool) *ChatHandler {
 	return &ChatHandler{
-		uc:   uc,
 		pool: pool,
 	}
 }

@@ -85,3 +85,9 @@ migrate-down:
 .PHONY: generate-swagger
 generate-swagger:
 	@./scripts/doc.sh
+
+# Example:
+# make lint
+.PHONY: lint
+lint:
+	@./scripts/lint.sh

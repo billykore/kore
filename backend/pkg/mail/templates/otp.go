@@ -18,14 +18,14 @@ type OtpData struct {
 }
 
 // OtpTemplate returns OTP html template with OtpData.
-func OtpTemplate(data OtpData) (string, error) {
+func OtpTemplate(data OtpData) ([]byte, error) {
 	tmpl, err := template.ParseFS(otpTmpl, "otp.gohtml")
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	err = tmpl.Execute(buffer, data)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return buffer.String(), nil
+	return buffer.Bytes(), nil
 }

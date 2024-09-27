@@ -44,5 +44,5 @@ func TestOtpTemplate(t *testing.T) {
 </body>
 </html>`
 
-	assert.Equal(t, otpHtml, tmpl)
+	assert.Equal(t, []byte(otpHtml), tmpl)
 }
