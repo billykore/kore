@@ -4,4 +4,4 @@ SERVICE=$1
 
 # run wire dependency injection
 echo "Run wire dependency injection..."
-wire ./services/$SERVICE/cmd
+wire ./cmd

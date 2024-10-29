@@ -11,11 +11,11 @@ import (
 // Config contains app configurations use by services.
 type Config struct {
 	HTTPPort  string `envconfig:"HTTP_PORT" default:"8000"`
-	Postgres  Postgres
-	Firestore Firestore
-	Token     Token
-	Rabbit    Rabbit
-	Email     Email
+	Postgres  postgres
+	Firestore firestore
+	Token     token
+	Rabbit    rabbit
+	Email     email
 }
 
 var (

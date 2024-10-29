@@ -1,8 +1,0 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
-
-go_library(
-    name = "perrors",
-    srcs = ["auth_errors.go"],
-    importpath = "github.com/billykore/kore/backend/pkg/perrors",
-    visibility = ["//visibility:public"],
-)

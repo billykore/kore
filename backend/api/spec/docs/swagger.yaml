@@ -1,18 +1,21 @@
 basePath: /api/v1
 definitions:
-  entity.AddCartItemRequest:
+  entity.Response:
     properties:
-      productId:
-        type: integer
-      quantity:
-        type: integer
+      data: {}
+      message:
+        type: string
+      serverTime:
+        type: string
+      status:
+        type: string
     type: object
-  entity.CartItem:
+  order.CartItem:
     properties:
       id:
         type: integer
     type: object
-  entity.CheckoutRequest:
+  order.CheckoutRequest:
     properties:
       accountName:
         type: string
@@ -20,12 +23,61 @@ definitions:
         type: string
       items:
         items:
-          $ref: '#/definitions/entity.CartItem'
+          $ref: '#/definitions/order.CartItem'
         type: array
       paymentMethod:
         type: string
     type: object
-  entity.CreateShippingRequest:
+  order.PaymentRequest:
+    properties:
+      accountName:
+        type: string
+      accountNumber:
+        type: string
+      method:
+        type: string
+    type: object
+  order.ShippingRequest:
+    properties:
+      address:
+        type: string
+      customerName:
+        type: string
+      shipperName:
+        type: string
+      shippingType:
+        type: string
+    type: object
+  otp.SendOtpRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  otp.VerifyOtpRequest:
+    properties:
+      email:
+        type: string
+      otp:
+        type: string
+    required:
+    - email
+    - otp
+    type: object
+  product.AddCartItemRequest:
+    properties:
+      productId:
+        type: integer
+      quantity:
+        type: integer
+    type: object
+  product.UpdateCartItemRequest:
+    properties:
+      quantity:
+        type: integer
+    type: object
+  shipping.CreateShippingRequest:
     properties:
       address:
         type: string
@@ -40,78 +92,26 @@ definitions:
       shippingType:
         type: string
     type: object
-  entity.LoginRequest:
-    properties:
-      password:
-        type: string
-      username:
-        type: string
-    type: object
-  entity.LogoutRequest:
-    properties:
-      accessToken:
-        type: string
-      loginId:
-        type: string
-    type: object
-  entity.OrderPaymentRequest:
-    properties:
-      accountName:
-        type: string
-      accountNumber:
-        type: string
-      method:
-        type: string
-    type: object
-  entity.Response:
-    properties:
-      data: {}
-      message:
-        type: string
-      serverTime:
-        type: string
-      status:
-        type: string
-    type: object
-  entity.SendOtpRequest:
-    properties:
-      email:
-        type: string
-    required:
-    - email
-    type: object
-  entity.ShippingRequest:
-    properties:
-      address:
-        type: string
-      customerName:
-        type: string
-      shipperName:
-        type: string
-      shippingType:
-        type: string
-    type: object
-  entity.UpdateCartItemRequest:
-    properties:
-      quantity:
-        type: integer
-    type: object
-  entity.UpdateShippingStatusRequest:
+  shipping.UpdateShippingStatusRequest:
     properties:
       currentStatus:
         type: string
       newStatus:
         type: string
     type: object
-  entity.VerifyOtpRequest:
+  user.LoginRequest:
     properties:
-      email:
+      password:
         type: string
-      otp:
+      username:
         type: string
-    required:
-    - email
-    - otp
+    type: object
+  user.LogoutRequest:
+    properties:
+      accessToken:
+        type: string
+      loginId:
+        type: string
     type: object
 host: api.kore.co.id
 info:
@@ -168,7 +168,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Cart item list
       tags:
-      - product-service
+      - product
     post:
       consumes:
       - application/json
@@ -179,7 +179,7 @@ paths:
         name: AddCartItemRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.AddCartItemRequest'
+          $ref: '#/definitions/product.AddCartItemRequest'
       produces:
       - application/json
       responses:
@@ -205,7 +205,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Add cart item
       tags:
-      - product-service
+      - product
   /carts/{cartId}:
     put:
       consumes:
@@ -222,7 +222,7 @@ paths:
         name: UpdateCartItemRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.UpdateCartItemRequest'
+          $ref: '#/definitions/product.UpdateCartItemRequest'
       produces:
       - application/json
       responses:
@@ -248,7 +248,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Update cart item
       tags:
-      - product-service
+      - product
   /carts/{id}:
     delete:
       consumes:
@@ -285,7 +285,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Delete specific cart
       tags:
-      - product-service
+      - product
   /categories:
     get:
       consumes:
@@ -316,7 +316,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: List of product categories
       tags:
-      - product-service
+      - product
   /discounts:
     get:
       consumes:
@@ -358,7 +358,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: List of discounts
       tags:
-      - product-service
+      - product
   /login:
     post:
       consumes:
@@ -375,7 +375,7 @@ paths:
         name: LoginRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.LoginRequest'
+          $ref: '#/definitions/user.LoginRequest'
       produces:
       - application/json
       responses:
@@ -397,7 +397,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: User login
       tags:
-      - auth-service
+      - authentication
   /logout:
     post:
       consumes:
@@ -409,7 +409,7 @@ paths:
         name: LogoutRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.LogoutRequest'
+          $ref: '#/definitions/user.LogoutRequest'
       produces:
       - application/json
       responses:
@@ -435,7 +435,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: User logout
       tags:
-      - auth-service
+      - authentication
   /orders/{orderId}:
     delete:
       consumes:
@@ -508,7 +508,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Get specific order
       tags:
-      - order-service
+      - order
   /orders/{orderId}/pay:
     post:
       consumes:
@@ -525,7 +525,7 @@ paths:
         name: OrderPaymentRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.OrderPaymentRequest'
+          $ref: '#/definitions/order.PaymentRequest'
       produces:
       - application/json
       responses:
@@ -568,7 +568,7 @@ paths:
         name: ShippingRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.ShippingRequest'
+          $ref: '#/definitions/order.ShippingRequest'
       produces:
       - application/json
       responses:
@@ -606,7 +606,7 @@ paths:
         name: CheckoutRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.CheckoutRequest'
+          $ref: '#/definitions/order.CheckoutRequest'
       produces:
       - application/json
       responses:
@@ -632,7 +632,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Checkout items
       tags:
-      - order-service
+      - order
   /otp/send:
     post:
       consumes:
@@ -644,7 +644,7 @@ paths:
         name: SendOtpRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.SendOtpRequest'
+          $ref: '#/definitions/otp.SendOtpRequest'
       produces:
       - application/json
       responses:
@@ -670,7 +670,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Send OTP
       tags:
-      - otp-service
+      - otp
   /otp/verify:
     post:
       consumes:
@@ -682,7 +682,7 @@ paths:
         name: VerifyOtpRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.VerifyOtpRequest'
+          $ref: '#/definitions/otp.VerifyOtpRequest'
       produces:
       - application/json
       responses:
@@ -708,7 +708,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Verify OTP
       tags:
-      - otp-service
+      - otp
   /products:
     get:
       consumes:
@@ -750,7 +750,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: List of products
       tags:
-      - product-service
+      - product
   /products/{productId}:
     get:
       consumes:
@@ -787,7 +787,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Get specific product
       tags:
-      - product-service
+      - product
   /shipping:
     post:
       consumes:
@@ -799,7 +799,7 @@ paths:
         name: CreateShippingRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.CreateShippingRequest'
+          $ref: '#/definitions/shipping.CreateShippingRequest'
       produces:
       - application/json
       responses:
@@ -825,7 +825,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Create shipping
       tags:
-      - shipping-service
+      - shipping
   /shipping/{shippingId}/status:
     put:
       consumes:
@@ -842,7 +842,7 @@ paths:
         name: UpdateShippingStatusRequest
         required: true
         schema:
-          $ref: '#/definitions/entity.UpdateShippingStatusRequest'
+          $ref: '#/definitions/shipping.UpdateShippingStatusRequest'
       produces:
       - application/json
       responses:
@@ -868,7 +868,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: Update shipping
       tags:
-      - shipping-service
+      - shipping
 schemes:
 - http
 - https

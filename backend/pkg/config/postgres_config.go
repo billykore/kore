@@ -1,6 +1,6 @@
 package config
 
-// Postgres config.
-type Postgres struct {
+// postgres config.
+type postgres struct {
 	DSN string `envconfig:"POSTGRES_DSN"`
 }
