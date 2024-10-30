@@ -80,8 +80,8 @@ func (r *ProductRepository) DeleteCart(ctx context.Context, id int, cart product
 	return tx.Error
 }
 
-func (r *ProductRepository) CategoryList(ctx context.Context) ([]*product.ProductCategory, error) {
-	categories := make([]*product.ProductCategory, 0)
+func (r *ProductRepository) CategoryList(ctx context.Context) ([]*product.Category, error) {
+	categories := make([]*product.Category, 0)
 	tx := r.db.WithContext(ctx).Find(&categories)
 	return categories, tx.Error
 }

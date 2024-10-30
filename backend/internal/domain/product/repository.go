@@ -9,6 +9,6 @@ type Repository interface {
 	SaveCart(ctx context.Context, cart Cart) error
 	UpdateCart(ctx context.Context, id int, cart Cart) error
 	DeleteCart(ctx context.Context, id int, cart Cart) error
-	CategoryList(ctx context.Context) ([]*ProductCategory, error)
+	CategoryList(ctx context.Context) ([]*Category, error)
 	DiscountList(ctx context.Context, limit, startId int) ([]*Discount, error)
 }

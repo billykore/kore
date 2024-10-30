@@ -37,8 +37,8 @@ func MakeResponse(m *product.Product) *GetResponse {
 		CategoryId:       m.CategoryId,
 		InventoryId:      m.InventoryId,
 		DiscountId:       m.DiscountId,
-		ProductCategory:  MakeCategoryResponse(&m.ProductCategory),
-		ProductInventory: MakeInventoryResponse(&m.ProductInventory),
+		ProductCategory:  MakeCategoryResponse(&m.Category),
+		ProductInventory: MakeInventoryResponse(&m.Inventory),
 		Discount:         MakeDiscountResponse(&m.Discount),
 	}
 }
@@ -49,7 +49,7 @@ type InventoryResponse struct {
 }
 
 // MakeInventoryResponse makes InventoryResponse from model.ProductInventory model.
-func MakeInventoryResponse(m *product.ProductInventory) *InventoryResponse {
+func MakeInventoryResponse(m *product.Inventory) *InventoryResponse {
 	return &InventoryResponse{
 		Quantity:    m.Quantity,
 		Description: m.Description,
@@ -131,7 +131,7 @@ type CategoryResponse struct {
 }
 
 // MakeCategoryResponse makes CategoryResponse from model.ProductCategory model.
-func MakeCategoryResponse(m *product.ProductCategory) *CategoryResponse {
+func MakeCategoryResponse(m *product.Category) *CategoryResponse {
 	return &CategoryResponse{
 		Id:          m.ID,
 		Name:        m.Name,

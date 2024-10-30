@@ -7,28 +7,36 @@ import (
 
 type Product struct {
 	gorm.Model
-	Name             string
-	Description      string
-	SKU              string
-	Price            types.Money
-	CategoryId       int
-	InventoryId      int
-	DiscountId       int
-	ProductCategory  ProductCategory  `gorm:"foreignKey:CategoryId"`
-	ProductInventory ProductInventory `gorm:"foreignKey:InventoryId"`
-	Discount         Discount         `gorm:"foreignKey:DiscountId"`
+	Name        string
+	Description string
+	SKU         string
+	Price       types.Money
+	CategoryId  int
+	InventoryId int
+	DiscountId  int
+	Category    Category  `gorm:"foreignKey:CategoryId"`
+	Inventory   Inventory `gorm:"foreignKey:InventoryId"`
+	Discount    Discount  `gorm:"foreignKey:DiscountId"`
 }
 
-type ProductCategory struct {
+type Category struct {
 	gorm.Model
 	Name        string
 	Description string
 }
 
-type ProductInventory struct {
+func (Category) TableName() string {
+	return "product_categories"
+}
+
+type Inventory struct {
 	gorm.Model
 	Quantity    int
 	Description string
+}
+
+func (Inventory) TableName() string {
+	return "product_inventories"
 }
 
 type Discount struct {
