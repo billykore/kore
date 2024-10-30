@@ -14,10 +14,10 @@ deploy:
 	@./scripts/deployment.sh $(kind) $(name)
 
 # Examples:
-# make generate-wire service=product
+# make generate-wire
 .PHONY: generate-wire
 generate-wire:
-	@./scripts/wire.sh $(service)
+	@./scripts/wire.sh
 
 # Examples:
 # make generate-proto proto=auth.proto
@@ -67,18 +67,18 @@ create-migration:
 	@migrate create -ext sql -dir pkg/db/migrations -seq $(name)
 
 # Examples:
-# make migrate-up db=auth dsn='postgres://user:password@localhost:5432/db?sslmode=disable' step=1
+# make migrate-up dsn='postgres://user:password@localhost:5432/db?sslmode=disable' step=1
 .PHONY: migrate-up
 migrate-up:
 	@echo "Migrate up..."
-	@migrate -path pkg/db/migrations/$(db) -database $(dsn) -verbose up $(step)
+	@migrate -path internal/infra/persistence/migrations -database $(dsn) -verbose up $(step)
 
 # Examples:
 # make migrate-down db=auth dsn='postgres://user:password@localhost:5432/db?sslmode=disable' step=1
 .PHONY: migrate-down
 migrate-down:
 	@echo "Migrate down..."
-	@migrate -path pkg/db/migrations/$(db) -database $(dsn) -verbose down $(step)
+	@migrate -path internal/infra/persistence/migrations -database $(dsn) -verbose down $(step)
 
 # Examples:
 # make generate-swagger

@@ -1,7 +1,7 @@
 package config
 
-// Email config.
-type Email struct {
+// email config.
+type email struct {
 	From string `envconfig:"EMAIL_FROM"`
 	Host string `envconfig:"EMAIL_HOST"`
 	Port int    `envconfig:"EMAIL_PORT"`

@@ -34,7 +34,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product-service"
+                    "product"
                 ],
                 "summary": "Cart item list",
                 "parameters": [
@@ -95,7 +95,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product-service"
+                    "product"
                 ],
                 "summary": "Add cart item",
                 "parameters": [
@@ -105,7 +105,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.AddCartItemRequest"
+                            "$ref": "#/definitions/product.AddCartItemRequest"
                         }
                     }
                 ],
@@ -153,7 +153,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product-service"
+                    "product"
                 ],
                 "summary": "Update cart item",
                 "parameters": [
@@ -170,7 +170,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.UpdateCartItemRequest"
+                            "$ref": "#/definitions/product.UpdateCartItemRequest"
                         }
                     }
                 ],
@@ -218,7 +218,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product-service"
+                    "product"
                 ],
                 "summary": "Delete specific cart",
                 "parameters": [
@@ -274,7 +274,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product-service"
+                    "product"
                 ],
                 "summary": "List of product categories",
                 "responses": {
@@ -321,7 +321,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product-service"
+                    "product"
                 ],
                 "summary": "List of discounts",
                 "parameters": [
@@ -384,7 +384,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth-service"
+                    "authentication"
                 ],
                 "summary": "User login",
                 "parameters": [
@@ -401,7 +401,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.LoginRequest"
+                            "$ref": "#/definitions/user.LoginRequest"
                         }
                     }
                 ],
@@ -443,7 +443,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth-service"
+                    "authentication"
                 ],
                 "summary": "User logout",
                 "parameters": [
@@ -453,7 +453,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.LogoutRequest"
+                            "$ref": "#/definitions/user.LogoutRequest"
                         }
                     }
                 ],
@@ -501,7 +501,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "order-service"
+                    "order"
                 ],
                 "summary": "Checkout items",
                 "parameters": [
@@ -511,7 +511,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.CheckoutRequest"
+                            "$ref": "#/definitions/order.CheckoutRequest"
                         }
                     }
                 ],
@@ -559,7 +559,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "order-service"
+                    "order"
                 ],
                 "summary": "Get specific order",
                 "parameters": [
@@ -686,7 +686,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.OrderPaymentRequest"
+                            "$ref": "#/definitions/order.PaymentRequest"
                         }
                     }
                 ],
@@ -751,7 +751,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.ShippingRequest"
+                            "$ref": "#/definitions/order.ShippingRequest"
                         }
                     }
                 ],
@@ -799,7 +799,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "otp-service"
+                    "otp"
                 ],
                 "summary": "Send OTP",
                 "parameters": [
@@ -809,7 +809,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.SendOtpRequest"
+                            "$ref": "#/definitions/otp.SendOtpRequest"
                         }
                     }
                 ],
@@ -857,7 +857,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "otp-service"
+                    "otp"
                 ],
                 "summary": "Verify OTP",
                 "parameters": [
@@ -867,7 +867,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.VerifyOtpRequest"
+                            "$ref": "#/definitions/otp.VerifyOtpRequest"
                         }
                     }
                 ],
@@ -915,7 +915,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product-service"
+                    "product"
                 ],
                 "summary": "List of products",
                 "parameters": [
@@ -978,7 +978,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "product-service"
+                    "product"
                 ],
                 "summary": "Get specific product",
                 "parameters": [
@@ -1034,7 +1034,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "shipping-service"
+                    "shipping"
                 ],
                 "summary": "Create shipping",
                 "parameters": [
@@ -1044,7 +1044,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.CreateShippingRequest"
+                            "$ref": "#/definitions/shipping.CreateShippingRequest"
                         }
                     }
                 ],
@@ -1092,7 +1092,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "shipping-service"
+                    "shipping"
                 ],
                 "summary": "Update shipping",
                 "parameters": [
@@ -1109,7 +1109,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.UpdateShippingStatusRequest"
+                            "$ref": "#/definitions/shipping.UpdateShippingStatusRequest"
                         }
                     }
                 ],
@@ -1149,18 +1149,22 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entity.AddCartItemRequest": {
+        "entity.Response": {
             "type": "object",
             "properties": {
-                "productId": {
-                    "type": "integer"
+                "data": {},
+                "message": {
+                    "type": "string"
                 },
-                "quantity": {
-                    "type": "integer"
+                "serverTime": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },
-        "entity.CartItem": {
+        "order.CartItem": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1168,7 +1172,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.CheckoutRequest": {
+        "order.CheckoutRequest": {
             "type": "object",
             "properties": {
                 "accountName": {
@@ -1180,7 +1184,7 @@ const docTemplate = `{
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.CartItem"
+                        "$ref": "#/definitions/order.CartItem"
                     }
                 },
                 "paymentMethod": {
@@ -1188,7 +1192,83 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.CreateShippingRequest": {
+        "order.PaymentRequest": {
+            "type": "object",
+            "properties": {
+                "accountName": {
+                    "type": "string"
+                },
+                "accountNumber": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "string"
+                }
+            }
+        },
+        "order.ShippingRequest": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "customerName": {
+                    "type": "string"
+                },
+                "shipperName": {
+                    "type": "string"
+                },
+                "shippingType": {
+                    "type": "string"
+                }
+            }
+        },
+        "otp.SendOtpRequest": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "otp.VerifyOtpRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "otp"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "otp": {
+                    "type": "string"
+                }
+            }
+        },
+        "product.AddCartItemRequest": {
+            "type": "object",
+            "properties": {
+                "productId": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "product.UpdateCartItemRequest": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "shipping.CreateShippingRequest": {
             "type": "object",
             "properties": {
                 "address": {
@@ -1211,94 +1291,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.LoginRequest": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "entity.LogoutRequest": {
-            "type": "object",
-            "properties": {
-                "accessToken": {
-                    "type": "string"
-                },
-                "loginId": {
-                    "type": "string"
-                }
-            }
-        },
-        "entity.OrderPaymentRequest": {
-            "type": "object",
-            "properties": {
-                "accountName": {
-                    "type": "string"
-                },
-                "accountNumber": {
-                    "type": "string"
-                },
-                "method": {
-                    "type": "string"
-                }
-            }
-        },
-        "entity.Response": {
-            "type": "object",
-            "properties": {
-                "data": {},
-                "message": {
-                    "type": "string"
-                },
-                "serverTime": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "entity.SendOtpRequest": {
-            "type": "object",
-            "required": [
-                "email"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                }
-            }
-        },
-        "entity.ShippingRequest": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "customerName": {
-                    "type": "string"
-                },
-                "shipperName": {
-                    "type": "string"
-                },
-                "shippingType": {
-                    "type": "string"
-                }
-            }
-        },
-        "entity.UpdateCartItemRequest": {
-            "type": "object",
-            "properties": {
-                "quantity": {
-                    "type": "integer"
-                }
-            }
-        },
-        "entity.UpdateShippingStatusRequest": {
+        "shipping.UpdateShippingStatusRequest": {
             "type": "object",
             "properties": {
                 "currentStatus": {
@@ -1309,17 +1302,24 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.VerifyOtpRequest": {
+        "user.LoginRequest": {
             "type": "object",
-            "required": [
-                "email",
-                "otp"
-            ],
             "properties": {
-                "email": {
+                "password": {
                     "type": "string"
                 },
-                "otp": {
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.LogoutRequest": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "loginId": {
                     "type": "string"
                 }
             }
