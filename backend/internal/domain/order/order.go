@@ -114,8 +114,3 @@ type Discount struct {
 	DiscountPercentage float64
 	Active             bool
 }
-
-type UpdateShippingRabbitData struct {
-	ShippingId uint   `json:"shippingId"`
-	Status     string `json:"status"`
-}

@@ -4,23 +4,24 @@ import (
 	"context"
 
 	"github.com/billykore/kore/backend/internal/domain/shipping"
-	"github.com/billykore/kore/backend/internal/infra/messaging/rabbit"
+	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/codes"
+	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/billykore/kore/backend/pkg/status"
 )
 
 type Service struct {
-	log    *logger.Logger
-	rabbit *rabbit.Rabbit
-	repo   shipping.Repository
+	log        *logger.Logger
+	rabbitConn *rabbitmq.Connection
+	repo       shipping.Repository
 }
 
-func NewService(log *logger.Logger, rabbit *rabbit.Rabbit, repo shipping.Repository) *Service {
+func NewService(log *logger.Logger, rabbitConn *rabbitmq.Connection, repo shipping.Repository) *Service {
 	return &Service{
-		log:    log,
-		rabbit: rabbit,
-		repo:   repo,
+		log:        log,
+		rabbitConn: rabbitConn,
+		repo:       repo,
 	}
 }
 
@@ -47,34 +48,29 @@ func (uc *Service) CreateShipping(ctx context.Context, req CreateShippingRequest
 	}, nil
 }
 
-func (uc *Service) UpdateShippingStatus(ctx context.Context, req UpdateShippingStatusRequest) error {
+func (uc *Service) UpdateShippingStatus(ctx context.Context, req UpdateShippingStatusRequest) ([]byte, error) {
 	s, err := uc.repo.GetById(ctx, req.Id)
 	if err != nil {
 		uc.log.Usecase("UpdateShippingStatus").Error(err)
-		return status.Error(codes.NotFound, err.Error())
+		return nil, status.Error(codes.NotFound, err.Error())
 	}
 	err = uc.repo.UpdateStatus(ctx, s.ID, shipping.Status(req.NewStatus), shipping.Status(req.CurrentStatus))
 	if err != nil {
 		uc.log.Usecase("UpdateShippingStatus").Error(err)
-		return status.Error(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 	data := &UpdateShippingRabbitData{
 		ShippingId: req.Id,
 		Status:     req.NewStatus,
 	}
-	payload := &rabbit.Payload[*UpdateShippingRabbitData]{
+	payload := &entity.MessagePayload[*UpdateShippingRabbitData]{
 		Origin: "shipping-service",
 		Data:   data,
 	}
 	bytePayload, err := payload.MarshalBinary()
 	if err != nil {
 		uc.log.Usecase("UpdateShippingStatus").Error(err)
-		return status.Error(codes.Internal, err.Error())
+		return nil, status.Error(codes.Internal, err.Error())
 	}
-	err = uc.rabbit.Publish(ctx, bytePayload)
-	if err != nil {
-		uc.log.Usecase("UpdateShippingStatus").Error(err)
-		return status.Error(codes.Internal, err.Error())
-	}
-	return nil
+	return bytePayload, nil
 }

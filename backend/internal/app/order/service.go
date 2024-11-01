@@ -5,14 +5,13 @@ import (
 	"errors"
 
 	"github.com/billykore/kore/backend/internal/domain/order"
-	"github.com/billykore/kore/backend/internal/infra/messaging/rabbit"
 	"github.com/billykore/kore/backend/internal/infra/shipping"
 	"github.com/billykore/kore/backend/internal/infra/transaction"
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/ctxt"
+	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/billykore/kore/backend/pkg/status"
-	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type Service struct {
@@ -115,9 +114,9 @@ func (s *Service) CancelOrder(ctx context.Context, req CancelOrderRequest) error
 	return nil
 }
 
-func (s *Service) ListenOrderStatusChanges(ctx context.Context, delivery amqp.Delivery) error {
-	payload := new(rabbit.Payload[*order.UpdateShippingRabbitData])
-	err := payload.UnmarshalBinary(delivery.Body)
+func (s *Service) ListenOrderStatusChanges(ctx context.Context, data []byte) error {
+	payload := new(entity.MessagePayload[*updateShippingRabbitData])
+	err := payload.UnmarshalBinary(data)
 	if err != nil {
 		s.log.Usecase("ListenOrderStatusChanges").Error(err)
 		return err

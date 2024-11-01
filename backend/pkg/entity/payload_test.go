@@ -1,4 +1,4 @@
-package rabbit
+package entity
 
 import (
 	"testing"
@@ -12,7 +12,7 @@ type testData struct {
 }
 
 func TestMarshalBinary(t *testing.T) {
-	payload := &Payload[*testData]{
+	payload := &MessagePayload[*testData]{
 		Origin: "test-origin",
 		Data: &testData{
 			ShippingId: 69,
@@ -26,7 +26,7 @@ func TestMarshalBinary(t *testing.T) {
 
 func TestUnmarshalBinary(t *testing.T) {
 	s := `{"origin":"test-origin","data":{"shippingId":69,"status":"shipped"}}`
-	payload := new(Payload[*testData])
+	payload := new(MessagePayload[*testData])
 	err := payload.UnmarshalBinary([]byte(s))
 	assert.NoError(t, err)
 	assert.Equal(t, "test-origin", payload.Origin)

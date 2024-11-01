@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"context"
-
 	"github.com/billykore/kore/backend/internal/app/order"
 	"github.com/billykore/kore/backend/internal/infra/messaging/rabbit"
 	"github.com/billykore/kore/backend/pkg/entity"
@@ -151,10 +149,4 @@ func (h *OrderHandler) CancelOrder(ctx echo.Context) error {
 		return ctx.JSON(entity.ResponseError(err))
 	}
 	return ctx.JSON(entity.ResponseSuccessNilData())
-}
-
-func (h *OrderHandler) ListenOrderStatusChanges() {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	h.rabbit.Consume(ctx, h.svc.ListenOrderStatusChanges)
 }

@@ -105,3 +105,8 @@ func MakeShippingResponse(shippingResp *shipping.Response) *ShippingResponse {
 type CancelOrderRequest struct {
 	OrderId uint `param:"orderId"`
 }
+
+type updateShippingRabbitData struct {
+	ShippingId uint   `json:"shippingId"`
+	Status     string `json:"status"`
+}
