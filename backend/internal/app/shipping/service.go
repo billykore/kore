@@ -48,7 +48,7 @@ func (uc *Service) CreateShipping(ctx context.Context, req CreateShippingRequest
 	}, nil
 }
 
-func (uc *Service) UpdateShippingStatus(ctx context.Context, req UpdateShippingStatusRequest) ([]byte, error) {
+func (uc *Service) UpdateShippingStatus(ctx context.Context, req UpdateShippingStatusRequest) (*entity.MessagePayload[*rabbitmq.UpdateShippingRabbitData], error) {
 	s, err := uc.repo.GetById(ctx, req.Id)
 	if err != nil {
 		uc.log.Usecase("UpdateShippingStatus").Error(err)
@@ -59,18 +59,13 @@ func (uc *Service) UpdateShippingStatus(ctx context.Context, req UpdateShippingS
 		uc.log.Usecase("UpdateShippingStatus").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	data := &UpdateShippingRabbitData{
+	data := &rabbitmq.UpdateShippingRabbitData{
 		ShippingId: req.Id,
 		Status:     req.NewStatus,
 	}
-	payload := &entity.MessagePayload[*UpdateShippingRabbitData]{
+	msgPayload := &entity.MessagePayload[*rabbitmq.UpdateShippingRabbitData]{
 		Origin: "shipping-service",
 		Data:   data,
 	}
-	bytePayload, err := payload.MarshalBinary()
-	if err != nil {
-		uc.log.Usecase("UpdateShippingStatus").Error(err)
-		return nil, status.Error(codes.Internal, err.Error())
-	}
-	return bytePayload, nil
+	return msgPayload, nil
 }

@@ -12,12 +12,13 @@ import (
 	"github.com/billykore/kore/backend/internal/app/product"
 	"github.com/billykore/kore/backend/internal/app/shipping"
 	"github.com/billykore/kore/backend/internal/app/user"
-	"github.com/billykore/kore/backend/internal/infra/database/postgres"
 	"github.com/billykore/kore/backend/internal/infra/http"
 	"github.com/billykore/kore/backend/internal/infra/http/handler"
 	"github.com/billykore/kore/backend/internal/infra/mail"
-	"github.com/billykore/kore/backend/internal/infra/messaging/rabbit"
+	"github.com/billykore/kore/backend/internal/infra/messaging"
+	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
 	"github.com/billykore/kore/backend/internal/infra/persistence"
+	"github.com/billykore/kore/backend/internal/infra/storage/postgres"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/billykore/kore/backend/pkg/validation"
@@ -39,8 +40,8 @@ func initKore(cfg *config.Config) *kore {
 	userHandler := handler.NewUserHandler(service)
 	orderRepository := postgres.NewOrderRepository(db)
 	orderService := order.NewService(loggerLogger, orderRepository)
-	rabbitRabbit := rabbit.New(cfg, loggerLogger)
-	orderHandler := handler.NewOrderHandler(orderService, rabbitRabbit)
+	connection := rabbitmq.NewConnection(cfg)
+	orderHandler := handler.NewOrderHandler(orderService, connection)
 	otpRepository := postgres.NewOtpRepository(db)
 	mailer := mail.NewSender(cfg)
 	otpService := otp.NewService(loggerLogger, otpRepository, mailer)
@@ -50,10 +51,13 @@ func initKore(cfg *config.Config) *kore {
 	productService := product.NewService(loggerLogger, productRepository)
 	productHandler := handler.NewProductHandler(productService)
 	shippingRepository := postgres.NewShippingRepository(db)
-	shippingService := shipping.NewService(loggerLogger, rabbitRabbit, shippingRepository)
-	shippingHandler := handler.NewShippingHandler(shippingService)
+	shippingService := shipping.NewService(loggerLogger, connection, shippingRepository)
+	shippingProducer := rabbitmq.NewShippingProducer(cfg, connection)
+	shippingHandler := handler.NewShippingHandler(shippingService, shippingProducer)
 	router := http.NewRouter(cfg, loggerLogger, echoEcho, userHandler, orderHandler, otpHandler, productHandler, shippingHandler)
 	server := http.NewServer(router)
-	mainKore := newKore(server)
+	orderConsumer := rabbitmq.NewOrderConsumer(cfg, loggerLogger, connection, orderService)
+	consumer := messaging.NewConsumers(cfg, loggerLogger, orderConsumer)
+	mainKore := newKore(server, consumer)
 	return mainKore
 }

@@ -1,6 +1,8 @@
 package rabbitmq
 
 import (
+	"github.com/billykore/kore/backend/pkg/config"
+	"github.com/billykore/kore/backend/pkg/logger"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -10,21 +12,23 @@ type Connection struct {
 }
 
 // NewConnection establishes a new RabbitMQ connection.
-func NewConnection(dsn string) (*Connection, error) {
-	conn, err := amqp.Dial(dsn)
-	if err != nil {
-		return nil, err
-	}
+func NewConnection(cfg *config.Config) *Connection {
+	log := logger.New()
 
+	conn, err := amqp.Dial(cfg.Rabbit.DSN)
+	if err != nil {
+		log.Fatalf("Failed to connect to RabbitMQ: %s", err)
+		return nil
+	}
 	channel, err := conn.Channel()
 	if err != nil {
-		return nil, err
+		log.Fatalf("Failed to open a channel: %s", err)
+		return nil
 	}
-
 	return &Connection{
 		conn:    conn,
 		channel: channel,
-	}, nil
+	}
 }
 
 // Close closes the RabbitMQ connection and channel.

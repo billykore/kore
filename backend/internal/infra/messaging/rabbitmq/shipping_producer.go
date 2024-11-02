@@ -1,21 +1,24 @@
 package rabbitmq
 
 import (
+	"context"
+
+	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/logger"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type ShippingProducer struct {
+	cfg        *config.Config
 	log        *logger.Logger
 	connection *Connection
-	exchange   string
 }
 
-func NewShippingProducer(connection *Connection, exchange string) *ShippingProducer {
+func NewShippingProducer(cfg *config.Config, connection *Connection) *ShippingProducer {
 	return &ShippingProducer{
+		cfg:        cfg,
 		connection: connection,
-		exchange:   exchange,
 	}
 }
 
@@ -24,17 +27,17 @@ type UpdateShippingRabbitData struct {
 	Status     string `json:"status"`
 }
 
-func (p *ShippingProducer) PublishShippingUpdateStatus(payload entity.MessagePayload[*UpdateShippingRabbitData]) error {
+func (p *ShippingProducer) PublishShippingUpdateStatus(ctx context.Context, payload *entity.MessagePayload[*UpdateShippingRabbitData]) error {
 	body, err := payload.MarshalBinary()
 	if err != nil {
 		return err
 	}
 	// Publish message to the RabbitMQ exchange
-	err = p.connection.channel.Publish(
-		p.exchange, // exchange
-		"",         // routing key
-		false,      // mandatory
-		false,      // immediate
+	err = p.connection.channel.PublishWithContext(ctx,
+		p.cfg.Rabbit.QueueName, // exchange
+		"",                     // routing key
+		false,                  // mandatory
+		false,                  // immediate
 		amqp.Publishing{
 			ContentType: "application/json",
 			Body:        body,

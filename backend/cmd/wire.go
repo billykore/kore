@@ -6,8 +6,9 @@ package main
 import (
 	"github.com/billykore/kore/backend/internal/app"
 	"github.com/billykore/kore/backend/internal/infra"
-	"github.com/billykore/kore/backend/internal/infra/database/postgres"
 	"github.com/billykore/kore/backend/internal/infra/http/handler"
+	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
+	"github.com/billykore/kore/backend/internal/infra/storage/postgres"
 	"github.com/billykore/kore/backend/pkg"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/google/wire"
@@ -20,6 +21,7 @@ func initKore(cfg *config.Config) *kore {
 		infra.ProviderSet,
 		handler.ProviderSet,
 		postgres.ProviderSet,
+		rabbitmq.ProviderSet,
 		pkg.ProviderSet,
 		echo.New,
 		newKore,

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/billykore/kore/backend/internal/app/shipping"
+	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/entity"
 
 	"github.com/labstack/echo/v4"
@@ -9,10 +10,11 @@ import (
 
 type ShippingHandler struct {
 	svc *shipping.Service
+	sp  *rabbitmq.ShippingProducer
 }
 
-func NewShippingHandler(svc *shipping.Service) *ShippingHandler {
-	return &ShippingHandler{svc: svc}
+func NewShippingHandler(svc *shipping.Service, sp *rabbitmq.ShippingProducer) *ShippingHandler {
+	return &ShippingHandler{svc: svc, sp: sp}
 }
 
 // CreateShipping swaggo annotation.
@@ -61,7 +63,11 @@ func (h *ShippingHandler) UpdateShippingStatus(ctx echo.Context) error {
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
-	err := h.svc.UpdateShippingStatus(ctx.Request().Context(), req)
+	msgPayload, err := h.svc.UpdateShippingStatus(ctx.Request().Context(), req)
+	if err != nil {
+		return ctx.JSON(entity.ResponseError(err))
+	}
+	err = h.sp.PublishShippingUpdateStatus(ctx.Request().Context(), msgPayload)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}

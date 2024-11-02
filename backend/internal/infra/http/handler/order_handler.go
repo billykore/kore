@@ -2,17 +2,17 @@ package handler
 
 import (
 	"github.com/billykore/kore/backend/internal/app/order"
-	"github.com/billykore/kore/backend/internal/infra/messaging/rabbit"
+	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/labstack/echo/v4"
 )
 
 type OrderHandler struct {
 	svc    *order.Service
-	rabbit *rabbit.Rabbit
+	rabbit *rabbitmq.Connection
 }
 
-func NewOrderHandler(svc *order.Service, rabbit *rabbit.Rabbit) *OrderHandler {
+func NewOrderHandler(svc *order.Service, rabbit *rabbitmq.Connection) *OrderHandler {
 	return &OrderHandler{
 		svc:    svc,
 		rabbit: rabbit,

@@ -3,6 +3,7 @@ package infra
 import (
 	"github.com/billykore/kore/backend/internal/infra/http"
 	"github.com/billykore/kore/backend/internal/infra/mail"
+	"github.com/billykore/kore/backend/internal/infra/messaging"
 	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
 	"github.com/billykore/kore/backend/internal/infra/persistence"
 	"github.com/billykore/kore/backend/pkg/logger"
@@ -15,5 +16,6 @@ var ProviderSet = wire.NewSet(
 	logger.New,
 	http.NewServer,
 	http.NewRouter,
+	messaging.NewConsumers,
 	rabbitmq.NewConnection,
 )

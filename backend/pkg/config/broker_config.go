@@ -2,6 +2,6 @@ package config
 
 // rabbit configuration.
 type rabbit struct {
-	URL       string `envconfig:"RABBIT_URL"`
+	DSN       string `envconfig:"RABBIT_DSN"`
 	QueueName string `envconfig:"RABBIT_QUEUE_NAME"`
 }
