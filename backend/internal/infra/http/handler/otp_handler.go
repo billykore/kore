@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/billykore/kore/backend/internal/app/otp"
+	"github.com/billykore/kore/backend/internal/domain/otp"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/validation"
 	"github.com/labstack/echo/v4"

@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/billykore/kore/backend/internal/app/user"
+	"github.com/billykore/kore/backend/internal/domain/user"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/labstack/echo/v4"
 )

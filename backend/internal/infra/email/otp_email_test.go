@@ -1,4 +1,17 @@
-<!DOCTYPE html>
+package email
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestParseOTPTemplate(t *testing.T) {
+	tmpl, err := parseOTPTemplate("123456")
+	assert.NoError(t, err)
+	assert.NotEmpty(t, tmpl)
+
+	otpHtml := []byte(`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -15,7 +28,7 @@
     <p style="font-size:1.1em">Hi,</p>
     <p>Please complete your login by enter the OTP. OTP is valid for 5 minutes</p>
     <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">
-        {{.Otp}}
+        123456
     </h2>
     <p style="font-size:0.9em;">Regards,<br/>Kore Corp.</p>
     <hr style="border:none;border-top:1px solid #eee"/>
@@ -27,4 +40,7 @@
   </div>
 </div>
 </body>
-</html>
+</html>`)
+
+	assert.Equal(t, otpHtml, tmpl)
+}

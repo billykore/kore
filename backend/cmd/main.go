@@ -7,21 +7,21 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 )
 
-type kore struct {
+type app struct {
 	hs *http.Server
-	cs *messaging.Consumer
+	mc *messaging.Consumer
 }
 
-func newKore(hs *http.Server, cs *messaging.Consumer) *kore {
-	return &kore{
+func newApp(hs *http.Server, mc *messaging.Consumer) *app {
+	return &app{
 		hs: hs,
-		cs: cs,
+		mc: mc,
 	}
 }
 
 func main() {
 	c := config.Get()
-	k := initKore(c)
-	go k.cs.Consume()
-	k.hs.Serve()
+	a := initApp(c)
+	go a.mc.Consume()
+	a.hs.Serve()
 }

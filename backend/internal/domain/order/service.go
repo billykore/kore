@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 
-	"github.com/billykore/kore/backend/internal/domain/order"
 	"github.com/billykore/kore/backend/internal/infra/shipping"
 	"github.com/billykore/kore/backend/internal/infra/transaction"
 	"github.com/billykore/kore/backend/pkg/codes"
@@ -14,12 +13,21 @@ import (
 	"github.com/billykore/kore/backend/pkg/status"
 )
 
-type Service struct {
-	log  *logger.Logger
-	repo order.Repository
+type Repository interface {
+	GetById(ctx context.Context, id uint) (*Order, error)
+	GetByIdAndStatus(ctx context.Context, id uint, status Status) (*Order, error)
+	GetByShippingId(ctx context.Context, shippingId uint) (*Order, error)
+	Save(ctx context.Context, order Order) error
+	UpdateStatus(ctx context.Context, id uint, newStatus Status, currentStatus ...Status) error
+	UpdateShipping(ctx context.Context, id uint, shippingId int) error
 }
 
-func NewService(log *logger.Logger, repo order.Repository) *Service {
+type Service struct {
+	log  *logger.Logger
+	repo Repository
+}
+
+func NewService(log *logger.Logger, repo Repository) *Service {
 	return &Service{
 		log:  log,
 		repo: repo,
@@ -33,10 +41,10 @@ func (s *Service) Checkout(ctx context.Context, req CheckoutRequest) error {
 		return status.Error(codes.Internal, "Failed checkout order")
 	}
 
-	newOrder := order.Order{
+	newOrder := Order{
 		Username:      user.Username,
 		PaymentMethod: req.PaymentMethod,
-		Status:        order.StatusCreated,
+		Status:        StatusCreated,
 	}
 	newOrder.SetCartIds(req.CartIds())
 
@@ -60,7 +68,7 @@ func (s *Service) GetOrderById(ctx context.Context, req GetRequest) (*Response, 
 }
 
 func (s *Service) PayOrder(ctx context.Context, req PaymentRequest) (*PaymentResponse, error) {
-	o, err := s.repo.GetByIdAndStatus(ctx, req.Id, order.StatusWaitingForPayment)
+	o, err := s.repo.GetByIdAndStatus(ctx, req.Id, StatusWaitingForPayment)
 	if err != nil {
 		s.log.Usecase("OrderPayment").Error(err)
 		return nil, status.Error(codes.NotFound, err.Error())
@@ -71,7 +79,7 @@ func (s *Service) PayOrder(ctx context.Context, req PaymentRequest) (*PaymentRes
 		s.log.Usecase("OrderPayment").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	err = s.repo.UpdateStatus(ctx, req.Id, order.StatusPaymentSucceed, order.StatusWaitingForPayment)
+	err = s.repo.UpdateStatus(ctx, req.Id, StatusPaymentSucceed, StatusWaitingForPayment)
 	if err != nil {
 		s.log.Usecase("UpdateOrderStatus").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
@@ -81,7 +89,7 @@ func (s *Service) PayOrder(ctx context.Context, req PaymentRequest) (*PaymentRes
 }
 
 func (s *Service) ShipOrder(ctx context.Context, req ShippingRequest) (*ShippingResponse, error) {
-	o, err := s.repo.GetByIdAndStatus(ctx, req.OrderId, order.StatusPaymentSucceed)
+	o, err := s.repo.GetByIdAndStatus(ctx, req.OrderId, StatusPaymentSucceed)
 	if err != nil {
 		s.log.Usecase("ShipOrder").Error(err)
 		return nil, status.Error(codes.NotFound, err.Error())
@@ -106,7 +114,7 @@ func (s *Service) ShipOrder(ctx context.Context, req ShippingRequest) (*Shipping
 }
 
 func (s *Service) CancelOrder(ctx context.Context, req CancelOrderRequest) error {
-	err := s.repo.UpdateStatus(ctx, req.OrderId, order.StatusCancelled, order.StatusCanCancel...)
+	err := s.repo.UpdateStatus(ctx, req.OrderId, StatusCancelled, StatusCanCancel...)
 	if err != nil {
 		s.log.Usecase("CancelOrder").Error(err)
 		return status.Error(codes.Internal, err.Error())
@@ -126,7 +134,7 @@ func (s *Service) ListenOrderStatusChanges(ctx context.Context, data []byte) err
 		s.log.Usecase("ListenOrderStatusChanges").Error(err)
 		return err
 	}
-	err = s.repo.UpdateStatus(ctx, o.ID, order.Status(payload.Data.Status), order.StatusWaitingForShipment)
+	err = s.repo.UpdateStatus(ctx, o.ID, Status(payload.Data.Status), StatusWaitingForShipment)
 	if err != nil {
 		s.log.Usecase("ListenOrderStatusChanges").Error(err)
 		return err

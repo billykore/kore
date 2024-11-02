@@ -1,7 +1,6 @@
 package product
 
 import (
-	"github.com/billykore/kore/backend/internal/domain/product"
 	"github.com/billykore/kore/backend/pkg/types"
 )
 
@@ -27,7 +26,7 @@ type GetResponse struct {
 }
 
 // MakeResponse makes ProductResponse from model.Order model.
-func MakeResponse(m *product.Product) *GetResponse {
+func MakeResponse(m *Product) *GetResponse {
 	return &GetResponse{
 		Id:               m.ID,
 		Name:             m.Name,
@@ -49,7 +48,7 @@ type InventoryResponse struct {
 }
 
 // MakeInventoryResponse makes InventoryResponse from model.ProductInventory model.
-func MakeInventoryResponse(m *product.Inventory) *InventoryResponse {
+func MakeInventoryResponse(m *Inventory) *InventoryResponse {
 	return &InventoryResponse{
 		Quantity:    m.Quantity,
 		Description: m.Description,
@@ -72,7 +71,7 @@ type CartResponse struct {
 }
 
 // MakeCartResponse makes CartResponse from model.Cart model.
-func MakeCartResponse(m *product.Cart) *CartResponse {
+func MakeCartResponse(m *Cart) *CartResponse {
 	return &CartResponse{
 		Id:       m.ID,
 		Quantity: m.Quantity,
@@ -115,7 +114,7 @@ type DiscountResponse struct {
 }
 
 // MakeDiscountResponse makes DiscountResponse from model.Discount model.
-func MakeDiscountResponse(m *product.Discount) *DiscountResponse {
+func MakeDiscountResponse(m *Discount) *DiscountResponse {
 	return &DiscountResponse{
 		Id:                 m.ID,
 		Name:               m.Name,
@@ -131,7 +130,7 @@ type CategoryResponse struct {
 }
 
 // MakeCategoryResponse makes CategoryResponse from model.ProductCategory model.
-func MakeCategoryResponse(m *product.Category) *CategoryResponse {
+func MakeCategoryResponse(m *Category) *CategoryResponse {
 	return &CategoryResponse{
 		Id:          m.ID,
 		Name:        m.Name,

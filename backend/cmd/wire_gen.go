@@ -7,14 +7,14 @@
 package main
 
 import (
-	"github.com/billykore/kore/backend/internal/app/order"
-	"github.com/billykore/kore/backend/internal/app/otp"
-	"github.com/billykore/kore/backend/internal/app/product"
-	"github.com/billykore/kore/backend/internal/app/shipping"
-	"github.com/billykore/kore/backend/internal/app/user"
+	"github.com/billykore/kore/backend/internal/domain/order"
+	"github.com/billykore/kore/backend/internal/domain/otp"
+	"github.com/billykore/kore/backend/internal/domain/product"
+	"github.com/billykore/kore/backend/internal/domain/shipping"
+	"github.com/billykore/kore/backend/internal/domain/user"
+	"github.com/billykore/kore/backend/internal/infra/email"
 	"github.com/billykore/kore/backend/internal/infra/http"
 	"github.com/billykore/kore/backend/internal/infra/http/handler"
-	"github.com/billykore/kore/backend/internal/infra/mail"
 	"github.com/billykore/kore/backend/internal/infra/messaging"
 	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
 	"github.com/billykore/kore/backend/internal/infra/persistence"
@@ -31,7 +31,7 @@ import (
 
 // Injectors from wire.go:
 
-func initKore(cfg *config.Config) *kore {
+func initApp(cfg *config.Config) *app {
 	loggerLogger := logger.New()
 	echoEcho := echo.New()
 	db := persistence.NewPostgres(cfg)
@@ -43,8 +43,9 @@ func initKore(cfg *config.Config) *kore {
 	connection := rabbitmq.NewConnection(cfg)
 	orderHandler := handler.NewOrderHandler(orderService, connection)
 	otpRepository := postgres.NewOtpRepository(db)
-	mailer := mail.NewSender(cfg)
-	otpService := otp.NewService(loggerLogger, otpRepository, mailer)
+	client := email.NewClient(cfg)
+	otpEmail := email.NewOTPEmail(loggerLogger, client)
+	otpService := otp.NewService(loggerLogger, otpRepository, otpEmail)
 	validator := validation.New()
 	otpHandler := handler.NewOtpHandler(otpService, validator)
 	productRepository := postgres.NewProductRepository(db)
@@ -58,6 +59,6 @@ func initKore(cfg *config.Config) *kore {
 	server := http.NewServer(router)
 	orderConsumer := rabbitmq.NewOrderConsumer(cfg, loggerLogger, connection, orderService)
 	consumer := messaging.NewConsumers(cfg, loggerLogger, orderConsumer)
-	mainKore := newKore(server, consumer)
-	return mainKore
+	mainApp := newApp(server, consumer)
+	return mainApp
 }

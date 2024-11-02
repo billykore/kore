@@ -1,11 +1,9 @@
-package mail
+package email
 
 import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"gopkg.in/gomail.v2"
 )
-
-type TemplateFunc func(any) ([]byte, error)
 
 type Data struct {
 	Recipient string
@@ -13,15 +11,16 @@ type Data struct {
 	Body      []byte
 }
 
-type Mailer struct {
+type Client struct {
 	from string
 	host string
 	port int
 	key  string
 }
 
-func NewSender(cfg *config.Config) *Mailer {
-	return &Mailer{
+// NewClient returns new Client.
+func NewClient(cfg *config.Config) *Client {
+	return &Client{
 		from: cfg.Email.From,
 		host: cfg.Email.Host,
 		port: cfg.Email.Port,
@@ -29,15 +28,15 @@ func NewSender(cfg *config.Config) *Mailer {
 	}
 }
 
-// Send mail to user.
-func (s *Mailer) Send(data Data) error {
+// Send email to recipient.
+func (c *Client) Send(data Data) error {
 	msg := gomail.NewMessage()
-	msg.SetHeader("From", s.from)
+	msg.SetHeader("From", c.from)
 	msg.SetHeader("To", data.Recipient)
 	msg.SetHeader("Subject", data.Subject)
 	msg.SetBody("text/plain", string(data.Body))
 
-	dialer := gomail.NewDialer(s.host, s.port, s.from, s.key)
+	dialer := gomail.NewDialer(c.host, c.port, c.from, c.key)
 	err := dialer.DialAndSend(msg)
 	return err
 }

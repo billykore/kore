@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/billykore/kore/backend/internal/app/order"
+	"github.com/billykore/kore/backend/internal/domain/order"
 	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/labstack/echo/v4"
