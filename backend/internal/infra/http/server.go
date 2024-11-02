@@ -20,7 +20,7 @@ func NewServer(router *Router) *Server {
 	}
 }
 
-// Serve start the server.
+// Serve start the Server.
 func (s *Server) Serve() {
 	s.router.Run()
 }

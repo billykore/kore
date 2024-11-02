@@ -19,8 +19,8 @@ func (r *ProductRepository) List(ctx context.Context, categoryId, limit, startId
 	products := make([]*product.Product, 0)
 	tx := r.db.WithContext(ctx).
 		Preload("Discount").
-		Preload("ProductCategory").
-		Preload("ProductInventory")
+		Preload("Category").
+		Preload("Inventory")
 	if categoryId > 0 {
 		tx = tx.Where("category_id = ?", categoryId)
 	}
@@ -38,8 +38,8 @@ func (r *ProductRepository) GetById(ctx context.Context, id int) (*product.Produ
 	p := new(product.Product)
 	tx := r.db.WithContext(ctx).
 		Preload("Discount").
-		Preload("ProductCategory").
-		Preload("ProductInventory").
+		Preload("Category").
+		Preload("Inventory").
 		Where("id = ?", id).
 		First(p)
 	return p, tx.Error

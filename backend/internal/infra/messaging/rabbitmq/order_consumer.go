@@ -3,7 +3,7 @@ package rabbitmq
 import (
 	"context"
 
-	"github.com/billykore/kore/backend/internal/app/order"
+	"github.com/billykore/kore/backend/internal/domain/order"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/logger"
 )

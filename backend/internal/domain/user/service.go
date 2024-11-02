@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/billykore/kore/backend/internal/domain/user"
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/ctxt"
 	"github.com/billykore/kore/backend/pkg/logger"
@@ -18,12 +17,20 @@ import (
 	"github.com/billykore/kore/backend/pkg/uuid"
 )
 
-type Service struct {
-	logger *logger.Logger
-	repo   user.Repository
+type Repository interface {
+	GetByUsername(ctx context.Context, username string) (*User, error)
+	Login(ctx context.Context, auth AuthActivities) error
+	SaveLoginActivity(ctx context.Context, auth AuthActivities) error
+	Logout(ctx context.Context, auth AuthActivities) error
+	FindFailedLoginByUsername(ctx context.Context, username string) (*AuthActivities, error)
 }
 
-func NewService(logger *logger.Logger, repo user.Repository) *Service {
+type Service struct {
+	logger *logger.Logger
+	repo   Repository
+}
+
+func NewService(logger *logger.Logger, repo Repository) *Service {
 	return &Service{
 		logger: logger,
 		repo:   repo,
@@ -52,7 +59,7 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 	}
 
 	if userLoginAttempt[req.Username] >= maxUserLoginAttempts {
-		err = s.repo.SaveLoginActivity(ctx, user.AuthActivities{
+		err = s.repo.SaveLoginActivity(ctx, AuthActivities{
 			UUID:             id,
 			Username:         req.Username,
 			IsLoggedOut:      false,
@@ -96,7 +103,7 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 		return nil, status.Error(codes.BadRequest, messages.InvalidUsernameOrPassword)
 	}
 
-	err = s.repo.Login(ctx, user.AuthActivities{
+	err = s.repo.Login(ctx, AuthActivities{
 		UUID:           id,
 		Username:       req.Username,
 		LoginTime:      time.Now(),
@@ -138,7 +145,7 @@ func (s *Service) Logout(ctx context.Context, req LogoutRequest) (*LogoutRespons
 		return nil, status.Error(codes.Unauthenticated, messages.LogoutFailed)
 	}
 
-	err := s.repo.Logout(ctx, user.AuthActivities{
+	err := s.repo.Logout(ctx, AuthActivities{
 		UUID:     req.LoginId,
 		Username: userLogin.Username,
 	})

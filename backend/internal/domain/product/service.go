@@ -3,19 +3,29 @@ package product
 import (
 	"context"
 
-	product "github.com/billykore/kore/backend/internal/domain/product"
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/ctxt"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/billykore/kore/backend/pkg/status"
 )
 
-type Service struct {
-	log  *logger.Logger
-	repo product.Repository
+type Repository interface {
+	List(ctx context.Context, categoryId, limit, startId int) ([]*Product, error)
+	GetById(ctx context.Context, id int) (*Product, error)
+	CartList(ctx context.Context, username string, limit, startId int) ([]*Cart, error)
+	SaveCart(ctx context.Context, cart Cart) error
+	UpdateCart(ctx context.Context, id int, cart Cart) error
+	DeleteCart(ctx context.Context, id int, cart Cart) error
+	CategoryList(ctx context.Context) ([]*Category, error)
+	DiscountList(ctx context.Context, limit, startId int) ([]*Discount, error)
 }
 
-func NewService(log *logger.Logger, repo product.Repository) *Service {
+type Service struct {
+	log  *logger.Logger
+	repo Repository
+}
+
+func NewService(log *logger.Logger, repo Repository) *Service {
 	return &Service{
 		log:  log,
 		repo: repo,
@@ -82,7 +92,7 @@ func (s *Service) AddCartItem(ctx context.Context, req AddCartItemRequest) error
 		s.log.Usecase("AddCartItem").Error(ctxt.ErrGetUserFromContext)
 		return status.Error(codes.Internal, "Failed to add cart item to list")
 	}
-	err := s.repo.SaveCart(ctx, product.Cart{
+	err := s.repo.SaveCart(ctx, Cart{
 		Username:  user.Username,
 		ProductId: req.ProductId,
 		Quantity:  req.Quantity,
@@ -100,7 +110,7 @@ func (s *Service) UpdateCartItemQuantity(ctx context.Context, req UpdateCartItem
 		s.log.Usecase("UpdateCartItemQuantity").Error(ctxt.ErrGetUserFromContext)
 		return status.Error(codes.Internal, "Failed to add cart item to list")
 	}
-	err := s.repo.UpdateCart(ctx, req.Id, product.Cart{
+	err := s.repo.UpdateCart(ctx, req.Id, Cart{
 		Username: user.Username,
 		Quantity: req.Quantity,
 	})
@@ -117,7 +127,7 @@ func (s *Service) DeleteCartItem(ctx context.Context, req DeleteCartItemRequest)
 		s.log.Usecase("DeleteCartItem").Error(ctxt.ErrGetUserFromContext)
 		return status.Error(codes.Internal, "Failed to add cart item to list")
 	}
-	err := s.repo.DeleteCart(ctx, req.Id, product.Cart{
+	err := s.repo.DeleteCart(ctx, req.Id, Cart{
 		Username: user.Username,
 	})
 	if err != nil {

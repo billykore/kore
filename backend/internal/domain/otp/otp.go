@@ -6,7 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
-type Otp struct {
+// OTP is OTP entity.
+type OTP struct {
 	gorm.Model
 	Email     string
 	Otp       string
@@ -14,11 +15,18 @@ type Otp struct {
 	ExpiresAt time.Time
 }
 
-func (Otp) TableName() string {
+func (OTP) TableName() string {
 	return "otp"
 }
 
 // IsExpired determine if ExpiresAt is before the current time.
-func (otp Otp) IsExpired() bool {
+func (otp OTP) IsExpired() bool {
 	return otp.ExpiresAt.Before(time.Now())
+}
+
+// EmailData defines data for email to send.
+type EmailData struct {
+	Recipient string
+	Subject   string
+	OTP       string
 }

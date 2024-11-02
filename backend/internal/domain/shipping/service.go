@@ -3,7 +3,6 @@ package shipping
 import (
 	"context"
 
-	"github.com/billykore/kore/backend/internal/domain/shipping"
 	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/entity"
@@ -11,13 +10,19 @@ import (
 	"github.com/billykore/kore/backend/pkg/status"
 )
 
+type Repository interface {
+	GetById(ctx context.Context, id uint) (*Shipping, error)
+	Save(ctx context.Context, shipping Shipping) (uint, error)
+	UpdateStatus(ctx context.Context, id uint, newStatus, currentStatus Status) error
+}
+
 type Service struct {
 	log        *logger.Logger
 	rabbitConn *rabbitmq.Connection
-	repo       shipping.Repository
+	repo       Repository
 }
 
-func NewService(log *logger.Logger, rabbitConn *rabbitmq.Connection, repo shipping.Repository) *Service {
+func NewService(log *logger.Logger, rabbitConn *rabbitmq.Connection, repo Repository) *Service {
 	return &Service{
 		log:        log,
 		rabbitConn: rabbitConn,
@@ -27,13 +32,13 @@ func NewService(log *logger.Logger, rabbitConn *rabbitmq.Connection, repo shippi
 
 func (uc *Service) CreateShipping(ctx context.Context, req CreateShippingRequest) (*CreateShippingResponse, error) {
 	fee := GetFee(req.ShippingType)
-	id, err := uc.repo.Save(ctx, shipping.Shipping{
+	id, err := uc.repo.Save(ctx, Shipping{
 		ShipperName:     req.ShipperName,
 		ShippingType:    req.ShippingType,
 		CustomerAddress: req.Address,
 		CustomerName:    req.CustomerName,
 		SenderName:      req.SenderName,
-		Status:          shipping.StatusCreated.String(),
+		Status:          StatusCreated.String(),
 		Fee:             fee,
 	})
 	if err != nil {
@@ -43,7 +48,7 @@ func (uc *Service) CreateShipping(ctx context.Context, req CreateShippingRequest
 	return &CreateShippingResponse{
 		Id:          id,
 		Fee:         fee,
-		Status:      shipping.StatusCreated.String(),
+		Status:      StatusCreated.String(),
 		ShipperName: req.ShipperName,
 	}, nil
 }
@@ -54,7 +59,7 @@ func (uc *Service) UpdateShippingStatus(ctx context.Context, req UpdateShippingS
 		uc.log.Usecase("UpdateShippingStatus").Error(err)
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
-	err = uc.repo.UpdateStatus(ctx, s.ID, shipping.Status(req.NewStatus), shipping.Status(req.CurrentStatus))
+	err = uc.repo.UpdateStatus(ctx, s.ID, Status(req.NewStatus), Status(req.CurrentStatus))
 	if err != nil {
 		uc.log.Usecase("UpdateShippingStatus").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())

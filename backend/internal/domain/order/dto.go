@@ -1,7 +1,6 @@
 package order
 
 import (
-	"github.com/billykore/kore/backend/internal/domain/order"
 	"github.com/billykore/kore/backend/internal/infra/shipping"
 	"github.com/billykore/kore/backend/internal/infra/transaction"
 	"github.com/billykore/kore/backend/pkg/types"
@@ -21,7 +20,7 @@ type Response struct {
 }
 
 // MakeResponse makes OtpResponse from Order entity.
-func MakeResponse(m *order.Order) *Response {
+func MakeResponse(m *Order) *Response {
 	return &Response{
 		Id:            m.ID,
 		Username:      m.Username,

@@ -4,27 +4,29 @@
 package main
 
 import (
-	"github.com/billykore/kore/backend/internal/app"
-	"github.com/billykore/kore/backend/internal/infra"
-	"github.com/billykore/kore/backend/internal/infra/http/handler"
-	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
-	"github.com/billykore/kore/backend/internal/infra/storage/postgres"
+	"github.com/billykore/kore/backend/internal/domain"
+	"github.com/billykore/kore/backend/internal/infra/email"
+	"github.com/billykore/kore/backend/internal/infra/http"
+	"github.com/billykore/kore/backend/internal/infra/messaging"
+	"github.com/billykore/kore/backend/internal/infra/persistence"
+	"github.com/billykore/kore/backend/internal/infra/storage"
 	"github.com/billykore/kore/backend/pkg"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/google/wire"
 	"github.com/labstack/echo/v4"
 )
 
-func initKore(cfg *config.Config) *kore {
+func initApp(cfg *config.Config) *app {
 	wire.Build(
-		app.ProviderSet,
-		infra.ProviderSet,
-		handler.ProviderSet,
-		postgres.ProviderSet,
-		rabbitmq.ProviderSet,
+		domain.ProviderSet,
+		http.ProviderSet,
+		email.ProviderSet,
+		messaging.ProviderSet,
+		persistence.ProviderSet,
+		storage.ProviderSet,
 		pkg.ProviderSet,
 		echo.New,
-		newKore,
+		newApp,
 	)
-	return &kore{}
+	return &app{}
 }
