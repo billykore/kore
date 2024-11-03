@@ -40,7 +40,7 @@ type UpdateShippingStatusRequest struct {
 	CurrentStatus string `json:"currentStatus"`
 }
 
-type UpdateShippingRabbitData struct {
+type StatusChangeData struct {
 	ShippingId uint   `json:"shippingId"`
 	Status     string `json:"status"`
 }

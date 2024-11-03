@@ -63,11 +63,7 @@ func (h *ShippingHandler) UpdateShippingStatus(ctx echo.Context) error {
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
-	msgPayload, err := h.svc.UpdateShippingStatus(ctx.Request().Context(), req)
-	if err != nil {
-		return ctx.JSON(entity.ResponseError(err))
-	}
-	err = h.sp.PublishShippingUpdateStatus(ctx.Request().Context(), msgPayload)
+	err := h.svc.UpdateShippingStatus(ctx.Request().Context(), req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}

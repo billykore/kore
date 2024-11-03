@@ -17,8 +17,8 @@ import (
 	"github.com/billykore/kore/backend/internal/infra/http/handler"
 	"github.com/billykore/kore/backend/internal/infra/messaging"
 	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
-	"github.com/billykore/kore/backend/internal/infra/persistence"
-	"github.com/billykore/kore/backend/internal/infra/storage/postgres"
+	"github.com/billykore/kore/backend/internal/infra/persistence/postgres"
+	postgres2 "github.com/billykore/kore/backend/internal/infra/storage/postgres"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/billykore/kore/backend/pkg/validation"
@@ -34,25 +34,25 @@ import (
 func initApp(cfg *config.Config) *app {
 	loggerLogger := logger.New()
 	echoEcho := echo.New()
-	db := persistence.NewPostgres(cfg)
-	userRepository := postgres.NewUserRepository(db)
+	db := postgres.New(cfg)
+	userRepository := postgres2.NewUserRepository(db)
 	service := user.NewService(loggerLogger, userRepository)
 	userHandler := handler.NewUserHandler(service)
-	orderRepository := postgres.NewOrderRepository(db)
+	orderRepository := postgres2.NewOrderRepository(db)
 	orderService := order.NewService(loggerLogger, orderRepository)
 	connection := rabbitmq.NewConnection(cfg)
 	orderHandler := handler.NewOrderHandler(orderService, connection)
-	otpRepository := postgres.NewOtpRepository(db)
+	otpRepository := postgres2.NewOtpRepository(db)
 	client := email.NewClient(cfg)
 	otpEmail := email.NewOTPEmail(loggerLogger, client)
 	otpService := otp.NewService(loggerLogger, otpRepository, otpEmail)
 	validator := validation.New()
 	otpHandler := handler.NewOtpHandler(otpService, validator)
-	productRepository := postgres.NewProductRepository(db)
+	productRepository := postgres2.NewProductRepository(db)
 	productService := product.NewService(loggerLogger, productRepository)
 	productHandler := handler.NewProductHandler(productService)
-	shippingRepository := postgres.NewShippingRepository(db)
-	shippingService := shipping.NewService(loggerLogger, connection, shippingRepository)
+	shippingRepository := postgres2.NewShippingRepository(db)
+	shippingService := shipping.NewService(loggerLogger, shippingRepository)
 	shippingProducer := rabbitmq.NewShippingProducer(cfg, connection)
 	shippingHandler := handler.NewShippingHandler(shippingService, shippingProducer)
 	router := http.NewRouter(cfg, loggerLogger, echoEcho, userHandler, orderHandler, otpHandler, productHandler, shippingHandler)

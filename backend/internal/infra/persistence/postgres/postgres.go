@@ -1,4 +1,4 @@
-package persistence
+package postgres
 
 import (
 	"github.com/billykore/kore/backend/pkg/config"
@@ -7,8 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
-// NewPostgres returns new postgres db connection.
-func NewPostgres(cfg *config.Config) *gorm.DB {
+// New returns new postgres db connection.
+func New(cfg *config.Config) *gorm.DB {
 	dsn := cfg.Postgres.DSN
 	log := logger.New()
 	db, err := gorm.Open(postgres.Open(dsn))

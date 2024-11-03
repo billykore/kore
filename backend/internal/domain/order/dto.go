@@ -69,11 +69,11 @@ type PaymentResponse struct {
 	PaymentId int         `json:"paymentId"`
 }
 
-func MakePaymentResponse(paymentResp *transaction.PaymentResponse) *PaymentResponse {
+func MakePaymentResponse(r *transaction.PaymentResponse) *PaymentResponse {
 	return &PaymentResponse{
-		Method:    paymentResp.Method,
-		Amount:    paymentResp.Amount,
-		PaymentId: paymentResp.PaymentId,
+		Method:    r.Method,
+		Amount:    r.Amount,
+		PaymentId: r.PaymentId,
 	}
 }
 
@@ -92,12 +92,12 @@ type ShippingResponse struct {
 	ShipperName string      `json:"shipperName"`
 }
 
-func MakeShippingResponse(shippingResp *shipping.Response) *ShippingResponse {
+func MakeShippingResponse(r *shipping.Response) *ShippingResponse {
 	return &ShippingResponse{
-		Id:          shippingResp.Id,
-		Fee:         shippingResp.Fee,
-		Status:      shippingResp.Status,
-		ShipperName: shippingResp.ShipperName,
+		Id:          r.Id,
+		Fee:         r.Fee,
+		Status:      r.Status,
+		ShipperName: r.ShipperName,
 	}
 }
 

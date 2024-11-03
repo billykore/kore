@@ -20,7 +20,7 @@ type Repository interface {
 
 // Email is OTP email service.
 type Email interface {
-	SendOTP(data EmailData) error
+	SendOTP(EmailData) error
 }
 
 type Service struct {

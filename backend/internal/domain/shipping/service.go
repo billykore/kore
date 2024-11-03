@@ -3,12 +3,14 @@ package shipping
 import (
 	"context"
 
-	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/codes"
-	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/billykore/kore/backend/pkg/status"
 )
+
+type Messaging interface {
+	ProduceStatusChange(context.Context, StatusChangeData) error
+}
 
 type Repository interface {
 	GetById(ctx context.Context, id uint) (*Shipping, error)
@@ -17,22 +19,21 @@ type Repository interface {
 }
 
 type Service struct {
-	log        *logger.Logger
-	rabbitConn *rabbitmq.Connection
-	repo       Repository
+	log  *logger.Logger
+	repo Repository
+	msg  Messaging
 }
 
-func NewService(log *logger.Logger, rabbitConn *rabbitmq.Connection, repo Repository) *Service {
+func NewService(log *logger.Logger, repo Repository) *Service {
 	return &Service{
-		log:        log,
-		rabbitConn: rabbitConn,
-		repo:       repo,
+		log:  log,
+		repo: repo,
 	}
 }
 
-func (uc *Service) CreateShipping(ctx context.Context, req CreateShippingRequest) (*CreateShippingResponse, error) {
+func (s *Service) CreateShipping(ctx context.Context, req CreateShippingRequest) (*CreateShippingResponse, error) {
 	fee := GetFee(req.ShippingType)
-	id, err := uc.repo.Save(ctx, Shipping{
+	id, err := s.repo.Save(ctx, Shipping{
 		ShipperName:     req.ShipperName,
 		ShippingType:    req.ShippingType,
 		CustomerAddress: req.Address,
@@ -42,7 +43,7 @@ func (uc *Service) CreateShipping(ctx context.Context, req CreateShippingRequest
 		Fee:             fee,
 	})
 	if err != nil {
-		uc.log.Usecase("CreateShipping").Error(err)
+		s.log.Usecase("CreateShipping").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 	return &CreateShippingResponse{
@@ -53,24 +54,24 @@ func (uc *Service) CreateShipping(ctx context.Context, req CreateShippingRequest
 	}, nil
 }
 
-func (uc *Service) UpdateShippingStatus(ctx context.Context, req UpdateShippingStatusRequest) (*entity.MessagePayload[*rabbitmq.UpdateShippingRabbitData], error) {
-	s, err := uc.repo.GetById(ctx, req.Id)
+func (s *Service) UpdateShippingStatus(ctx context.Context, req UpdateShippingStatusRequest) error {
+	shipping, err := s.repo.GetById(ctx, req.Id)
 	if err != nil {
-		uc.log.Usecase("UpdateShippingStatus").Error(err)
-		return nil, status.Error(codes.NotFound, err.Error())
+		s.log.Usecase("UpdateShippingStatus").Error(err)
+		return status.Error(codes.NotFound, err.Error())
 	}
-	err = uc.repo.UpdateStatus(ctx, s.ID, Status(req.NewStatus), Status(req.CurrentStatus))
+	err = s.repo.UpdateStatus(ctx, shipping.ID, Status(req.NewStatus), Status(req.CurrentStatus))
 	if err != nil {
-		uc.log.Usecase("UpdateShippingStatus").Error(err)
-		return nil, status.Error(codes.Internal, err.Error())
+		s.log.Usecase("UpdateShippingStatus").Error(err)
+		return status.Error(codes.Internal, err.Error())
 	}
-	data := &rabbitmq.UpdateShippingRabbitData{
-		ShippingId: req.Id,
+	err = s.msg.ProduceStatusChange(ctx, StatusChangeData{
+		ShippingId: shipping.ID,
 		Status:     req.NewStatus,
+	})
+	if err != nil {
+		s.log.Usecase("UpdateShippingStatus").Error(err)
+		return status.Error(codes.Internal, err.Error())
 	}
-	msgPayload := &entity.MessagePayload[*rabbitmq.UpdateShippingRabbitData]{
-		Origin: "shipping-service",
-		Data:   data,
-	}
-	return msgPayload, nil
+	return nil
 }
