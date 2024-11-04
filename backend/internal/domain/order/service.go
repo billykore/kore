@@ -8,7 +8,6 @@ import (
 	"github.com/billykore/kore/backend/internal/infra/transaction"
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/ctxt"
-	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/billykore/kore/backend/pkg/status"
 )
@@ -122,19 +121,13 @@ func (s *Service) CancelOrder(ctx context.Context, req CancelOrderRequest) error
 	return nil
 }
 
-func (s *Service) ListenOrderStatusChanges(ctx context.Context, data []byte) error {
-	payload := new(entity.MessagePayload[*updateShippingRabbitData])
-	err := payload.UnmarshalBinary(data)
+func (s *Service) ConsumeOrderStatusChanges(ctx context.Context, data StatusChangeData) error {
+	order, err := s.repo.GetByShippingId(ctx, data.ShippingId)
 	if err != nil {
 		s.log.Usecase("ListenOrderStatusChanges").Error(err)
 		return err
 	}
-	o, err := s.repo.GetByShippingId(ctx, payload.Data.ShippingId)
-	if err != nil {
-		s.log.Usecase("ListenOrderStatusChanges").Error(err)
-		return err
-	}
-	err = s.repo.UpdateStatus(ctx, o.ID, Status(payload.Data.Status), StatusWaitingForShipment)
+	err = s.repo.UpdateStatus(ctx, order.ID, Status(data.Status), StatusWaitingForShipment)
 	if err != nil {
 		s.log.Usecase("ListenOrderStatusChanges").Error(err)
 		return err

@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
+	"github.com/billykore/kore/backend/internal/infra/messaging/consumer"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/logger"
 )
@@ -15,10 +15,10 @@ import (
 type Consumer struct {
 	cfg           *config.Config
 	log           *logger.Logger
-	orderConsumer *rabbitmq.OrderConsumer
+	orderConsumer *consumer.OrderConsumer
 }
 
-func NewConsumers(cfg *config.Config, log *logger.Logger, orderConsumer *rabbitmq.OrderConsumer) *Consumer {
+func NewConsumer(cfg *config.Config, log *logger.Logger, orderConsumer *consumer.OrderConsumer) *Consumer {
 	return &Consumer{
 		cfg:           cfg,
 		log:           log,

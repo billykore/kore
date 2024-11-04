@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/billykore/kore/backend/internal/infra/http/handler"
+	"github.com/billykore/kore/backend/internal/infra/http/server"
 	"github.com/google/wire"
 )
 
@@ -11,6 +12,6 @@ var ProviderSet = wire.NewSet(
 	handler.NewProductHandler,
 	handler.NewShippingHandler,
 	handler.NewUserHandler,
-	NewRouter,
-	NewServer,
+	server.NewRouter,
+	server.New,
 )

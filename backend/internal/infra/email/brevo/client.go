@@ -1,4 +1,4 @@
-package email
+package brevo
 
 import (
 	"github.com/billykore/kore/backend/pkg/config"

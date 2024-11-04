@@ -24,10 +24,11 @@ type Service struct {
 	msg  Messaging
 }
 
-func NewService(log *logger.Logger, repo Repository) *Service {
+func NewService(log *logger.Logger, repo Repository, msg Messaging) *Service {
 	return &Service{
 		log:  log,
 		repo: repo,
+		msg:  msg,
 	}
 }
 

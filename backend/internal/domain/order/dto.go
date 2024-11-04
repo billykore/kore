@@ -105,7 +105,7 @@ type CancelOrderRequest struct {
 	OrderId uint `param:"orderId"`
 }
 
-type updateShippingRabbitData struct {
+type StatusChangeData struct {
 	ShippingId uint   `json:"shippingId"`
 	Status     string `json:"status"`
 }

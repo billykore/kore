@@ -1,4 +1,4 @@
-package entity
+package rabbitmq
 
 import "encoding/json"
 

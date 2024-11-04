@@ -1,11 +1,11 @@
-package rabbitmq
+package producer
 
 import (
 	"context"
 
 	"github.com/billykore/kore/backend/internal/domain/shipping"
+	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/config"
-	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/logger"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -13,19 +13,19 @@ import (
 type ShippingProducer struct {
 	cfg  *config.Config
 	log  *logger.Logger
-	conn *Connection
-	svc  *shipping.Service
+	conn *rabbitmq.Connection
 }
 
-func NewShippingProducer(cfg *config.Config, conn *Connection) *ShippingProducer {
+func NewShippingProducer(cfg *config.Config, log *logger.Logger, conn *rabbitmq.Connection) *ShippingProducer {
 	return &ShippingProducer{
 		cfg:  cfg,
+		log:  log,
 		conn: conn,
 	}
 }
 
 func (p *ShippingProducer) ProduceStatusChange(ctx context.Context, data shipping.StatusChangeData) error {
-	payload := entity.MessagePayload[shipping.StatusChangeData]{
+	payload := rabbitmq.MessagePayload[shipping.StatusChangeData]{
 		Origin: "shipping-service",
 		Data:   data,
 	}
@@ -34,7 +34,7 @@ func (p *ShippingProducer) ProduceStatusChange(ctx context.Context, data shippin
 		return err
 	}
 	// Publish message to the RabbitMQ exchange
-	err = p.conn.channel.PublishWithContext(ctx,
+	err = p.conn.Channel.PublishWithContext(ctx,
 		p.cfg.Rabbit.QueueName, // exchange
 		"",                     // routing key
 		false,                  // mandatory

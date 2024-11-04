@@ -1,27 +1,27 @@
 package main
 
 import (
-	"github.com/billykore/kore/backend/internal/infra/http"
+	"github.com/billykore/kore/backend/internal/infra/http/server"
 	"github.com/billykore/kore/backend/internal/infra/messaging"
 	"github.com/billykore/kore/backend/pkg/config"
 	_ "github.com/joho/godotenv/autoload"
 )
 
 type app struct {
-	hs *http.Server
-	mc *messaging.Consumer
+	ss *server.Server
+	rc *messaging.Consumer
 }
 
-func newApp(hs *http.Server, mc *messaging.Consumer) *app {
+func newApp(ss *server.Server, rc *messaging.Consumer) *app {
 	return &app{
-		hs: hs,
-		mc: mc,
+		ss: ss,
+		rc: rc,
 	}
 }
 
 func main() {
 	c := config.Get()
 	a := initApp(c)
-	go a.mc.Consume()
-	a.hs.Serve()
+	go a.rc.Consume()
+	a.ss.Serve()
 }

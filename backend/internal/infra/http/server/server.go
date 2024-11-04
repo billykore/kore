@@ -1,4 +1,4 @@
-package http
+package server
 
 import (
 	"github.com/billykore/kore/backend/internal/infra/http/handler"
@@ -13,8 +13,8 @@ type Server struct {
 	router *Router
 }
 
-// NewServer creates new Server.
-func NewServer(router *Router) *Server {
+// New creates new Server.
+func New(router *Router) *Server {
 	return &Server{
 		router: router,
 	}

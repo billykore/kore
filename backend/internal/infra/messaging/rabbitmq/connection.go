@@ -8,7 +8,7 @@ import (
 
 type Connection struct {
 	conn    *amqp.Connection
-	channel *amqp.Channel
+	Channel *amqp.Channel
 }
 
 // NewConnection establishes a new RabbitMQ connection.
@@ -22,18 +22,18 @@ func NewConnection(cfg *config.Config) *Connection {
 	}
 	channel, err := conn.Channel()
 	if err != nil {
-		log.Fatalf("Failed to open a channel: %s", err)
+		log.Fatalf("Failed to open a Channel: %s", err)
 		return nil
 	}
 	return &Connection{
 		conn:    conn,
-		channel: channel,
+		Channel: channel,
 	}
 }
 
 // Close closes the RabbitMQ connection and channel.
 func (c *Connection) Close() {
-	err := c.channel.Close()
+	err := c.Channel.Close()
 	if err != nil {
 		return
 	}

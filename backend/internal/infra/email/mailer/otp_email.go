@@ -1,10 +1,11 @@
-package email
+package mailer
 
 import (
 	"bytes"
 	"html/template"
 
 	"github.com/billykore/kore/backend/internal/domain/otp"
+	"github.com/billykore/kore/backend/internal/infra/email/brevo"
 	"github.com/billykore/kore/backend/pkg/logger"
 )
 
@@ -55,10 +56,10 @@ func parseOTPTemplate(otp string) ([]byte, error) {
 
 type OTPEmail struct {
 	log    *logger.Logger
-	client *Client
+	client *brevo.Client
 }
 
-func NewOTPEmail(log *logger.Logger, client *Client) *OTPEmail {
+func NewOTPEmail(log *logger.Logger, client *brevo.Client) *OTPEmail {
 	return &OTPEmail{
 		log:    log,
 		client: client,
@@ -71,7 +72,7 @@ func (e *OTPEmail) SendOTP(data otp.EmailData) error {
 		e.log.Usecase("SendOTP").Error(err)
 		return err
 	}
-	err = e.client.Send(Data{
+	err = e.client.Send(brevo.Data{
 		Recipient: data.Recipient,
 		Subject:   data.Subject,
 		Body:      body,

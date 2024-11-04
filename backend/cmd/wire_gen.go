@@ -12,13 +12,16 @@ import (
 	"github.com/billykore/kore/backend/internal/domain/product"
 	"github.com/billykore/kore/backend/internal/domain/shipping"
 	"github.com/billykore/kore/backend/internal/domain/user"
-	"github.com/billykore/kore/backend/internal/infra/email"
-	"github.com/billykore/kore/backend/internal/infra/http"
+	"github.com/billykore/kore/backend/internal/infra/db/postgres"
+	"github.com/billykore/kore/backend/internal/infra/db/repository"
+	"github.com/billykore/kore/backend/internal/infra/email/brevo"
+	"github.com/billykore/kore/backend/internal/infra/email/mailer"
 	"github.com/billykore/kore/backend/internal/infra/http/handler"
+	"github.com/billykore/kore/backend/internal/infra/http/server"
 	"github.com/billykore/kore/backend/internal/infra/messaging"
+	"github.com/billykore/kore/backend/internal/infra/messaging/consumer"
+	"github.com/billykore/kore/backend/internal/infra/messaging/producer"
 	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
-	"github.com/billykore/kore/backend/internal/infra/persistence/postgres"
-	postgres2 "github.com/billykore/kore/backend/internal/infra/storage/postgres"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/billykore/kore/backend/pkg/validation"
@@ -35,30 +38,30 @@ func initApp(cfg *config.Config) *app {
 	loggerLogger := logger.New()
 	echoEcho := echo.New()
 	db := postgres.New(cfg)
-	userRepository := postgres2.NewUserRepository(db)
+	userRepository := repository.NewUserRepository(db)
 	service := user.NewService(loggerLogger, userRepository)
 	userHandler := handler.NewUserHandler(service)
-	orderRepository := postgres2.NewOrderRepository(db)
+	orderRepository := repository.NewOrderRepository(db)
 	orderService := order.NewService(loggerLogger, orderRepository)
 	connection := rabbitmq.NewConnection(cfg)
 	orderHandler := handler.NewOrderHandler(orderService, connection)
-	otpRepository := postgres2.NewOtpRepository(db)
-	client := email.NewClient(cfg)
-	otpEmail := email.NewOTPEmail(loggerLogger, client)
+	otpRepository := repository.NewOtpRepository(db)
+	client := brevo.NewClient(cfg)
+	otpEmail := mailer.NewOTPEmail(loggerLogger, client)
 	otpService := otp.NewService(loggerLogger, otpRepository, otpEmail)
 	validator := validation.New()
 	otpHandler := handler.NewOtpHandler(otpService, validator)
-	productRepository := postgres2.NewProductRepository(db)
+	productRepository := repository.NewProductRepository(db)
 	productService := product.NewService(loggerLogger, productRepository)
 	productHandler := handler.NewProductHandler(productService)
-	shippingRepository := postgres2.NewShippingRepository(db)
-	shippingService := shipping.NewService(loggerLogger, shippingRepository)
-	shippingProducer := rabbitmq.NewShippingProducer(cfg, connection)
-	shippingHandler := handler.NewShippingHandler(shippingService, shippingProducer)
-	router := http.NewRouter(cfg, loggerLogger, echoEcho, userHandler, orderHandler, otpHandler, productHandler, shippingHandler)
-	server := http.NewServer(router)
-	orderConsumer := rabbitmq.NewOrderConsumer(cfg, loggerLogger, connection, orderService)
-	consumer := messaging.NewConsumers(cfg, loggerLogger, orderConsumer)
-	mainApp := newApp(server, consumer)
+	shippingRepository := repository.NewShippingRepository(db)
+	shippingProducer := producer.NewShippingProducer(cfg, loggerLogger, connection)
+	shippingService := shipping.NewService(loggerLogger, shippingRepository, shippingProducer)
+	shippingHandler := handler.NewShippingHandler(shippingService)
+	router := server.NewRouter(cfg, loggerLogger, echoEcho, userHandler, orderHandler, otpHandler, productHandler, shippingHandler)
+	serverServer := server.New(router)
+	orderConsumer := consumer.NewOrderConsumer(cfg, loggerLogger, orderService, connection)
+	messagingConsumer := messaging.NewConsumer(cfg, loggerLogger, orderConsumer)
+	mainApp := newApp(serverServer, messagingConsumer)
 	return mainApp
 }
