@@ -4,13 +4,20 @@ import (
 	"context"
 	"errors"
 
-	"github.com/billykore/kore/backend/internal/infra/shipping"
-	"github.com/billykore/kore/backend/internal/infra/transaction"
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/ctxt"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/billykore/kore/backend/pkg/status"
+	"github.com/billykore/kore/backend/pkg/types"
 )
+
+type PaymentService interface {
+	Pay(srcName, srcAccount string, amount types.Money) (*PaymentResponse, error)
+}
+
+type ShippingService interface {
+	Ship(ShippingData) (*ShippingResponse, error)
+}
 
 type Repository interface {
 	GetById(ctx context.Context, id uint) (*Order, error)
@@ -22,14 +29,18 @@ type Repository interface {
 }
 
 type Service struct {
-	log  *logger.Logger
-	repo Repository
+	log         *logger.Logger
+	repo        Repository
+	paymentSvc  PaymentService
+	shippingSvc ShippingService
 }
 
-func NewService(log *logger.Logger, repo Repository) *Service {
+func NewService(log *logger.Logger, repo Repository, paymentSvc PaymentService, shippingSvc ShippingService) *Service {
 	return &Service{
-		log:  log,
-		repo: repo,
+		log:         log,
+		repo:        repo,
+		paymentSvc:  paymentSvc,
+		shippingSvc: shippingSvc,
 	}
 }
 
@@ -67,13 +78,12 @@ func (s *Service) GetOrderById(ctx context.Context, req GetRequest) (*Response, 
 }
 
 func (s *Service) PayOrder(ctx context.Context, req PaymentRequest) (*PaymentResponse, error) {
-	o, err := s.repo.GetByIdAndStatus(ctx, req.Id, StatusWaitingForPayment)
+	order, err := s.repo.GetByIdAndStatus(ctx, req.Id, StatusWaitingForPayment)
 	if err != nil {
 		s.log.Usecase("OrderPayment").Error(err)
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
-	paymentMethod := transaction.NewPayment(req.Method, req.AccountName, req.AccountNumber)
-	paymentResp, err := paymentMethod.Pay(o.TotalPrice())
+	paymentResp, err := s.paymentSvc.Pay(req.AccountName, req.AccountNumber, order.TotalPrice())
 	if err != nil {
 		s.log.Usecase("OrderPayment").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
@@ -83,18 +93,16 @@ func (s *Service) PayOrder(ctx context.Context, req PaymentRequest) (*PaymentRes
 		s.log.Usecase("UpdateOrderStatus").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	resp := MakePaymentResponse(paymentResp)
-	return resp, nil
+	return paymentResp, nil
 }
 
 func (s *Service) ShipOrder(ctx context.Context, req ShippingRequest) (*ShippingResponse, error) {
-	o, err := s.repo.GetByIdAndStatus(ctx, req.OrderId, StatusPaymentSucceed)
+	order, err := s.repo.GetByIdAndStatus(ctx, req.OrderId, StatusPaymentSucceed)
 	if err != nil {
 		s.log.Usecase("ShipOrder").Error(err)
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
-	shipper := shipping.New(req.ShipperName)
-	shippingResp, err := shipper.Create(&shipping.Data{
+	shippingResp, err := s.shippingSvc.Ship(ShippingData{
 		Address:      req.Address,
 		CustomerName: req.CustomerName,
 		ShippingType: req.ShippingType,
@@ -103,13 +111,12 @@ func (s *Service) ShipOrder(ctx context.Context, req ShippingRequest) (*Shipping
 		s.log.Usecase("ShipOrder").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	err = s.repo.UpdateShipping(ctx, o.ID, shippingResp.Id)
+	err = s.repo.UpdateShipping(ctx, order.ID, shippingResp.Id)
 	if err != nil {
 		s.log.Usecase("ShipOrder").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-	resp := MakeShippingResponse(shippingResp)
-	return resp, nil
+	return shippingResp, nil
 }
 
 func (s *Service) CancelOrder(ctx context.Context, req CancelOrderRequest) error {

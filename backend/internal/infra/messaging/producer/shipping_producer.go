@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/billykore/kore/backend/internal/domain/shipping"
-	"github.com/billykore/kore/backend/internal/infra/messaging/rabbitmq"
+	"github.com/billykore/kore/backend/pkg/broker/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/logger"
 	amqp "github.com/rabbitmq/amqp091-go"

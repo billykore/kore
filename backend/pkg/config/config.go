@@ -5,17 +5,18 @@ package config
 import (
 	"sync"
 
+	"github.com/billykore/kore/backend/pkg/config/internal"
 	"github.com/kelseyhightower/envconfig"
 )
 
 // Config contains app configurations use by services.
 type Config struct {
 	HTTPPort  string `envconfig:"HTTP_PORT" default:"8000"`
-	Postgres  postgres
-	Firestore firestore
-	Token     token
-	Rabbit    rabbit
-	Email     email
+	Postgres  internal.Postgres
+	Firestore internal.Firestore
+	Token     internal.Token
+	Rabbit    internal.Rabbit
+	Email     internal.Email
 }
 
 var (

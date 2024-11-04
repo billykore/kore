@@ -1,4 +1,4 @@
-CREATE TABLE shipping
+CREATE TABLE shipper
 (
     id               SERIAL PRIMARY KEY,
     shipper_name     VARCHAR(100) NOT NULL,

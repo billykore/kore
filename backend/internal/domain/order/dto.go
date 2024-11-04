@@ -1,8 +1,6 @@
 package order
 
 import (
-	"github.com/billykore/kore/backend/internal/infra/shipping"
-	"github.com/billykore/kore/backend/internal/infra/transaction"
 	"github.com/billykore/kore/backend/pkg/types"
 )
 
@@ -14,7 +12,7 @@ type Response struct {
 	Id            uint   `json:"id"`
 	Username      string `json:"userId"`
 	CartIds       []int  `json:"cartIds"`
-	PaymentMethod string `json:"paymentMethod"`
+	PaymentMethod string `json:"payment"`
 	Status        string `json:"status"`
 	ShippingId    int    `json:"shippingId"`
 }
@@ -32,7 +30,7 @@ func MakeResponse(m *Order) *Response {
 }
 
 type CheckoutRequest struct {
-	PaymentMethod string     `json:"paymentMethod"`
+	PaymentMethod string     `json:"payment"`
 	AccountNumber string     `json:"accountNumber"`
 	AccountName   string     `json:"accountName"`
 	Items         []CartItem `json:"items"`
@@ -59,22 +57,16 @@ type UpdateOrderRequest struct {
 type PaymentRequest struct {
 	Id            uint   `param:"orderId" swaggerignore:"true"`
 	Method        string `json:"method"`
-	AccountNumber string `json:"accountNumber"`
 	AccountName   string `json:"accountName"`
+	AccountNumber string `json:"accountNumber"`
 }
 
 type PaymentResponse struct {
-	Method    string      `json:"method"`
-	Amount    types.Money `json:"amount"`
-	PaymentId int         `json:"paymentId"`
-}
-
-func MakePaymentResponse(r *transaction.PaymentResponse) *PaymentResponse {
-	return &PaymentResponse{
-		Method:    r.Method,
-		Amount:    r.Amount,
-		PaymentId: r.PaymentId,
-	}
+	Method        string      `json:"method"`
+	Amount        types.Money `json:"amount"`
+	PaymentId     int         `json:"paymentId"`
+	AccountName   string      `json:"accountName"`
+	AccountNumber string      `json:"accountNumber"`
 }
 
 type ShippingRequest struct {
@@ -85,20 +77,19 @@ type ShippingRequest struct {
 	CustomerName string `json:"customerName"`
 }
 
-type ShippingResponse struct {
-	Id          int         `json:"id"`
-	Fee         types.Money `json:"fee"`
-	Status      string      `json:"status"`
-	ShipperName string      `json:"shipperName"`
+type ShippingData struct {
+	Address      string
+	CustomerName string
+	ShippingType string
 }
 
-func MakeShippingResponse(r *shipping.Response) *ShippingResponse {
-	return &ShippingResponse{
-		Id:          r.Id,
-		Fee:         r.Fee,
-		Status:      r.Status,
-		ShipperName: r.ShipperName,
-	}
+type ShippingResponse struct {
+	Id           int         `json:"id"`
+	Fee          types.Money `json:"fee"`
+	Status       string      `json:"status"`
+	ShipperName  string      `json:"shipperName"`
+	Address      string      `json:"address"`
+	CustomerName string      `json:"customerName"`
 }
 
 type CancelOrderRequest struct {

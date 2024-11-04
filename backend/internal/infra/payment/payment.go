@@ -1,4 +1,4 @@
-package shipping
+package payment
 
 import (
 	"github.com/billykore/kore/backend/internal/domain/order"
@@ -6,5 +6,5 @@ import (
 )
 
 var ProviderSet = wire.NewSet(
-	NewJNE, wire.Bind(new(order.ShippingService), new(*JNE)),
+	NewGoPay, wire.Bind(new(order.PaymentService), new(*GoPay)),
 )

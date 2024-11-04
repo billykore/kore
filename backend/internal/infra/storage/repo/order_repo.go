@@ -1,4 +1,4 @@
-package repository
+package repo
 
 import (
 	"context"
@@ -7,29 +7,29 @@ import (
 	"gorm.io/gorm"
 )
 
-type OrderRepository struct {
+type OrderRepo struct {
 	db *gorm.DB
 }
 
-func NewOrderRepository(db *gorm.DB) *OrderRepository {
-	return &OrderRepository{
+func NewOrderRepo(db *gorm.DB) *OrderRepo {
+	return &OrderRepo{
 		db: db,
 	}
 }
 
-func (r *OrderRepository) GetById(ctx context.Context, id uint) (*order.Order, error) {
+func (r *OrderRepo) GetById(ctx context.Context, id uint) (*order.Order, error) {
 	q := "SELECT id, username, payment_method, cart_ids, status FROM orders WHERE id = $1"
 	tx := r.db.WithContext(ctx).Begin()
 	return getOrder(tx, q, id)
 }
 
-func (r *OrderRepository) GetByIdAndStatus(ctx context.Context, id uint, status order.Status) (*order.Order, error) {
+func (r *OrderRepo) GetByIdAndStatus(ctx context.Context, id uint, status order.Status) (*order.Order, error) {
 	q := "SELECT id, username, payment_method, cart_ids, status FROM orders WHERE id = $1 AND status = $2"
 	tx := r.db.WithContext(ctx).Begin()
 	return getOrder(tx, q, id, status)
 }
 
-func (r *OrderRepository) GetByShippingId(ctx context.Context, shippingId uint) (*order.Order, error) {
+func (r *OrderRepo) GetByShippingId(ctx context.Context, shippingId uint) (*order.Order, error) {
 	q := "SELECT id, username, payment_method, cart_ids, status FROM orders WHERE shipping_id = $1"
 	tx := r.db.WithContext(ctx).Begin()
 	return getOrder(tx, q, shippingId)
@@ -51,7 +51,7 @@ func getOrder(tx *gorm.DB, query string, args ...any) (*order.Order, error) {
 	return o, nil
 }
 
-func (r *OrderRepository) Save(ctx context.Context, order order.Order) error {
+func (r *OrderRepo) Save(ctx context.Context, order order.Order) error {
 	q := "INSERT INTO orders (username, payment_method, cart_ids, status) VALUES ($1, $2, $3, $4)"
 	tx := r.db.WithContext(ctx).Begin()
 	tx = tx.Exec(q, order.Username, order.PaymentMethod, order.CartIds, order.Status)
@@ -63,7 +63,7 @@ func (r *OrderRepository) Save(ctx context.Context, order order.Order) error {
 	return nil
 }
 
-func (r *OrderRepository) UpdateStatus(ctx context.Context, id uint, newStatus order.Status, currentStatus ...order.Status) error {
+func (r *OrderRepo) UpdateStatus(ctx context.Context, id uint, newStatus order.Status, currentStatus ...order.Status) error {
 	q := "UPDATE orders SET status = ? WHERE id = ? AND status IN ?"
 	tx := r.db.WithContext(ctx).Begin()
 	err := updateOrder(tx, q, newStatus, id, currentStatus)
@@ -74,7 +74,7 @@ func (r *OrderRepository) UpdateStatus(ctx context.Context, id uint, newStatus o
 	return tx.Commit().Error
 }
 
-func (r *OrderRepository) UpdateShipping(ctx context.Context, id uint, shippingId int) error {
+func (r *OrderRepo) UpdateShipping(ctx context.Context, id uint, shippingId int) error {
 	tx := r.db.WithContext(ctx).Begin()
 	q1 := "UPDATE orders SET status = ? WHERE id = ?"
 	err := updateOrder(tx, q1, order.StatusWaitingForShipment, id)

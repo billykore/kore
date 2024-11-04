@@ -1026,7 +1026,7 @@ const docTemplate = `{
         },
         "/shipping": {
             "post": {
-                "description": "Create new customer order shipping",
+                "description": "Ship new customer order shipping",
                 "consumes": [
                     "application/json"
                 ],
@@ -1036,10 +1036,10 @@ const docTemplate = `{
                 "tags": [
                     "shipping"
                 ],
-                "summary": "Create shipping",
+                "summary": "Ship shipping",
                 "parameters": [
                     {
-                        "description": "Create shipping request",
+                        "description": "Ship shipping request",
                         "name": "CreateShippingRequest",
                         "in": "body",
                         "required": true,

@@ -9,19 +9,19 @@ import (
 
 type app struct {
 	ss *server.Server
-	rc *messaging.Consumer
+	mc *messaging.Consumer
 }
 
-func newApp(ss *server.Server, rc *messaging.Consumer) *app {
+func newApp(ss *server.Server, mc *messaging.Consumer) *app {
 	return &app{
 		ss: ss,
-		rc: rc,
+		mc: mc,
 	}
 }
 
 func main() {
 	c := config.Get()
 	a := initApp(c)
-	go a.rc.Consume()
+	go a.mc.Consume()
 	a.ss.Serve()
 }

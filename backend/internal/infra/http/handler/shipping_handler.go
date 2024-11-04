@@ -17,12 +17,12 @@ func NewShippingHandler(svc *shipping.Service) *ShippingHandler {
 
 // CreateShipping swaggo annotation.
 //
-//	@Summary		Create shipping
-//	@Description	Create new customer order shipping
+//	@Summary		Ship shipping
+//	@Description	Ship new customer order shipping
 //	@Tags			shipping
 //	@Accept			json
 //	@Produce		json
-//	@Param			CreateShippingRequest	body		shipping.CreateShippingRequest	true	"Create shipping request"
+//	@Param			CreateShippingRequest	body		shipping.CreateShippingRequest	true	"Ship shipping request"
 //	@Success		200						{object}	entity.Response
 //	@Failure		400						{object}	entity.Response
 //	@Failure		401						{object}	entity.Response

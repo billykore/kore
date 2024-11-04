@@ -1,4 +1,4 @@
-package repository
+package repo
 
 import (
 	"context"
@@ -7,15 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type ProductRepository struct {
+type ProductRepo struct {
 	db *gorm.DB
 }
 
-func NewProductRepository(db *gorm.DB) *ProductRepository {
-	return &ProductRepository{db: db}
+func NewProductRepo(db *gorm.DB) *ProductRepo {
+	return &ProductRepo{db: db}
 }
 
-func (r *ProductRepository) List(ctx context.Context, categoryId, limit, startId int) ([]*product.Product, error) {
+func (r *ProductRepo) List(ctx context.Context, categoryId, limit, startId int) ([]*product.Product, error) {
 	products := make([]*product.Product, 0)
 	tx := r.db.WithContext(ctx).
 		Preload("Discount").
@@ -34,7 +34,7 @@ func (r *ProductRepository) List(ctx context.Context, categoryId, limit, startId
 	return products, nil
 }
 
-func (r *ProductRepository) GetById(ctx context.Context, id int) (*product.Product, error) {
+func (r *ProductRepo) GetById(ctx context.Context, id int) (*product.Product, error) {
 	p := new(product.Product)
 	tx := r.db.WithContext(ctx).
 		Preload("Discount").
@@ -45,7 +45,7 @@ func (r *ProductRepository) GetById(ctx context.Context, id int) (*product.Produ
 	return p, tx.Error
 }
 
-func (r *ProductRepository) CartList(ctx context.Context, username string, limit, startId int) ([]*product.Cart, error) {
+func (r *ProductRepo) CartList(ctx context.Context, username string, limit, startId int) ([]*product.Cart, error) {
 	carts := make([]*product.Cart, 0)
 	tx := r.db.WithContext(ctx).
 		Preload("Product").
@@ -58,12 +58,12 @@ func (r *ProductRepository) CartList(ctx context.Context, username string, limit
 	return carts, tx.Error
 }
 
-func (r *ProductRepository) SaveCart(ctx context.Context, cart product.Cart) error {
+func (r *ProductRepo) SaveCart(ctx context.Context, cart product.Cart) error {
 	tx := r.db.WithContext(ctx).Save(&cart)
 	return tx.Error
 }
 
-func (r *ProductRepository) UpdateCart(ctx context.Context, id int, cart product.Cart) error {
+func (r *ProductRepo) UpdateCart(ctx context.Context, id int, cart product.Cart) error {
 	tx := r.db.WithContext(ctx).
 		Model(&cart).
 		Where("id = ?", id).
@@ -72,7 +72,7 @@ func (r *ProductRepository) UpdateCart(ctx context.Context, id int, cart product
 	return tx.Error
 }
 
-func (r *ProductRepository) DeleteCart(ctx context.Context, id int, cart product.Cart) error {
+func (r *ProductRepo) DeleteCart(ctx context.Context, id int, cart product.Cart) error {
 	tx := r.db.WithContext(ctx).
 		Where("id = ?", id).
 		Where("username = ?", cart.Username).
@@ -80,13 +80,13 @@ func (r *ProductRepository) DeleteCart(ctx context.Context, id int, cart product
 	return tx.Error
 }
 
-func (r *ProductRepository) CategoryList(ctx context.Context) ([]*product.Category, error) {
+func (r *ProductRepo) CategoryList(ctx context.Context) ([]*product.Category, error) {
 	categories := make([]*product.Category, 0)
 	tx := r.db.WithContext(ctx).Find(&categories)
 	return categories, tx.Error
 }
 
-func (r *ProductRepository) DiscountList(ctx context.Context, limit, startId int) ([]*product.Discount, error) {
+func (r *ProductRepo) DiscountList(ctx context.Context, limit, startId int) ([]*product.Discount, error) {
 	discounts := make([]*product.Discount, 0)
 	tx := r.db.WithContext(ctx)
 	if startId > 0 {

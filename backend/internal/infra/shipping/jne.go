@@ -1,5 +1,7 @@
 package shipping
 
+import "github.com/billykore/kore/backend/internal/domain/order"
+
 const JNECompanyName = "JNE Shipping"
 
 // JNE shipping service.
@@ -12,9 +14,9 @@ func NewJNE() *JNE {
 	return &JNE{JNECompanyName}
 }
 
-// Create new JNE shipping.
-func (jne *JNE) Create(data *Data) (*Response, error) {
-	return &Response{
+// Ship order.
+func (jne *JNE) Ship(data order.ShippingData) (*order.ShippingResponse, error) {
+	return &order.ShippingResponse{
 		Id:           699,
 		Fee:          10000,
 		Status:       "created",

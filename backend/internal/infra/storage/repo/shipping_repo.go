@@ -1,4 +1,4 @@
-package repository
+package repo
 
 import (
 	"context"
@@ -7,28 +7,28 @@ import (
 	"gorm.io/gorm"
 )
 
-type ShippingRepository struct {
+type ShippingRepo struct {
 	db *gorm.DB
 }
 
-func NewShippingRepository(db *gorm.DB) *ShippingRepository {
-	return &ShippingRepository{
+func NewShippingRepo(db *gorm.DB) *ShippingRepo {
+	return &ShippingRepo{
 		db: db,
 	}
 }
 
-func (r *ShippingRepository) GetById(ctx context.Context, id uint) (*shipping.Shipping, error) {
+func (r *ShippingRepo) GetById(ctx context.Context, id uint) (*shipping.Shipping, error) {
 	s := new(shipping.Shipping)
 	tx := r.db.WithContext(ctx).Where("id = ?", id).First(s)
 	return s, tx.Error
 }
 
-func (r *ShippingRepository) Save(ctx context.Context, shipping shipping.Shipping) (uint, error) {
+func (r *ShippingRepo) Save(ctx context.Context, shipping shipping.Shipping) (uint, error) {
 	tx := r.db.WithContext(ctx).Save(&shipping)
 	return shipping.ID, tx.Error
 }
 
-func (r *ShippingRepository) UpdateStatus(ctx context.Context, id uint, newStatus, currentStatus shipping.Status) error {
+func (r *ShippingRepo) UpdateStatus(ctx context.Context, id uint, newStatus, currentStatus shipping.Status) error {
 	tx := r.db.WithContext(ctx).
 		Model(&shipping.Shipping{}).
 		Where("id = ?", id).

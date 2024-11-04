@@ -1,4 +1,4 @@
-package repository
+package repo
 
 import (
 	"context"
@@ -10,15 +10,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserRepository struct {
+type UserRepo struct {
 	postgres *gorm.DB
 }
 
-func NewUserRepository(postgres *gorm.DB) *UserRepository {
-	return &UserRepository{postgres: postgres}
+func NewUserRepo(postgres *gorm.DB) *UserRepo {
+	return &UserRepo{postgres: postgres}
 }
 
-func (r *UserRepository) GetByUsername(ctx context.Context, username string) (*user.User, error) {
+func (r *UserRepo) GetByUsername(ctx context.Context, username string) (*user.User, error) {
 	u := new(user.User)
 	res := r.postgres.WithContext(ctx).
 		Where("username = ?", username).
@@ -29,7 +29,7 @@ func (r *UserRepository) GetByUsername(ctx context.Context, username string) (*u
 	return u, nil
 }
 
-func (r *UserRepository) Login(ctx context.Context, auth user.AuthActivities) error {
+func (r *UserRepo) Login(ctx context.Context, auth user.AuthActivities) error {
 	tx := r.postgres.Begin()
 	if err := tx.Error; err != nil {
 		return err
@@ -47,7 +47,7 @@ func (r *UserRepository) Login(ctx context.Context, auth user.AuthActivities) er
 	return tx.Commit().Error
 }
 
-func (r *UserRepository) SaveLoginActivity(ctx context.Context, auth user.AuthActivities) error {
+func (r *UserRepo) SaveLoginActivity(ctx context.Context, auth user.AuthActivities) error {
 	tx := r.postgres.Begin()
 	err := saveLoginActivity(ctx, tx, auth)
 	if err != nil {
@@ -83,7 +83,7 @@ func autoLogout(ctx context.Context, tx *gorm.DB, auth user.AuthActivities) erro
 	return nil
 }
 
-func (r *UserRepository) Logout(ctx context.Context, auth user.AuthActivities) error {
+func (r *UserRepo) Logout(ctx context.Context, auth user.AuthActivities) error {
 	tx := r.postgres.Begin()
 	if err := tx.Error; err != nil {
 		return err
@@ -125,7 +125,7 @@ func updateLogoutData(ctx context.Context, tx *gorm.DB, auth user.AuthActivities
 	return err
 }
 
-func (r *UserRepository) FindFailedLoginByUsername(ctx context.Context, username string) (*user.AuthActivities, error) {
+func (r *UserRepo) FindFailedLoginByUsername(ctx context.Context, username string) (*user.AuthActivities, error) {
 	activities := new(user.AuthActivities)
 	tx := r.postgres.WithContext(ctx).
 		Where("username = ?", username).

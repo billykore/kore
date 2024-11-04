@@ -5,7 +5,7 @@ import (
 	"html/template"
 
 	"github.com/billykore/kore/backend/internal/domain/otp"
-	"github.com/billykore/kore/backend/internal/infra/email/brevo"
+	"github.com/billykore/kore/backend/pkg/email/brevo"
 	"github.com/billykore/kore/backend/pkg/logger"
 )
 
