@@ -4,13 +4,13 @@
 package main
 
 import (
-	"github.com/billykore/kore/backend/internal/domain"
-	"github.com/billykore/kore/backend/internal/infra/email"
-	"github.com/billykore/kore/backend/internal/infra/http"
-	"github.com/billykore/kore/backend/internal/infra/messaging"
-	"github.com/billykore/kore/backend/internal/infra/payment"
-	"github.com/billykore/kore/backend/internal/infra/shipping"
-	"github.com/billykore/kore/backend/internal/infra/storage"
+	"github.com/billykore/kore/backend/domain"
+	"github.com/billykore/kore/backend/infra/email"
+	"github.com/billykore/kore/backend/infra/http"
+	"github.com/billykore/kore/backend/infra/messaging"
+	"github.com/billykore/kore/backend/infra/payment"
+	"github.com/billykore/kore/backend/infra/shipping"
+	"github.com/billykore/kore/backend/infra/storage"
 	"github.com/billykore/kore/backend/pkg"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/google/wire"

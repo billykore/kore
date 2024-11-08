@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/billykore/kore/backend/internal/infra/http/server"
-	"github.com/billykore/kore/backend/internal/infra/messaging"
+	"github.com/billykore/kore/backend/infra/http/server"
+	"github.com/billykore/kore/backend/infra/messaging"
 	"github.com/billykore/kore/backend/pkg/config"
 	_ "github.com/joho/godotenv/autoload"
 )

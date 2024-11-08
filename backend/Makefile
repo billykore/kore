@@ -71,14 +71,14 @@ create-migration:
 .PHONY: migrate-up
 migrate-up:
 	@echo "Migrate up..."
-	@migrate -path internal/infra/persistence/migrations -database $(dsn) -verbose up $(step)
+	@migrate -path pkg/db/migrations -database $(dsn) -verbose up $(step)
 
 # Examples:
 # make migrate-down db=auth dsn='postgres://user:password@localhost:5432/db?sslmode=disable' step=1
 .PHONY: migrate-down
 migrate-down:
 	@echo "Migrate down..."
-	@migrate -path internal/infra/persistence/migrations -database $(dsn) -verbose down $(step)
+	@migrate -path pkg/db/migrations -database $(dsn) -verbose down $(step)
 
 # Examples:
 # make generate-swagger
