@@ -1,16 +1,16 @@
 package handler
 
 import (
-	user2 "github.com/billykore/kore/backend/domain/user"
+	"github.com/billykore/kore/backend/domain/user"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/labstack/echo/v4"
 )
 
 type UserHandler struct {
-	svc *user2.Service
+	svc *user.Service
 }
 
-func NewUserHandler(svc *user2.Service) *UserHandler {
+func NewUserHandler(svc *user.Service) *UserHandler {
 	return &UserHandler{svc: svc}
 }
 
@@ -29,7 +29,7 @@ func NewUserHandler(svc *user2.Service) *UserHandler {
 //	@Failure		500				{object}	entity.Response
 //	@Router			/login [post]
 func (h *UserHandler) Login(ctx echo.Context) error {
-	var req user2.LoginRequest
+	var req user.LoginRequest
 	err := ctx.Bind(&req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
@@ -56,7 +56,7 @@ func (h *UserHandler) Login(ctx echo.Context) error {
 //	@Failure		500				{object}	entity.Response
 //	@Router			/logout [post]
 func (h *UserHandler) Logout(ctx echo.Context) error {
-	var req user2.LogoutRequest
+	var req user.LogoutRequest
 	err := ctx.Bind(&req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))

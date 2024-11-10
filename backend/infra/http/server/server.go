@@ -1,7 +1,7 @@
 package server
 
 import (
-	handler2 "github.com/billykore/kore/backend/infra/http/handler"
+	"github.com/billykore/kore/backend/infra/http/handler"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/labstack/echo/v4"
@@ -30,11 +30,11 @@ type Router struct {
 	cfg             *config.Config
 	log             *logger.Logger
 	router          *echo.Echo
-	authHandler     *handler2.UserHandler
-	orderHandler    *handler2.OrderHandler
-	otpHandler      *handler2.OtpHandler
-	productHandler  *handler2.ProductHandler
-	shippingHandler *handler2.ShippingHandler
+	authHandler     *handler.UserHandler
+	orderHandler    *handler.OrderHandler
+	otpHandler      *handler.OtpHandler
+	productHandler  *handler.ProductHandler
+	shippingHandler *handler.ShippingHandler
 }
 
 // NewRouter returns new Router.
@@ -42,11 +42,11 @@ func NewRouter(
 	cfg *config.Config,
 	log *logger.Logger,
 	router *echo.Echo,
-	authHandler *handler2.UserHandler,
-	orderHandler *handler2.OrderHandler,
-	otpHandler *handler2.OtpHandler,
-	productHandler *handler2.ProductHandler,
-	shippingHandler *handler2.ShippingHandler,
+	authHandler *handler.UserHandler,
+	orderHandler *handler.OrderHandler,
+	otpHandler *handler.OtpHandler,
+	productHandler *handler.ProductHandler,
+	shippingHandler *handler.ShippingHandler,
 ) *Router {
 	return &Router{
 		cfg:             cfg,

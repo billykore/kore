@@ -1,18 +1,18 @@
 package handler
 
 import (
-	order2 "github.com/billykore/kore/backend/domain/order"
+	"github.com/billykore/kore/backend/domain/order"
 	"github.com/billykore/kore/backend/pkg/broker/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/labstack/echo/v4"
 )
 
 type OrderHandler struct {
-	svc    *order2.Service
+	svc    *order.Service
 	rabbit *rabbitmq.Connection
 }
 
-func NewOrderHandler(svc *order2.Service, rabbit *rabbitmq.Connection) *OrderHandler {
+func NewOrderHandler(svc *order.Service, rabbit *rabbitmq.Connection) *OrderHandler {
 	return &OrderHandler{
 		svc:    svc,
 		rabbit: rabbit,
@@ -34,7 +34,7 @@ func NewOrderHandler(svc *order2.Service, rabbit *rabbitmq.Connection) *OrderHan
 //	@Failure		500				{object}	entity.Response
 //	@Router			/orders/checkout [post]
 func (h *OrderHandler) Checkout(ctx echo.Context) error {
-	var req order2.CheckoutRequest
+	var req order.CheckoutRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
@@ -60,7 +60,7 @@ func (h *OrderHandler) Checkout(ctx echo.Context) error {
 //	@Failure		500		{object}	entity.Response
 //	@Router			/orders/{orderId} [get]
 func (h *OrderHandler) GetOrderById(ctx echo.Context) error {
-	var req order2.GetRequest
+	var req order.GetRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
@@ -87,7 +87,7 @@ func (h *OrderHandler) GetOrderById(ctx echo.Context) error {
 //	@Failure		500					{object}	entity.Response
 //	@Router			/orders/{orderId}/pay [post]
 func (h *OrderHandler) PayOrder(ctx echo.Context) error {
-	var req order2.PaymentRequest
+	var req order.PaymentRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
@@ -114,7 +114,7 @@ func (h *OrderHandler) PayOrder(ctx echo.Context) error {
 //	@Failure		500				{object}	entity.Response
 //	@Router			/orders/{orderId}/ship [post]
 func (h *OrderHandler) ShipOrder(ctx echo.Context) error {
-	var req order2.ShippingRequest
+	var req order.ShippingRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
@@ -140,7 +140,7 @@ func (h *OrderHandler) ShipOrder(ctx echo.Context) error {
 //	@Failure		500		{object}	entity.Response
 //	@Router			/orders/{orderId} [delete]
 func (h *OrderHandler) CancelOrder(ctx echo.Context) error {
-	var req order2.CancelOrderRequest
+	var req order.CancelOrderRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}

@@ -1,17 +1,17 @@
 package handler
 
 import (
-	shipping2 "github.com/billykore/kore/backend/domain/shipping"
+	"github.com/billykore/kore/backend/domain/shipping"
 	"github.com/billykore/kore/backend/pkg/entity"
 
 	"github.com/labstack/echo/v4"
 )
 
 type ShippingHandler struct {
-	svc *shipping2.Service
+	svc *shipping.Service
 }
 
-func NewShippingHandler(svc *shipping2.Service) *ShippingHandler {
+func NewShippingHandler(svc *shipping.Service) *ShippingHandler {
 	return &ShippingHandler{svc: svc}
 }
 
@@ -30,7 +30,7 @@ func NewShippingHandler(svc *shipping2.Service) *ShippingHandler {
 //	@Failure		500						{object}	entity.Response
 //	@Router			/shipping [post]
 func (h *ShippingHandler) CreateShipping(ctx echo.Context) error {
-	var req shipping2.CreateShippingRequest
+	var req shipping.CreateShippingRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
@@ -57,7 +57,7 @@ func (h *ShippingHandler) CreateShipping(ctx echo.Context) error {
 //	@Failure		500							{object}	entity.Response
 //	@Router			/shipping/{shippingId}/status [put]
 func (h *ShippingHandler) UpdateShippingStatus(ctx echo.Context) error {
-	var req shipping2.UpdateShippingStatusRequest
+	var req shipping.UpdateShippingStatusRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}

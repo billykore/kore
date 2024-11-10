@@ -3,7 +3,7 @@ package consumer
 import (
 	"context"
 
-	order2 "github.com/billykore/kore/backend/domain/order"
+	"github.com/billykore/kore/backend/domain/order"
 	"github.com/billykore/kore/backend/pkg/broker/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/logger"
@@ -12,11 +12,11 @@ import (
 type OrderConsumer struct {
 	cfg  *config.Config
 	log  *logger.Logger
-	svc  *order2.Service
+	svc  *order.Service
 	conn *rabbitmq.Connection
 }
 
-func NewOrderConsumer(cfg *config.Config, log *logger.Logger, svc *order2.Service, conn *rabbitmq.Connection) *OrderConsumer {
+func NewOrderConsumer(cfg *config.Config, log *logger.Logger, svc *order.Service, conn *rabbitmq.Connection) *OrderConsumer {
 	return &OrderConsumer{
 		cfg:  cfg,
 		log:  log,
@@ -44,7 +44,7 @@ func (c *OrderConsumer) ListenOrderStatusChanges(ctx context.Context) error {
 		for msg := range msgs {
 			c.log.Usecase("ListenOrderStatusChanges").Infof("Received a message: %s", msg.Body)
 
-			payload := new(rabbitmq.MessagePayload[order2.StatusChangeData])
+			payload := new(rabbitmq.MessagePayload[order.StatusChangeData])
 			err := payload.UnmarshalBinary(msg.Body)
 			if err != nil {
 				c.log.Usecase("ListenOrderStatusChanges").

@@ -1,7 +1,7 @@
 package handler
 
 import (
-	otp2 "github.com/billykore/kore/backend/domain/otp"
+	"github.com/billykore/kore/backend/domain/otp"
 	"github.com/billykore/kore/backend/pkg/entity"
 	"github.com/billykore/kore/backend/pkg/validation"
 	"github.com/labstack/echo/v4"
@@ -9,10 +9,10 @@ import (
 
 type OtpHandler struct {
 	va  *validation.Validator
-	svc *otp2.Service
+	svc *otp.Service
 }
 
-func NewOtpHandler(svc *otp2.Service, validator *validation.Validator) *OtpHandler {
+func NewOtpHandler(svc *otp.Service, validator *validation.Validator) *OtpHandler {
 	return &OtpHandler{
 		va:  validator,
 		svc: svc,
@@ -34,7 +34,7 @@ func NewOtpHandler(svc *otp2.Service, validator *validation.Validator) *OtpHandl
 //	@Failure		500				{object}	entity.Response
 //	@Router			/otp/send [post]
 func (h *OtpHandler) SendOtp(ctx echo.Context) error {
-	var req otp2.SendOtpRequest
+	var req otp.SendOtpRequest
 	err := ctx.Bind(&req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))
@@ -65,7 +65,7 @@ func (h *OtpHandler) SendOtp(ctx echo.Context) error {
 //	@Failure		500					{object}	entity.Response
 //	@Router			/otp/verify [post]
 func (h *OtpHandler) VerifyOtp(ctx echo.Context) error {
-	var req otp2.VerifyOtpRequest
+	var req otp.VerifyOtpRequest
 	err := ctx.Bind(&req)
 	if err != nil {
 		return ctx.JSON(entity.ResponseError(err))

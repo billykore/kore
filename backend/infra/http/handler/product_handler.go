@@ -1,17 +1,17 @@
 package handler
 
 import (
-	product2 "github.com/billykore/kore/backend/domain/product"
+	"github.com/billykore/kore/backend/domain/product"
 	"github.com/billykore/kore/backend/pkg/entity"
 
 	"github.com/labstack/echo/v4"
 )
 
 type ProductHandler struct {
-	svc *product2.Service
+	svc *product.Service
 }
 
-func NewProductHandler(svc *product2.Service) *ProductHandler {
+func NewProductHandler(svc *product.Service) *ProductHandler {
 	return &ProductHandler{
 		svc: svc,
 	}
@@ -33,7 +33,7 @@ func NewProductHandler(svc *product2.Service) *ProductHandler {
 //	@Failure		500		{object}	entity.Response
 //	@Router			/products [get]
 func (h *ProductHandler) GetProductList(ctx echo.Context) error {
-	var req product2.GetRequest
+	var req product.GetRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
@@ -59,7 +59,7 @@ func (h *ProductHandler) GetProductList(ctx echo.Context) error {
 //	@Failure		500			{object}	entity.Response
 //	@Router			/products/{productId} [get]
 func (h *ProductHandler) GetProductById(ctx echo.Context) error {
-	var req product2.GetRequest
+	var req product.GetRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
@@ -107,7 +107,7 @@ func (h *ProductHandler) GetCategoryList(ctx echo.Context) error {
 //	@Failure		500		{object}	entity.Response
 //	@Router			/discounts [get]
 func (h *ProductHandler) GetDiscountList(ctx echo.Context) error {
-	var req product2.DiscountRequest
+	var req product.DiscountRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseError(err))
 	}
@@ -134,7 +134,7 @@ func (h *ProductHandler) GetDiscountList(ctx echo.Context) error {
 //	@Failure		500		{object}	entity.Response
 //	@Router			/carts [get]
 func (h *ProductHandler) GetCartItemList(ctx echo.Context) error {
-	var req product2.CartRequest
+	var req product.CartRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
@@ -160,7 +160,7 @@ func (h *ProductHandler) GetCartItemList(ctx echo.Context) error {
 //	@Failure		500					{object}	entity.Response
 //	@Router			/carts [post]
 func (h *ProductHandler) AddCartItem(ctx echo.Context) error {
-	var req product2.AddCartItemRequest
+	var req product.AddCartItemRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
@@ -187,7 +187,7 @@ func (h *ProductHandler) AddCartItem(ctx echo.Context) error {
 //	@Failure		500						{object}	entity.Response
 //	@Router			/carts/{cartId} [put]
 func (h *ProductHandler) UpdateCartItemQuantity(ctx echo.Context) error {
-	var req product2.UpdateCartItemRequest
+	var req product.UpdateCartItemRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
@@ -213,7 +213,7 @@ func (h *ProductHandler) UpdateCartItemQuantity(ctx echo.Context) error {
 //	@Failure		500		{object}	entity.Response
 //	@Router			/carts/{id} [delete]
 func (h *ProductHandler) DeleteCartItem(ctx echo.Context) error {
-	var req product2.DeleteCartItemRequest
+	var req product.DeleteCartItemRequest
 	if err := ctx.Bind(&req); err != nil {
 		return ctx.JSON(entity.ResponseBadRequest(err))
 	}
