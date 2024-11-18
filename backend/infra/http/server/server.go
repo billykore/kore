@@ -73,16 +73,20 @@ func (r *Router) run() {
 	}
 }
 
+// Run runs the server.
 func (r *Router) Run() {
 	r.setLoginRoutes()
 	r.setProductRoutes()
+	r.setOrderRoutes()
+	r.setShippingRoutes()
 	r.useMiddlewares()
 	r.run()
 }
 
 func (r *Router) setLoginRoutes() {
+	r.router.POST("/register", r.authHandler.Register)
 	r.router.POST("/login", r.authHandler.Login)
-	r.router.POST("/logout", r.authHandler.Logout)
+	r.router.POST("/logout", r.authHandler.Logout, authMiddleware())
 }
 
 func (r *Router) setProductRoutes() {
@@ -96,10 +100,29 @@ func (r *Router) setProductRoutes() {
 
 func (r *Router) setCartRoutes() {
 	cr := r.router.Group("/carts")
-	cr.Use(AuthMiddleware())
+	cr.Use(authMiddleware())
 
 	cr.GET("", r.productHandler.GetCartItemList)
 	cr.POST("", r.productHandler.AddCartItem)
 	cr.PUT("/:cartId", r.productHandler.UpdateCartItemQuantity)
 	cr.DELETE("/:cartId", r.productHandler.DeleteCartItem)
+}
+
+func (r *Router) setOrderRoutes() {
+	or := r.router.Group("/orders")
+	or.Use(authMiddleware())
+
+	or.POST("/checkout", r.orderHandler.Checkout)
+	or.GET("/:orderId", r.orderHandler.GetOrderById)
+	or.POST("/:orderId/pay", r.orderHandler.PayOrder)
+	or.POST("/:orderId/ship", r.orderHandler.ShipOrder)
+	or.DELETE("/:orderId", r.orderHandler.CancelOrder)
+}
+
+func (r *Router) setShippingRoutes() {
+	so := r.router.Group("/shipping")
+	so.Use(authMiddleware())
+
+	so.POST("", r.shippingHandler.CreateShipping)
+	so.PUT("/:shippingId/status", r.shippingHandler.UpdateShippingStatus)
 }

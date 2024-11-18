@@ -24,7 +24,7 @@ func NewShippingProducer(cfg *config.Config, log *logger.Logger, conn *rabbitmq.
 	}
 }
 
-func (p *ShippingProducer) ProduceStatusChange(ctx context.Context, data shipping.StatusChangeData) error {
+func (p *ShippingProducer) PublishStatusChange(ctx context.Context, data shipping.StatusChangeData) error {
 	payload := rabbitmq.MessagePayload[shipping.StatusChangeData]{
 		Origin: "shipping-service",
 		Data:   data,
@@ -33,6 +33,17 @@ func (p *ShippingProducer) ProduceStatusChange(ctx context.Context, data shippin
 	if err != nil {
 		return err
 	}
+
+	err = p.conn.Channel.ExchangeDeclare(
+		p.cfg.Rabbit.QueueName, // name
+		"fanout",               // type
+		true,                   // durable
+		false,                  // auto-deleted
+		false,                  // internal
+		false,                  // no-wait
+		nil,                    // arguments
+	)
+
 	// Publish message to the RabbitMQ exchange
 	err = p.conn.Channel.PublishWithContext(ctx,
 		p.cfg.Rabbit.QueueName, // exchange
@@ -48,6 +59,7 @@ func (p *ShippingProducer) ProduceStatusChange(ctx context.Context, data shippin
 		p.log.Errorf("Failed to publish message: %v", err)
 		return err
 	}
+
 	p.log.Infof("Published shipping status update for shippingId: %d", payload.Data.ShippingId)
 	return nil
 }

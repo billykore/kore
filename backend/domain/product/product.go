@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Product is product entity.
 type Product struct {
 	gorm.Model
 	Name        string
@@ -19,6 +20,7 @@ type Product struct {
 	Discount    Discount  `gorm:"foreignKey:DiscountId"`
 }
 
+// Category is category entity.
 type Category struct {
 	gorm.Model
 	Name        string
@@ -29,6 +31,7 @@ func (Category) TableName() string {
 	return "product_categories"
 }
 
+// Inventory is inventory entity.
 type Inventory struct {
 	gorm.Model
 	Quantity    int
@@ -39,6 +42,7 @@ func (Inventory) TableName() string {
 	return "product_inventories"
 }
 
+// Discount is discount entity.
 type Discount struct {
 	gorm.Model
 	Name               string
@@ -47,6 +51,7 @@ type Discount struct {
 	Active             bool
 }
 
+// Cart is cart entity.
 type Cart struct {
 	gorm.Model
 	Username  string

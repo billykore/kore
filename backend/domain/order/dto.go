@@ -17,27 +17,15 @@ type Response struct {
 	ShippingId    int    `json:"shippingId"`
 }
 
-// MakeResponse makes OtpResponse from Order entity.
-func MakeResponse(m *Order) *Response {
-	return &Response{
-		Id:            m.ID,
-		Username:      m.Username,
-		CartIds:       m.IntCartIds(),
-		PaymentMethod: m.PaymentMethod,
-		Status:        m.Status.String(),
-		ShippingId:    m.ShippingId,
-	}
-}
-
 type CheckoutRequest struct {
-	PaymentMethod string     `json:"payment"`
+	PaymentMethod string     `json:"paymentMethod"`
 	AccountNumber string     `json:"accountNumber"`
 	AccountName   string     `json:"accountName"`
 	Items         []CartItem `json:"items"`
 }
 
-// CartIds gets id from all item in the order.
-func (r *CheckoutRequest) CartIds() []uint {
+// cartIds gets id from all item in the order.
+func (r *CheckoutRequest) cartIds() []uint {
 	var ids []uint
 	for _, item := range r.Items {
 		ids = append(ids, item.Id)

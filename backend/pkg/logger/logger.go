@@ -9,7 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Logger is service log.
+// Logger provides logging functions.
 type Logger struct {
 	zapLogger *zap.Logger
 	usecase   string

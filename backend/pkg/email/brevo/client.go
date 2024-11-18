@@ -5,12 +5,17 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
+// Data describe email data to send.
 type Data struct {
+	// Recipient is email recipient.
 	Recipient string
-	Subject   string
-	Body      []byte
+	// Subject is subject of the email.
+	Subject string
+	// Body is the email body.
+	Body []byte
 }
 
+// Client is Brevo email service client.
 type Client struct {
 	from string
 	host string
@@ -28,7 +33,7 @@ func NewClient(cfg *config.Config) *Client {
 	}
 }
 
-// Send email to recipient.
+// Send sends email to the recipient.
 func (c *Client) Send(data Data) error {
 	msg := gomail.NewMessage()
 	msg.SetHeader("From", c.from)

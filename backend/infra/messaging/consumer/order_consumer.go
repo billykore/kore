@@ -26,6 +26,46 @@ func NewOrderConsumer(cfg *config.Config, log *logger.Logger, svc *order.Service
 }
 
 func (c *OrderConsumer) ListenOrderStatusChanges(ctx context.Context) error {
+	err := c.conn.Channel.ExchangeDeclare(
+		c.cfg.Rabbit.QueueName, // name
+		"fanout",               // type
+		true,                   // durable
+		false,                  // auto-deleted
+		false,                  // internal
+		false,                  // no-wait
+		nil,                    // arguments
+	)
+	if err != nil {
+		c.log.Usecase("ListenOrderStatusChanges").
+			Errorf("ExchangeDeclare error: %v", err)
+		return err
+	}
+
+	queue, err := c.conn.Channel.QueueDeclare(
+		"",    // name
+		false, // durable
+		false, // delete when unused
+		true,  // exclusive
+		false, // no-wait
+		nil,   // arguments
+	)
+	if err != nil {
+		c.log.Usecase("ListenOrderStatusChanges").Errorf("QueueDeclare error: %v", err)
+		return err
+	}
+
+	err = c.conn.Channel.QueueBind(
+		queue.Name,             // queue name
+		"",                     // routing key
+		c.cfg.Rabbit.QueueName, // exchange
+		false,
+		nil,
+	)
+	if err != nil {
+		c.log.Usecase("ListenOrderStatusChanges").
+			Errorf("QueueBind error: %v", err)
+	}
+
 	msgs, err := c.conn.Channel.ConsumeWithContext(ctx,
 		c.cfg.Rabbit.QueueName, // queue
 		"",                     // consumer
@@ -36,7 +76,8 @@ func (c *OrderConsumer) ListenOrderStatusChanges(ctx context.Context) error {
 		nil,                    // args
 	)
 	if err != nil {
-		c.log.Usecase("ListenOrderStatusChanges").Errorf("Consume error: %v", err)
+		c.log.Usecase("ListenOrderStatusChanges").
+			Errorf("ConsumeWithContext error: %v", err)
 		return err
 	}
 
@@ -49,9 +90,15 @@ func (c *OrderConsumer) ListenOrderStatusChanges(ctx context.Context) error {
 			if err != nil {
 				c.log.Usecase("ListenOrderStatusChanges").
 					Infof("Failed to process user event: %v", err)
+				return
 			}
 
 			err = c.svc.ConsumeOrderStatusChanges(ctx, payload.Data)
+			if err != nil {
+				c.log.Usecase("ListenOrderStatusChanges").
+					Errorf("Failed to process user event: %v", err)
+				return
+			}
 		}
 	}()
 

@@ -9,53 +9,94 @@ import (
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/ctxt"
 	"github.com/billykore/kore/backend/pkg/logger"
-	"github.com/billykore/kore/backend/pkg/messages"
-	"github.com/billykore/kore/backend/pkg/pkgerr"
 	"github.com/billykore/kore/backend/pkg/security/password"
 	"github.com/billykore/kore/backend/pkg/security/token"
 	"github.com/billykore/kore/backend/pkg/status"
 	"github.com/billykore/kore/backend/pkg/uuid"
 )
 
+// maxUserLoginAttempts is max user login attempts.
+const maxUserLoginAttempts = 5
+
+// userLoginAttempt stores username login attempts.
+var userLoginAttempt = make(map[string]int)
+
+// ErrAlreadyExists indicates an attempt to create a user failed
+// because the user already exists in the system.
+var ErrAlreadyExists = errors.New("user already exists")
+
+// ErrAlreadyLoggedOut indicates an operation was attempted on a user who has already logged out.
+var ErrAlreadyLoggedOut = errors.New("user already logged out")
+
+// Repository defines the methods to interacting with persistence storage used by user domain.
 type Repository interface {
+	// Create creates new user.
+	Create(ctx context.Context, user User) error
+
+	// GetByUsername gets specific user by username.
 	GetByUsername(ctx context.Context, username string) (*User, error)
+
+	// Login saves user login.
 	Login(ctx context.Context, auth AuthActivities) error
+
+	// SaveLoginActivity saves user login activities.
 	SaveLoginActivity(ctx context.Context, auth AuthActivities) error
+
+	// Logout set user login activity to logged out.
 	Logout(ctx context.Context, auth AuthActivities) error
+
+	// FindFailedLoginByUsername finds user auth activities that failed to logged in.
 	FindFailedLoginByUsername(ctx context.Context, username string) (*AuthActivities, error)
 }
 
 type Service struct {
-	logger *logger.Logger
-	repo   Repository
+	log  *logger.Logger
+	repo Repository
 }
 
-func NewService(logger *logger.Logger, repo Repository) *Service {
+func NewService(log *logger.Logger, repo Repository) *Service {
 	return &Service{
-		logger: logger,
-		repo:   repo,
+		log:  log,
+		repo: repo,
 	}
 }
 
-// stores username login attempts.
-var userLoginAttempt = make(map[string]int)
-
-// max user login attempts.
-const maxUserLoginAttempts = 5
+func (s *Service) Create(ctx context.Context, req RegisterRequest) (*RegisterResponse, error) {
+	hashedPwd, err := password.Hash(req.Password)
+	if err != nil {
+		s.log.Usecase("Create").Errorf("failed to hash password: %v", err)
+		return nil, status.Error(codes.Internal, messageRegisterFailed)
+	}
+	err = s.repo.Create(ctx, User{
+		Username: req.Username,
+		Password: hashedPwd,
+	})
+	if err != nil && errors.Is(err, ErrAlreadyExists) {
+		s.log.Usecase("Create").Errorf("failed to create new user: %v", err)
+		return nil, status.Errorf(codes.Conflict, "%s: %s", messageRegisterFailed, err.Error())
+	}
+	if err != nil {
+		s.log.Usecase("Create").Errorf("failed to create new user: %v", err)
+		return nil, status.Error(codes.Internal, messageRegisterFailed)
+	}
+	return &RegisterResponse{
+		Username: req.Username,
+	}, nil
+}
 
 func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 	if userLoginAttempt[req.Username] == 0 {
 		err := s.checkFailedLoginActivity(ctx, req.Username)
 		if err != nil {
-			s.logger.Usecase("Login").Errorf("failed to check failed loggerin activity by username (%s): %v", req.Username, err)
-			return nil, status.Error(codes.Internal, messages.FailedLoginAttemptNotExpired)
+			s.log.Usecase("Login").Errorf("failed to check failed login activity by username (%s): %v", req.Username, err)
+			return nil, status.Error(codes.Internal, messageFailedLoginAttemptNotExpired)
 		}
 	}
 
 	id, err := uuid.New()
 	if err != nil {
-		s.logger.Usecase("Login").Error(err)
-		return nil, status.Error(codes.Internal, messages.LoginFailed)
+		s.log.Usecase("Login").Error(err)
+		return nil, status.Error(codes.Internal, messageLoginFailed)
 	}
 
 	if userLoginAttempt[req.Username] >= maxUserLoginAttempts {
@@ -67,16 +108,16 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 			LastLoginAttempt: time.Now(),
 		})
 		if err != nil {
-			s.logger.Usecase("Login").Errorf("failed to save loggerin activity: %v", err)
-			return nil, status.Error(codes.Internal, messages.LoginFailed)
+			s.log.Usecase("Login").Errorf("failed to save login activity: %v", err)
+			return nil, status.Error(codes.Internal, messageLoginFailed)
 		}
 
-		// max attempts is reached, reset attempts and return error.
-		userLoginAttempt[req.Username] = 0
+		// max attempts is reached, delete from map and return error.
+		delete(userLoginAttempt, req.Username)
 
-		s.logger.Usecase("Login").Error(fmt.Errorf("user (%s) already loggerin %d times",
-			req.Username, maxUserLoginAttempts))
-		return nil, status.Error(codes.BadRequest, messages.MaxLoginAttemptReached)
+		s.log.Usecase("Login").Errorf("user (%s) already login %d times",
+			req.Username, maxUserLoginAttempts)
+		return nil, status.Error(codes.BadRequest, messageMaxLoginAttemptReached)
 	}
 
 	userLogin, err := s.repo.GetByUsername(ctx, req.Username)
@@ -84,8 +125,8 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 		// increment user login attempts.
 		userLoginAttempt[req.Username]++
 
-		s.logger.Usecase("Login").Errorf("failed to get user by username (%s): %v", req.Username, err)
-		return nil, status.Error(codes.BadRequest, messages.InvalidUsernameOrPassword)
+		s.log.Usecase("Login").Errorf("failed to get user by username (%s): %v", req.Username, err)
+		return nil, status.Error(codes.BadRequest, messageInvalidUsernameOrPassword)
 	}
 
 	err = password.Verify(userLogin.Password, req.Password)
@@ -93,14 +134,14 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 		// increment user login attempts.
 		userLoginAttempt[req.Username]++
 
-		s.logger.Usecase("Login").Errorf("failed to verify user (%s) password: %v", userLogin.Username, err)
-		return nil, status.Error(codes.BadRequest, messages.InvalidUsernameOrPassword)
+		s.log.Usecase("Login").Errorf("failed to verify user (%s) password: %v", userLogin.Username, err)
+		return nil, status.Error(codes.BadRequest, messageInvalidUsernameOrPassword)
 	}
 
 	t, err := token.New(userLogin.Username)
 	if err != nil {
-		s.logger.Usecase("Login").Errorf("failed to create token: %v", err)
-		return nil, status.Error(codes.BadRequest, messages.InvalidUsernameOrPassword)
+		s.log.Usecase("Login").Errorf("failed to create token: %v", err)
+		return nil, status.Error(codes.BadRequest, messageInvalidUsernameOrPassword)
 	}
 
 	err = s.repo.Login(ctx, AuthActivities{
@@ -110,8 +151,8 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 		IsLoginSucceed: true,
 	})
 	if err != nil {
-		s.logger.Usecase("Login").Errorf("failed to save loggerin activity: %v", err)
-		return nil, status.Error(codes.Internal, messages.LoginFailed)
+		s.log.Usecase("Login").Errorf("failed to save loggerin activity: %v", err)
+		return nil, status.Error(codes.Internal, messageLoginFailed)
 	}
 
 	return &Token{
@@ -141,22 +182,20 @@ func (s *Service) checkFailedLoginActivity(ctx context.Context, username string)
 func (s *Service) Logout(ctx context.Context, req LogoutRequest) (*LogoutResponse, error) {
 	userLogin, ok := ctxt.UserFromContext(ctx)
 	if !ok {
-		s.logger.Usecase("Logout").Error(ctxt.ErrGetUserFromContext)
-		return nil, status.Error(codes.Unauthenticated, messages.LogoutFailed)
+		s.log.Usecase("Logout").Error(ctxt.ErrGetUserFromContext)
+		return nil, status.Error(codes.Unauthenticated, messageLogoutFailed)
 	}
-
 	err := s.repo.Logout(ctx, AuthActivities{
 		UUID:     req.LoginId,
 		Username: userLogin.Username,
 	})
-	if err != nil && errors.Is(err, pkgerr.ErrAlreadyLoggedOut) {
-		s.logger.Usecase("Logout").Errorf("failed to save loggerout activity: %v", err)
-		return nil, status.Error(codes.Unauthenticated, messages.UserAlreadyLoggedOut)
+	if err != nil && errors.Is(err, ErrAlreadyLoggedOut) {
+		s.log.Usecase("Logout").Errorf("failed to save logout activity: %v", err)
+		return nil, status.Errorf(codes.Unauthenticated, "%s: %s", messageLogoutFailed, err.Error())
 	}
 	if err != nil {
-		s.logger.Usecase("Logout").Errorf("failed to save loggerout activity: %v", err)
-		return nil, status.Error(codes.Unauthenticated, messages.LogoutFailed)
+		s.log.Usecase("Logout").Errorf("failed to save loggerout activity: %v", err)
+		return nil, status.Error(codes.Unauthenticated, messageLogoutFailed)
 	}
-
-	return &LogoutResponse{Message: messages.LogoutSucceed}, nil
+	return &LogoutResponse{Message: messageLogoutSucceed}, nil
 }

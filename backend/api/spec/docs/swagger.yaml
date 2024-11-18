@@ -108,10 +108,20 @@ definitions:
     type: object
   user.LogoutRequest:
     properties:
-      accessToken:
-        type: string
       loginId:
         type: string
+    type: object
+  user.RegisterRequest:
+    properties:
+      password:
+        minLength: 8
+        type: string
+      username:
+        minLength: 3
+        type: string
+    required:
+    - password
+    - username
     type: object
 host: api.kore.co.id
 info:
@@ -397,7 +407,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: User login
       tags:
-      - authentication
+      - user
   /logout:
     post:
       consumes:
@@ -435,7 +445,7 @@ paths:
             $ref: '#/definitions/entity.Response'
       summary: User logout
       tags:
-      - authentication
+      - user
   /orders/{orderId}:
     delete:
       consumes:
@@ -788,13 +798,47 @@ paths:
       summary: Get specific product
       tags:
       - product
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: User registration by username and password
+      parameters:
+      - description: Register Request
+        in: body
+        name: RegisterRequest
+        required: true
+        schema:
+          $ref: '#/definitions/user.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entity.Response'
+      summary: User registration
+      tags:
+      - user
   /shipping:
     post:
       consumes:
       - application/json
-      description: Create new customer order shipping
+      description: Ship new customer order shipping
       parameters:
-      - description: Create shipping request
+      - description: Ship shipping request
         in: body
         name: CreateShippingRequest
         required: true
@@ -823,7 +867,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/entity.Response'
-      summary: Create shipping
+      summary: Ship shipping
       tags:
       - shipping
   /shipping/{shippingId}/status:

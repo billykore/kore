@@ -7,19 +7,25 @@ import (
 	"github.com/billykore/kore/backend/pkg/codes"
 	"github.com/billykore/kore/backend/pkg/datetime"
 	"github.com/billykore/kore/backend/pkg/logger"
-	"github.com/billykore/kore/backend/pkg/messages"
 	otpPkg "github.com/billykore/kore/backend/pkg/security/otp"
 	"github.com/billykore/kore/backend/pkg/status"
 )
 
+// Repository defines the methods to interacting with persistence storage used by OTP domain.
 type Repository interface {
+	// Get gets the OTP.
 	Get(ctx context.Context, otp OTP) (*OTP, error)
+
+	// Save saves new OTP.
 	Save(ctx context.Context, otp OTP) error
+
+	// Update updates active OTP.
 	Update(ctx context.Context, otp OTP) error
 }
 
-// Email is OTP email service.
+// Email is interface for email service used by OTP domain.
 type Email interface {
+	// SendOTP sends OTP email.
 	SendOTP(EmailData) error
 }
 
@@ -99,17 +105,17 @@ func (s *Service) VerifyOtp(ctx context.Context, req VerifyOtpRequest) error {
 	})
 	if err != nil || currentOtp == nil {
 		s.log.Usecase("VerifyOtp").Error(err)
-		return status.Error(codes.NotFound, messages.InvalidOTP)
+		return status.Error(codes.NotFound, messageInvalidOTP)
 	}
 	if !currentOtp.IsActive {
 		s.log.Usecase("VerifyOtp").Error(
 			fmt.Errorf("otp (%s) is not active", currentOtp.Otp))
-		return status.Error(codes.BadRequest, messages.InvalidOTP)
+		return status.Error(codes.BadRequest, messageInvalidOTP)
 	}
 	if currentOtp.IsExpired() {
 		s.log.Usecase("VerifyOtp").Error(
 			fmt.Errorf("otp (%s) is expired", currentOtp.Otp))
-		return status.Error(codes.BadRequest, messages.ExpiredOTP)
+		return status.Error(codes.BadRequest, messageExpiredOTP)
 	}
 	err = s.repo.Update(ctx, OTP{Otp: req.Otp})
 	if err != nil {

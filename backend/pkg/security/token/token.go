@@ -11,6 +11,7 @@ import (
 
 const tokenExpiredTime = 15 * time.Minute
 
+// Token contains access token and expired time of the token
 type Token struct {
 	AccessToken string `json:"accessToken"`
 	ExpiredTime int64  `json:"expiredTime"`
@@ -51,7 +52,7 @@ func generateToken(cfg *config.Config, username string) (Token, error) {
 	}, nil
 }
 
-// UserFromToken return user information from JWT token.
+// UserFromToken returns user information from JWT token.
 func UserFromToken(token *jwt.Token) entity.User {
 	claims := token.Claims.(jwt.MapClaims)
 	return entity.User{

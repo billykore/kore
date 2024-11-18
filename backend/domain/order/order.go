@@ -20,8 +20,8 @@ const (
 
 var StatusCanCancel = []Status{StatusCreated, StatusWaitingForPayment}
 
-func (status Status) String() string {
-	return string(status)
+func (s Status) String() string {
+	return string(s)
 }
 
 type Cart struct {
@@ -81,6 +81,7 @@ func (o *Order) IntCartIds() []int {
 	return ids
 }
 
+// Product is product entity.
 type Product struct {
 	gorm.Model
 	Name             string
@@ -95,18 +96,21 @@ type Product struct {
 	Discount         Discount         `gorm:"foreignKey:DiscountId"`
 }
 
+// ProductCategory is product category entity.
 type ProductCategory struct {
 	gorm.Model
 	Name        string
 	Description string
 }
 
+// ProductInventory is product category entity.
 type ProductInventory struct {
 	gorm.Model
 	Quantity    int
 	Description string
 }
 
+// Discount is discount category entity.
 type Discount struct {
 	gorm.Model
 	Name               string

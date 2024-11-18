@@ -10,6 +10,7 @@ const (
 	expTime = 5 * time.Minute
 )
 
+// Otp contains OTP value and OTP expired time.
 type Otp struct {
 	Value     string
 	ExpiredAt time.Time

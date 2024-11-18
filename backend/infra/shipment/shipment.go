@@ -1,4 +1,4 @@
-package shipping
+package shipment
 
 import (
 	"github.com/billykore/kore/backend/domain/order"

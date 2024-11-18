@@ -45,6 +45,8 @@ func errMessage(fe validator.FieldError) string {
 		return fmt.Sprintf("%s is not a valid email", fe.Field())
 	case "len":
 		return fmt.Sprintf("%s length must be %s", fe.Field(), fe.Param())
+	case "min":
+		return fmt.Sprintf("%s minimum length must be %s", fe.Field(), fe.Param())
 	case "number":
 		return fmt.Sprintf("%s must be number", fe.Field())
 	}

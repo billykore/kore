@@ -25,8 +25,8 @@ type GetResponse struct {
 	Discount         *DiscountResponse  `json:"discount"`
 }
 
-// MakeResponse makes ProductResponse from model.Order model.
-func MakeResponse(p *Product) *GetResponse {
+// makeResponse makes ProductResponse from model.Order model.
+func makeResponse(p *Product) *GetResponse {
 	return &GetResponse{
 		Id:               p.ID,
 		Name:             p.Name,
@@ -36,9 +36,9 @@ func MakeResponse(p *Product) *GetResponse {
 		CategoryId:       p.CategoryId,
 		InventoryId:      p.InventoryId,
 		DiscountId:       p.DiscountId,
-		ProductCategory:  MakeCategoryResponse(&p.Category),
-		ProductInventory: MakeInventoryResponse(&p.Inventory),
-		Discount:         MakeDiscountResponse(&p.Discount),
+		ProductCategory:  makeCategoryResponse(&p.Category),
+		ProductInventory: makeInventoryResponse(&p.Inventory),
+		Discount:         makeDiscountResponse(&p.Discount),
 	}
 }
 
@@ -47,8 +47,8 @@ type InventoryResponse struct {
 	Description string `json:"description"`
 }
 
-// MakeInventoryResponse makes InventoryResponse from model.ProductInventory model.
-func MakeInventoryResponse(i *Inventory) *InventoryResponse {
+// makeInventoryResponse makes InventoryResponse from model.ProductInventory model.
+func makeInventoryResponse(i *Inventory) *InventoryResponse {
 	return &InventoryResponse{
 		Quantity:    i.Quantity,
 		Description: i.Description,
@@ -70,8 +70,8 @@ type CartResponse struct {
 	} `json:"product"`
 }
 
-// MakeCartResponse makes CartResponse from model.Cart model.
-func MakeCartResponse(c *Cart) *CartResponse {
+// makeCartResponse makes CartResponse from model.Cart model.
+func makeCartResponse(c *Cart) *CartResponse {
 	return &CartResponse{
 		Id:       c.ID,
 		Quantity: c.Quantity,
@@ -113,8 +113,8 @@ type DiscountResponse struct {
 	DiscountPercentage float64 `json:"discountPercentage"`
 }
 
-// MakeDiscountResponse makes DiscountResponse from model.Discount model.
-func MakeDiscountResponse(d *Discount) *DiscountResponse {
+// makeDiscountResponse makes DiscountResponse from model.Discount model.
+func makeDiscountResponse(d *Discount) *DiscountResponse {
 	return &DiscountResponse{
 		Id:                 d.ID,
 		Name:               d.Name,
@@ -129,8 +129,8 @@ type CategoryResponse struct {
 	Description string `json:"description"`
 }
 
-// MakeCategoryResponse makes CategoryResponse from model.ProductCategory model.
-func MakeCategoryResponse(c *Category) *CategoryResponse {
+// makeCategoryResponse makes CategoryResponse from model.ProductCategory model.
+func makeCategoryResponse(c *Category) *CategoryResponse {
 	return &CategoryResponse{
 		Id:          c.ID,
 		Name:        c.Name,

@@ -9,14 +9,32 @@ import (
 	"github.com/billykore/kore/backend/pkg/status"
 )
 
+// Repository defines the methods to interacting with persistence storage used by product domain.
 type Repository interface {
+	// List gets list of products, can be filtered by category ID.
+	// The limit and startId parameters is used for pagination.
 	List(ctx context.Context, categoryId, limit, startId int) ([]*Product, error)
+
+	// GetById gets specific product by ID.
 	GetById(ctx context.Context, id int) (*Product, error)
+
+	// CartList gets list of carts of order.
+	// The limit and startId parameters is used for pagination.
 	CartList(ctx context.Context, username string, limit, startId int) ([]*Cart, error)
+
+	// SaveCart saves new cart.
 	SaveCart(ctx context.Context, cart Cart) error
+
+	// UpdateCart updates cart.
 	UpdateCart(ctx context.Context, id int, cart Cart) error
+
+	// DeleteCart deletes cart by ID and cart details.
 	DeleteCart(ctx context.Context, id int, cart Cart) error
+
+	// CategoryList gets list of product categories.
 	CategoryList(ctx context.Context) ([]*Category, error)
+
+	// DiscountList gets list of available discounts.
 	DiscountList(ctx context.Context, limit, startId int) ([]*Discount, error)
 }
 
@@ -40,7 +58,7 @@ func (s *Service) GetProductList(ctx context.Context, req GetRequest) ([]*GetRes
 	}
 	resp := make([]*GetResponse, 0)
 	for _, p := range products {
-		resp = append(resp, MakeResponse(p))
+		resp = append(resp, makeResponse(p))
 	}
 	return resp, nil
 }
@@ -51,7 +69,7 @@ func (s *Service) GetProductById(ctx context.Context, req GetRequest) (*GetRespo
 		s.log.Usecase("GetProductById").Error(err)
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
-	resp := MakeResponse(res)
+	resp := makeResponse(res)
 	return resp, nil
 }
 
@@ -63,7 +81,7 @@ func (s *Service) GetCategoryList(ctx context.Context) ([]*CategoryResponse, err
 	}
 	resp := make([]*CategoryResponse, 0)
 	for _, c := range categories {
-		resp = append(resp, MakeCategoryResponse(c))
+		resp = append(resp, makeCategoryResponse(c))
 	}
 	return resp, nil
 }
@@ -81,7 +99,7 @@ func (s *Service) GetCartItemList(ctx context.Context, req CartRequest) ([]*Cart
 	}
 	resp := make([]*CartResponse, 0)
 	for _, c := range carts {
-		resp = append(resp, MakeCartResponse(c))
+		resp = append(resp, makeCartResponse(c))
 	}
 	return resp, nil
 }
@@ -145,7 +163,7 @@ func (s *Service) GetDiscountList(ctx context.Context, req DiscountRequest) ([]*
 	}
 	resp := make([]*DiscountResponse, 0)
 	for _, d := range discounts {
-		resp = append(resp, MakeDiscountResponse(d))
+		resp = append(resp, makeDiscountResponse(d))
 	}
 	return resp, nil
 }

@@ -10,8 +10,8 @@ var shippingFee = map[string]types.Money{
 	"sameDay": 50_000,
 }
 
-// GetFee return fee base on the shipping type.
-func GetFee(shippingType string) types.Money {
+// getFee return fee base on the shipping type.
+func getFee(shippingType string) types.Money {
 	if v, ok := shippingFee[shippingType]; ok {
 		return v
 	}

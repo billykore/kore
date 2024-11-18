@@ -16,6 +16,9 @@ const (
 	// NotFound is code to represents not found error.
 	NotFound
 
+	// Conflict is code to represent conflict error.
+	Conflict
+
 	// Internal is code to represents internal server error.
 	Internal
 )

@@ -8,13 +8,21 @@ import (
 	"github.com/billykore/kore/backend/pkg/status"
 )
 
+// Messaging is interface for messaging service used by shipping domain.
 type Messaging interface {
-	ProduceStatusChange(context.Context, StatusChangeData) error
+	// PublishStatusChange publish shipping status change.
+	PublishStatusChange(context.Context, StatusChangeData) error
 }
 
+// Repository defines the methods to interacting with persistence storage used by shipping domain.
 type Repository interface {
+	// GetById gets specific shipping by ID.
 	GetById(ctx context.Context, id uint) (*Shipping, error)
+
+	// Save saves new shipping.
 	Save(ctx context.Context, shipping Shipping) (uint, error)
+
+	// UpdateStatus updates existing shipping status.
 	UpdateStatus(ctx context.Context, id uint, newStatus, currentStatus Status) error
 }
 
@@ -33,7 +41,7 @@ func NewService(log *logger.Logger, repo Repository, msg Messaging) *Service {
 }
 
 func (s *Service) CreateShipping(ctx context.Context, req CreateShippingRequest) (*CreateShippingResponse, error) {
-	fee := GetFee(req.ShippingType)
+	fee := getFee(req.ShippingType)
 	id, err := s.repo.Save(ctx, Shipping{
 		ShipperName:     req.ShipperName,
 		ShippingType:    req.ShippingType,
@@ -66,7 +74,7 @@ func (s *Service) UpdateShippingStatus(ctx context.Context, req UpdateShippingSt
 		s.log.Usecase("UpdateShippingStatus").Error(err)
 		return status.Error(codes.Internal, err.Error())
 	}
-	err = s.msg.ProduceStatusChange(ctx, StatusChangeData{
+	err = s.msg.PublishStatusChange(ctx, StatusChangeData{
 		ShippingId: shipping.ID,
 		Status:     req.NewStatus,
 	})

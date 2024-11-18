@@ -6,9 +6,11 @@ import (
 	"time"
 
 	"github.com/billykore/kore/backend/domain/user"
-	"github.com/billykore/kore/backend/pkg/pkgerr"
+	"github.com/jackc/pgx/v5/pgconn"
 	"gorm.io/gorm"
 )
+
+const duplicateKeyCode = "23505"
 
 type UserRepo struct {
 	postgres *gorm.DB
@@ -16,6 +18,18 @@ type UserRepo struct {
 
 func NewUserRepo(postgres *gorm.DB) *UserRepo {
 	return &UserRepo{postgres: postgres}
+}
+
+func (r *UserRepo) Create(ctx context.Context, u user.User) error {
+	res := r.postgres.WithContext(ctx).Create(&u)
+	if err := res.Error; err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) && pgErr.Code == duplicateKeyCode {
+			return user.ErrAlreadyExists
+		}
+		return err
+	}
+	return nil
 }
 
 func (r *UserRepo) GetByUsername(ctx context.Context, username string) (*user.User, error) {
@@ -105,12 +119,12 @@ func saveLogoutActivity(ctx context.Context, tx *gorm.DB, auth user.AuthActiviti
 	res := tx.WithContext(ctx).
 		Where("uuid = ?", auth.UUID).
 		Where("username = ?", auth.Username).
-		First(auth)
+		First(&auth)
 	if err := res.Error; err != nil {
 		return err
 	}
 	if auth.IsLoggedOut {
-		return pkgerr.ErrAlreadyLoggedOut
+		return user.ErrAlreadyLoggedOut
 	}
 	return nil
 }

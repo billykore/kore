@@ -9,7 +9,7 @@ import (
 	"github.com/billykore/kore/backend/infra/http"
 	"github.com/billykore/kore/backend/infra/messaging"
 	"github.com/billykore/kore/backend/infra/payment"
-	"github.com/billykore/kore/backend/infra/shipping"
+	"github.com/billykore/kore/backend/infra/shipment"
 	"github.com/billykore/kore/backend/infra/storage"
 	"github.com/billykore/kore/backend/pkg"
 	"github.com/billykore/kore/backend/pkg/config"
@@ -25,7 +25,7 @@ func initApp(cfg *config.Config) *app {
 		http.ProviderSet,
 		messaging.ProviderSet,
 		payment.ProviderSet,
-		shipping.ProviderSet,
+		shipment.ProviderSet,
 		pkg.ProviderSet,
 		echo.New,
 		newApp,

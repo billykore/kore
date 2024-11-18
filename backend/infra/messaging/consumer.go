@@ -27,6 +27,8 @@ func NewConsumer(cfg *config.Config, log *logger.Logger, orderConsumer *consumer
 }
 
 func (c *Consumer) Consume() {
+	c.log.Usecase("Consume").Info("Consumer start consume...")
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 

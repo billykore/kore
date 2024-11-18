@@ -18,9 +18,9 @@ var jwtConfig = echojwt.Config{
 	ErrorHandler:   errorHandler,
 }
 
-// AuthMiddleware returns middleware function that validate token from headers
+// authMiddleware returns middleware function that validate token from headers
 // and extract user information.
-func AuthMiddleware() echo.MiddlewareFunc {
+func authMiddleware() echo.MiddlewareFunc {
 	return echojwt.WithConfig(jwtConfig)
 }
 

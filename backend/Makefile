@@ -1,17 +1,8 @@
 # Examples:
-# make build-image kind=gateway
-# make build-image kind=service name=auth
+# make build-image
 .PHONY: build-image
 build-image:
-	@./scripts/build.sh $(kind) $(name)
-
-# Examples:
-# make deploy kind=gateway
-# make deploy kind=service name=auth
-# make deploy kind=database name=postgres
-.PHONY: deploy
-deploy:
-	@./scripts/deployment.sh $(kind) $(name)
+	@./scripts/build.sh $(name)
 
 # Examples:
 # make generate-wire
@@ -20,44 +11,11 @@ generate-wire:
 	@./scripts/wire.sh
 
 # Examples:
-# make generate-proto proto=auth.proto
-.PHONY: generate-proto
-generate-proto:
-	@./scripts/grpc.sh $(proto)
-
-# Examples:
-# make generate
-.PHONY: generate
-generate: \
-	generate-proto \
-	generate-wire
-
-# Examples:
 # make run service=auth
 .PHONY: run
 run:
 	@echo "Run app..."
-	@go run ./services/$(service)/cmd
-
-# Examples:
-# make install-cli
-.PHONY: install-cli
-install-cli:
-	@echo "Install monorepo CLI..."
-	@go install ./korecli
-
-# Examples:
-# make gazelle-update-repos
-.PHONY: gazelle-update-repos
-gazelle-update-repos:
-	@bazel run //:gazelle
-
-# Examples:
-# make bazel-run service=auth
-.PHONY: bazel-run
-bazel-run:
-	@echo "Run $(service) service with bazel..."
-	@bazel run //services/$(service)/cmd
+	@go run ./cmd
 
 # Examples:
 # make create-migration name=create_table_products

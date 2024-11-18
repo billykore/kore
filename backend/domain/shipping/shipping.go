@@ -15,6 +15,7 @@ func (s Status) String() string {
 	return string(s)
 }
 
+// Shipping is shipping entity.
 type Shipping struct {
 	gorm.Model
 	ShipperName     string

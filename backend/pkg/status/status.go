@@ -1,8 +1,12 @@
 package status
 
-import "github.com/billykore/kore/backend/pkg/codes"
+import (
+	"fmt"
 
-// Status represent error throw by services.
+	"github.com/billykore/kore/backend/pkg/codes"
+)
+
+// Status represents domain error.
 type Status struct {
 	// Code is the error code.
 	Code codes.Code
@@ -10,12 +14,17 @@ type Status struct {
 	Message string
 }
 
-// Error return new Status.
+// Error returns new Status.
 func Error(c codes.Code, msg string) error {
 	return &Status{
 		Code:    c,
 		Message: msg,
 	}
+}
+
+// Errorf returns new formatted Status.
+func Errorf(c codes.Code, format string, a ...any) error {
+	return Error(c, fmt.Sprintf(format, a...))
 }
 
 func (s *Status) Error() string {
