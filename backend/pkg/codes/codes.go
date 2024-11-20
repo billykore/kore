@@ -13,6 +13,9 @@ const (
 	// Unauthenticated is code to represents unauthenticated error.
 	Unauthenticated
 
+	// Forbidden is code to represents forbidden error.
+	Forbidden
+
 	// NotFound is code to represents not found error.
 	NotFound
 

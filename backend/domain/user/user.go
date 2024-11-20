@@ -1,6 +1,7 @@
 package user
 
 import (
+	"encoding/json"
 	"time"
 
 	"gorm.io/gorm"
@@ -28,4 +29,12 @@ type AuthActivities struct {
 // IsLoginLastAttemptExpired tells if last failed login activity is pass 24 hours.
 func (a *AuthActivities) IsLoginLastAttemptExpired() bool {
 	return time.Now().After(a.LastLoginAttempt.Add(24 * time.Hour))
+}
+
+func (a *AuthActivities) MarshalBinary() ([]byte, error) {
+	return json.Marshal(a)
+}
+
+func (a *AuthActivities) UnmarshalBinary(data []byte) error {
+	return json.Unmarshal(data, a)
 }

@@ -20,7 +20,8 @@ import (
 func initApp(cfg *config.Config) *app {
 	wire.Build(
 		domain.ProviderSet,
-		storage.ProviderSet,
+		storage.RepoProviderSet,
+		storage.CacheProviderSet,
 		email.ProviderSet,
 		http.ProviderSet,
 		messaging.ProviderSet,

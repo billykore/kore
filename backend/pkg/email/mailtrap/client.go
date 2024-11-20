@@ -1,4 +1,4 @@
-package brevo
+package mailtrap
 
 import (
 	"github.com/billykore/kore/backend/pkg/config"
@@ -15,21 +15,23 @@ type Data struct {
 	Body []byte
 }
 
-// Client is Brevo email service client.
+// Client is MailTrap email service client.
 type Client struct {
-	from string
-	host string
-	port int
-	key  string
+	from     string
+	host     string
+	port     int
+	username string
+	password string
 }
 
 // NewClient returns new Client.
 func NewClient(cfg *config.Config) *Client {
 	return &Client{
-		from: cfg.Email.From,
-		host: cfg.Email.Host,
-		port: cfg.Email.Port,
-		key:  cfg.Email.Key,
+		from:     cfg.Email.From,
+		host:     cfg.Email.Host,
+		port:     cfg.Email.Port,
+		username: cfg.Email.Username,
+		password: cfg.Email.Password,
 	}
 }
 
@@ -41,7 +43,7 @@ func (c *Client) Send(data Data) error {
 	msg.SetHeader("Subject", data.Subject)
 	msg.SetBody("text/plain", string(data.Body))
 
-	dialer := gomail.NewDialer(c.host, c.port, c.from, c.key)
+	dialer := gomail.NewDialer(c.host, c.port, c.username, c.password)
 	err := dialer.DialAndSend(msg)
 	return err
 }

@@ -13,3 +13,10 @@ func TestGenerate(t *testing.T) {
 	otp2 := Generate(10)
 	assert.Len(t, otp2.Value, 10)
 }
+
+func BenchmarkGenerate(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		Generate(6)
+	}
+}

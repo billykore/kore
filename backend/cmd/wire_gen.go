@@ -20,11 +20,13 @@ import (
 	"github.com/billykore/kore/backend/infra/messaging/producer"
 	"github.com/billykore/kore/backend/infra/payment"
 	"github.com/billykore/kore/backend/infra/shipment"
+	"github.com/billykore/kore/backend/infra/storage/cache"
 	"github.com/billykore/kore/backend/infra/storage/repo"
 	"github.com/billykore/kore/backend/pkg/broker/rabbitmq"
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/db/postgres"
-	"github.com/billykore/kore/backend/pkg/email/brevo"
+	"github.com/billykore/kore/backend/pkg/db/redis"
+	"github.com/billykore/kore/backend/pkg/email/mailtrap"
 	"github.com/billykore/kore/backend/pkg/logger"
 	"github.com/billykore/kore/backend/pkg/validation"
 	"github.com/labstack/echo/v4"
@@ -42,7 +44,9 @@ func initApp(cfg *config.Config) *app {
 	validator := validation.New()
 	db := postgres.New(cfg)
 	userRepo := repo.NewUserRepo(db)
-	service := user.NewService(loggerLogger, userRepo)
+	client := redis.New(cfg)
+	userCache := cache.NewUserCache(client)
+	service := user.NewService(loggerLogger, userRepo, userCache)
 	userHandler := handler.NewUserHandler(validator, service)
 	orderRepo := repo.NewOrderRepo(db)
 	goPay := payment.NewGoPay()
@@ -51,8 +55,8 @@ func initApp(cfg *config.Config) *app {
 	connection := rabbitmq.NewConnection(cfg)
 	orderHandler := handler.NewOrderHandler(orderService, connection)
 	otpRepo := repo.NewOtpRepo(db)
-	client := brevo.NewClient(cfg)
-	otpEmail := mailer.NewOTPEmail(loggerLogger, client)
+	mailtrapClient := mailtrap.NewClient(cfg)
+	otpEmail := mailer.NewOTPEmail(loggerLogger, mailtrapClient)
 	otpService := otp.NewService(loggerLogger, otpRepo, otpEmail)
 	otpHandler := handler.NewOtpHandler(otpService, validator)
 	productRepo := repo.NewProductRepo(db)

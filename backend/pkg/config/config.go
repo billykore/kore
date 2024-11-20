@@ -17,6 +17,7 @@ type Config struct {
 	Token     internal.Token
 	Rabbit    internal.Rabbit
 	Email     internal.Email
+	Redis     internal.Redis
 }
 
 var (

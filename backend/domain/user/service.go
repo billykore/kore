@@ -15,8 +15,8 @@ import (
 	"github.com/billykore/kore/backend/pkg/uuid"
 )
 
-// maxUserLoginAttempts is max user login attempts.
-const maxUserLoginAttempts = 5
+// maxLoginAttempts is max user login attempts.
+const maxLoginAttempts = 5
 
 // userLoginAttempt stores username login attempts.
 var userLoginAttempt = make(map[string]int)
@@ -27,6 +27,8 @@ var ErrAlreadyExists = errors.New("user already exists")
 
 // ErrAlreadyLoggedOut indicates an operation was attempted on a user who has already logged out.
 var ErrAlreadyLoggedOut = errors.New("user already logged out")
+
+var errFailedCacheLoginActivity = errors.New("failed cache login activity")
 
 // Repository defines the methods to interacting with persistence storage used by user domain.
 type Repository interface {
@@ -44,20 +46,28 @@ type Repository interface {
 
 	// Logout set user login activity to logged out.
 	Logout(ctx context.Context, auth AuthActivities) error
+}
 
-	// FindFailedLoginByUsername finds user auth activities that failed to logged in.
-	FindFailedLoginByUsername(ctx context.Context, username string) (*AuthActivities, error)
+// Cache defines the methods to interacting with cache storage used by user domain.
+type Cache interface {
+	// SaveFailedLoginAttempt saves failed login attempt of user by the given username.
+	SaveFailedLoginAttempt(ctx context.Context, authActivity AuthActivities) error
+
+	// GetFailedLoginAttempt gets failed login attempt by username.
+	GetFailedLoginAttempt(ctx context.Context, username string) (*AuthActivities, error)
 }
 
 type Service struct {
-	log  *logger.Logger
-	repo Repository
+	log   *logger.Logger
+	repo  Repository
+	cache Cache
 }
 
-func NewService(log *logger.Logger, repo Repository) *Service {
+func NewService(log *logger.Logger, repo Repository, cache Cache) *Service {
 	return &Service{
-		log:  log,
-		repo: repo,
+		log:   log,
+		repo:  repo,
+		cache: cache,
 	}
 }
 
@@ -84,12 +94,12 @@ func (s *Service) Create(ctx context.Context, req RegisterRequest) (*RegisterRes
 	}, nil
 }
 
-func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
+func (s *Service) Login(ctx context.Context, req LoginRequest) (*LoginResponse, error) {
 	if userLoginAttempt[req.Username] == 0 {
 		err := s.checkFailedLoginActivity(ctx, req.Username)
 		if err != nil {
 			s.log.Usecase("Login").Errorf("failed to check failed login activity by username (%s): %v", req.Username, err)
-			return nil, status.Error(codes.Internal, messageFailedLoginAttemptNotExpired)
+			return nil, status.Error(codes.Forbidden, messageFailedLoginAttemptNotExpired)
 		}
 	}
 
@@ -99,8 +109,8 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 		return nil, status.Error(codes.Internal, messageLoginFailed)
 	}
 
-	if userLoginAttempt[req.Username] >= maxUserLoginAttempts {
-		err = s.repo.SaveLoginActivity(ctx, AuthActivities{
+	if userLoginAttempt[req.Username] >= maxLoginAttempts {
+		err = s.saveLoginActivity(ctx, AuthActivities{
 			UUID:             id,
 			Username:         req.Username,
 			IsLoggedOut:      false,
@@ -116,7 +126,7 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 		delete(userLoginAttempt, req.Username)
 
 		s.log.Usecase("Login").Errorf("user (%s) already login %d times",
-			req.Username, maxUserLoginAttempts)
+			req.Username, maxLoginAttempts)
 		return nil, status.Error(codes.BadRequest, messageMaxLoginAttemptReached)
 	}
 
@@ -151,11 +161,14 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 		IsLoginSucceed: true,
 	})
 	if err != nil {
-		s.log.Usecase("Login").Errorf("failed to save loggerin activity: %v", err)
+		s.log.Usecase("Login").Errorf("failed to save login activity: %v", err)
 		return nil, status.Error(codes.Internal, messageLoginFailed)
 	}
 
-	return &Token{
+	// reset user login attempt if login is successful.
+	delete(userLoginAttempt, req.Username)
+
+	return &LoginResponse{
 		LoginId:     id,
 		AccessToken: t.AccessToken,
 		ExpiredTime: t.ExpiredTime,
@@ -166,7 +179,7 @@ func (s *Service) Login(ctx context.Context, req LoginRequest) (*Token, error) {
 // If there is any, then checks if the failed login time is expired,
 // so the user can try new login.
 func (s *Service) checkFailedLoginActivity(ctx context.Context, username string) error {
-	activity, err := s.repo.FindFailedLoginByUsername(ctx, username)
+	activity, err := s.cache.GetFailedLoginAttempt(ctx, username)
 	if err != nil {
 		return fmt.Errorf("failed to get login activity by username (%s): %v", username, err)
 	}
@@ -177,6 +190,16 @@ func (s *Service) checkFailedLoginActivity(ctx context.Context, username string)
 		return errors.New("last failed login attempt is not expired yet")
 	}
 	return nil
+}
+
+// saveLoginActivity saves user login activity, either it was succeeded or failed.
+func (s *Service) saveLoginActivity(ctx context.Context, activity AuthActivities) error {
+	err := s.cache.SaveFailedLoginAttempt(ctx, activity)
+	if err != nil {
+		s.log.Usecase("saveLoginActivity").Error(err)
+		return errFailedCacheLoginActivity
+	}
+	return s.repo.SaveLoginActivity(ctx, activity)
 }
 
 func (s *Service) Logout(ctx context.Context, req LogoutRequest) (*LogoutResponse, error) {
@@ -194,7 +217,7 @@ func (s *Service) Logout(ctx context.Context, req LogoutRequest) (*LogoutRespons
 		return nil, status.Errorf(codes.Unauthenticated, "%s: %s", messageLogoutFailed, err.Error())
 	}
 	if err != nil {
-		s.log.Usecase("Logout").Errorf("failed to save loggerout activity: %v", err)
+		s.log.Usecase("Logout").Errorf("failed to save logout activity: %v", err)
 		return nil, status.Error(codes.Unauthenticated, messageLogoutFailed)
 	}
 	return &LogoutResponse{Message: messageLogoutSucceed}, nil

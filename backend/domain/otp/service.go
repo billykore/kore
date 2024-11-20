@@ -49,7 +49,6 @@ func (s *Service) SendOtp(ctx context.Context, req SendOtpRequest) (*Response, e
 		s.log.Usecase("SendOtp").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-
 	err = s.repo.Save(ctx, OTP{
 		Email:     req.Email,
 		Otp:       newOtp.Value,
@@ -60,17 +59,16 @@ func (s *Service) SendOtp(ctx context.Context, req SendOtpRequest) (*Response, e
 		s.log.Usecase("SendOtp").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-
 	err = s.email.SendOTP(EmailData{
 		Recipient: req.Email,
 		Subject:   "Login OTP",
+		Name:      req.Email,
 		OTP:       newOtp.Value,
 	})
 	if err != nil {
 		s.log.Usecase("SendOtp").Error(err)
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-
 	return &Response{
 		Otp:       newOtp.Value,
 		ExpiresAt: newOtp.ExpiredAt.Format(datetime.DefaultTimeLayout),

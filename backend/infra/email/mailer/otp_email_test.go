@@ -7,7 +7,7 @@ import (
 )
 
 func TestParseOTPTemplate(t *testing.T) {
-	tmpl, err := parseOTPTemplate("123456")
+	tmpl, err := parseOTPTemplate("Oyen", "123456")
 	assert.NoError(t, err)
 	assert.NotEmpty(t, tmpl)
 
@@ -25,7 +25,7 @@ func TestParseOTPTemplate(t *testing.T) {
         Kore Corp.
       </a>
     </div>
-    <p style="font-size:1.1em">Hi,</p>
+    <p style="font-size:1.1em">Hi, Oyen!</p>
     <p>Please complete your login by enter the OTP. OTP is valid for 5 minutes</p>
     <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">
         123456

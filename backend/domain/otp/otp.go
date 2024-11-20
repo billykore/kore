@@ -28,5 +28,6 @@ func (otp OTP) IsExpired() bool {
 type EmailData struct {
 	Recipient string
 	Subject   string
+	Name      string
 	OTP       string
 }

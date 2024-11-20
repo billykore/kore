@@ -79,6 +79,7 @@ func (r *Router) Run() {
 	r.setProductRoutes()
 	r.setOrderRoutes()
 	r.setShippingRoutes()
+	r.setOTPRoutes()
 	r.useMiddlewares()
 	r.run()
 }
@@ -117,6 +118,11 @@ func (r *Router) setOrderRoutes() {
 	or.POST("/:orderId/pay", r.orderHandler.PayOrder)
 	or.POST("/:orderId/ship", r.orderHandler.ShipOrder)
 	or.DELETE("/:orderId", r.orderHandler.CancelOrder)
+}
+
+func (r *Router) setOTPRoutes() {
+	r.router.POST("/otp/send", r.otpHandler.SendOtp)
+	r.router.POST("/otp/verify", r.otpHandler.VerifyOtp)
 }
 
 func (r *Router) setShippingRoutes() {

@@ -5,11 +5,11 @@ import (
 	"html/template"
 
 	"github.com/billykore/kore/backend/domain/otp"
-	"github.com/billykore/kore/backend/pkg/email/brevo"
+	"github.com/billykore/kore/backend/pkg/email/mailtrap"
 	"github.com/billykore/kore/backend/pkg/logger"
 )
 
-var otpTmpl = []byte(`<!DOCTYPE html>
+var otpTmpl = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -23,10 +23,10 @@ var otpTmpl = []byte(`<!DOCTYPE html>
         Kore Corp.
       </a>
     </div>
-    <p style="font-size:1.1em">Hi,</p>
+    <p style="font-size:1.1em">Hi, {{.Name}}!</p>
     <p>Please complete your login by enter the OTP. OTP is valid for 5 minutes</p>
     <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">
-        {{.}}
+        {{.OTP}}
     </h2>
     <p style="font-size:0.9em;">Regards,<br/>Kore Corp.</p>
     <hr style="border:none;border-top:1px solid #eee"/>
@@ -38,16 +38,19 @@ var otpTmpl = []byte(`<!DOCTYPE html>
   </div>
 </div>
 </body>
-</html>`)
+</html>`
 
 // buffer to write the email template bytes.
 var buffer = new(bytes.Buffer)
 
 // parseOTPTemplate returns OTP html template.
-func parseOTPTemplate(otp string) ([]byte, error) {
+func parseOTPTemplate(name, otp string) ([]byte, error) {
 	defer buffer.Reset()
-	tmpl := template.Must(template.New("otp").Parse(string(otpTmpl)))
-	err := tmpl.Execute(buffer, otp)
+	tmpl := template.Must(template.New("otp").Parse(otpTmpl))
+	err := tmpl.Execute(buffer, map[string]any{
+		"Name": name,
+		"OTP":  otp,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -56,10 +59,10 @@ func parseOTPTemplate(otp string) ([]byte, error) {
 
 type OTPEmail struct {
 	log    *logger.Logger
-	client *brevo.Client
+	client *mailtrap.Client
 }
 
-func NewOTPEmail(log *logger.Logger, client *brevo.Client) *OTPEmail {
+func NewOTPEmail(log *logger.Logger, client *mailtrap.Client) *OTPEmail {
 	return &OTPEmail{
 		log:    log,
 		client: client,
@@ -67,12 +70,12 @@ func NewOTPEmail(log *logger.Logger, client *brevo.Client) *OTPEmail {
 }
 
 func (e *OTPEmail) SendOTP(data otp.EmailData) error {
-	body, err := parseOTPTemplate(data.OTP)
+	body, err := parseOTPTemplate(data.Name, data.OTP)
 	if err != nil {
 		e.log.Usecase("SendOTP").Error(err)
 		return err
 	}
-	err = e.client.Send(brevo.Data{
+	err = e.client.Send(mailtrap.Data{
 		Recipient: data.Recipient,
 		Subject:   data.Subject,
 		Body:      body,

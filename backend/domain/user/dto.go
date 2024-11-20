@@ -15,10 +15,6 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	Token *Token `json:"token"`
-}
-
-type Token struct {
 	LoginId     string `json:"loginId"`
 	AccessToken string `json:"accessToken"`
 	ExpiredTime int64  `json:"expiredTime"`
