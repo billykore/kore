@@ -127,7 +127,7 @@ func (r *Router) setOTPRoutes() {
 
 func (r *Router) setShippingRoutes() {
 	so := r.router.Group("/shipping")
-	so.Use(authMiddleware())
+	so.Use(authMiddleware(), featureFlagMiddleware("NEW_FEATURE"))
 
 	so.POST("", r.shippingHandler.CreateShipping)
 	so.PUT("/:shippingId/status", r.shippingHandler.UpdateShippingStatus)

@@ -4,6 +4,7 @@ import (
 	"github.com/billykore/kore/backend/pkg/config"
 	"github.com/billykore/kore/backend/pkg/ctxt"
 	"github.com/billykore/kore/backend/pkg/entity"
+	"github.com/billykore/kore/backend/pkg/feature"
 	"github.com/billykore/kore/backend/pkg/security/token"
 	"github.com/golang-jwt/jwt/v5"
 	echojwt "github.com/labstack/echo-jwt/v4"
@@ -37,4 +38,17 @@ func successHandler(ctx echo.Context) {
 // errorHandler returns unauthorized response if there is authentication error.
 func errorHandler(ctx echo.Context, err error) error {
 	return ctx.JSON(entity.ResponseUnauthorized(err))
+}
+
+// featureFlagMiddleware restricts access to specific API routes
+// based on the state of a feature flag.
+func featureFlagMiddleware(flag string) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(ctx echo.Context) error {
+			if !feature.IsEnabled(flag) {
+				return ctx.JSON(entity.ResponseForbidden(feature.ErrFeatureIsDisabled))
+			}
+			return next(ctx)
+		}
+	}
 }

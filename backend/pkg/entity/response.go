@@ -62,6 +62,15 @@ func ResponseUnauthorized(err error) (int, *Response) {
 	}
 }
 
+// ResponseForbidden returns status code 403 and error response.
+func ResponseForbidden(err error) (int, *Response) {
+	return http.StatusForbidden, &Response{
+		Status:     "FORBIDDEN",
+		Message:    err.Error(),
+		ServerTime: time.Now().Format(datetime.DefaultTimeLayout),
+	}
+}
+
 var responseCode = []int{
 	http.StatusOK,
 	http.StatusBadRequest,
