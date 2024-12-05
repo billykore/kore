@@ -3,4 +3,4 @@
 # generate swagger documentation
 echo "Generate swagger documentation..."
 swag fmt
-swag init -g ./api/spec/main.go -o ./api/spec/docs
+swag init -g ./cmd/main.go -o ./cmd/swagger/docs
